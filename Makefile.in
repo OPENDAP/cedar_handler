@@ -52,8 +52,8 @@ $(LIB) : $(OBJS)
 	$(AR) cru $@ $?
 	$(RANLIB) $@
 
-$(HANDLER) : $(LIB) $(MODOBJS) $(HANDLER).o ../dispatch/test_authenticator.o ../dispatch/no_aggserver.o
-	g++ -o $(HANDLER) $(HANDLER).o ../dispatch/test_authenticator.o ../dispatch/no_aggserver.o $(MODOBJS) $(LIB) $(LIBS)
+$(HANDLER) : $(LIB) $(MODOBJS) $(HANDLER).o ../dispatch/dods_module.o ../dispatch/test_authenticator.o ../dispatch/no_aggserver.o
+	g++ -o $(HANDLER) $(HANDLER).o ../dispatch/dods_module.o ../dispatch/test_authenticator.o ../dispatch/no_aggserver.o $(MODOBJS) $(LIB) $(LIBS)
 
 clean :
 	/bin/rm -rf $(OBJS) $(LIB) $(MODOBJS) $(HANDLER).o $(HANDLER)
