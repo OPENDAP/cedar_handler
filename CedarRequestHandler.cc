@@ -29,7 +29,7 @@ CedarRequestHandler::CedarRequestHandler( string name )
 {
     add_handler( DAS_RESPONSE, CedarRequestHandler::cedar_build_das ) ;
     add_handler( DDS_RESPONSE, CedarRequestHandler::cedar_build_dds ) ;
-    add_handler( DATA_RESPONSE, CedarRequestHandler::cedar_build_dds ) ;
+    add_handler( DATA_RESPONSE, CedarRequestHandler::cedar_build_data ) ;
     add_handler( FLAT_RESPONSE, CedarRequestHandler::cedar_build_flat ) ;
     add_handler( STREAM_RESPONSE, CedarRequestHandler::cedar_build_stream ) ;
     add_handler( TAB_RESPONSE, CedarRequestHandler::cedar_build_tab ) ;
@@ -70,6 +70,22 @@ CedarRequestHandler::cedar_build_dds( DODSDataHandlerInterface &dhi )
     }
     dhi.post_constraint = "" ;
     return ret ;
+}
+
+bool
+CedarRequestHandler::cedar_build_data( DODSDataHandlerInterface &dhi )
+{
+    DDS *dds = (DDS *)dhi.response_handler->get_response_object() ;
+    string cedar_error ;
+    if( !cedar_read_descriptors( *dds, dhi.container->get_real_name(),
+				 dhi.container->get_symbolic_name(),
+				 dhi.container->get_constraint(),
+				 cedar_error ) )
+    {
+	throw DODSResponseException( cedar_error ) ;
+    }
+    dhi.post_constraint = "" ;
+    return true ;
 }
 
 bool
@@ -179,6 +195,9 @@ CedarRequestHandler::cedar_build_help( DODSDataHandlerInterface &dhi )
 }
 
 // $Log: CedarRequestHandler.cc,v $
+// Revision 1.2  2004/07/02 21:11:47  pwest
+// added function to read data instead of using dds function
+//
 // Revision 1.1  2004/06/30 21:04:03  pwest
 // cedar_handler uses the new dispatch code and can also be built for normal
 // cgi scripting (except the cgi needs to be updated to not check for
