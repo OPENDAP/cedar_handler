@@ -15,7 +15,7 @@ CedarTab::CedarTab()
 CedarTab::CedarTab( bool is_http )
     : DODSInfo( is_http, dods_data )
 {
-    initialize( "Cedar.Tab.Buffered" ) ;
+    initialize( "" ) ;
 }
 
 CedarTab::~CedarTab()
@@ -23,6 +23,10 @@ CedarTab::~CedarTab()
 }
 
 // $Log: CedarTab.cc,v $
+// Revision 1.2  2004/07/09 16:11:55  pwest
+// Using default key for buffering information instead of uniq keys for flat
+// and tab
+//
 // Revision 1.1  2004/06/30 21:04:03  pwest
 // cedar_handler uses the new dispatch code and can also be built for normal
 // cgi scripting (except the cgi needs to be updated to not check for
