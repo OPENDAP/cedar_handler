@@ -58,7 +58,7 @@ $(HANDLER) : $(LIB) $(MODOBJS) $(HANDLER).o ../dispatch/dods_module.o ../dispatc
 clean :
 	/bin/rm -rf $(OBJS) $(LIB) $(MODOBJS) $(HANDLER).o $(HANDLER)
 
-install: lib install-headers install-mods
+install: lib install-headers install-mods install-progs
 	-mkdir -p $(libdir)
 	$(INSTALL_DATA) $(LIB) $(libdir)
 	$(RANLIB) $(libdir)/$(LIB)
@@ -72,6 +72,10 @@ install-mods:
 	-mkdir -p $(libdir)
 	for h in $(MODOBJS); \
 	    do $(INSTALL_DATA) $$h $(libdir); done
+
+install-progs: $(HANDLER)
+	-mkdir -p $(bindir)
+	$(INSTALL_PROGRAM) -s $(HANDLER) $(bindir)
 
 configure: configure.in cdf.m4 $(DODS_ROOT)etc/aclocal.m4
 	autoconf --localdir=$(DODS_ROOT)etc
