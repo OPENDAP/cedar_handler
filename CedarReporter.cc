@@ -45,12 +45,21 @@ CedarReporter::report( const DODSDataHandlerInterface &dhi )
 	*(_file_buffer) << b[j] ;
     *(_file_buffer) << "] " ;
 
-    *(_file_buffer) << dhi.user_name << " " << dhi.user_address << " "
+    if( dhi.user_name == "" )
+	*(_file_buffer) << "USER_UNKNOWN" ;
+    else
+	*(_file_buffer) << dhi.user_name ;
+
+    *(_file_buffer) << " " << dhi.user_address << " "
 		    << dhi.action << " " << dhi.real_name_list << " \""
 		    << dhi.request << "\"" << endl ;
 }
 
 // $Log: CedarReporter.cc,v $
+// Revision 1.2  2004/07/09 16:12:40  pwest
+// If the user name is not available then print this information out, otherwise
+// print the user name.
+//
 // Revision 1.1  2004/06/30 21:04:03  pwest
 // cedar_handler uses the new dispatch code and can also be built for normal
 // cgi scripting (except the cgi needs to be updated to not check for
