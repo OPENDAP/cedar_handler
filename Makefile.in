@@ -37,7 +37,7 @@ LIB:=libcedar-handler.a
 LIBS = -L../dispatch -ldispatch @LIBS@
 DEFS:=@DEFS@
 CXXFLAGS:=@CXXFLAGS@ -Wall -Wno-deprecated
-CPPFLAGS:=$(CXXFLASGS) $(DEFS) $(INCS)
+CPPFLAGS:=$(CXXFLAGS) $(DEFS) $(INCS)
 
 HANDLER:=cedar_handler
 
