@@ -100,8 +100,8 @@ cedar_read_attributes.o: cedar_read_attributes.cc \
   ../../include/IteratorAdapter.h ../dap/AttrTable.h ../dap/Error.h \
   ../dap/DODSResponseObject.h ../dap/cgi_util.h ../dap/DDS.h \
   ../dap/BaseType.h ../dap/InternalErr.h ../dap/dods-datatypes.h \
-  ../dap/Clause.h ../dap/expr.h ../dap/RValue.h ../dap/ObjectType.h \
-  ../dap/EncodingType.h \
+  ../dap/Constructor.h ../dap/Clause.h ../dap/expr.h ../dap/RValue.h \
+  ../dap/ObjectType.h ../dap/EncodingType.h \
   /project/cedar/lib/Cedar-2.0.1/include/CedarFile.h \
   /project/cedar/lib/Cedar-2.0.1/include/CedarConfig.h \
   /project/cedar/lib/Cedar-2.0.1/include/CedarCrayServices.h \
@@ -131,10 +131,10 @@ cedar_read_descriptors.o: cedar_read_descriptors.cc \
   ../dap/PassiveArray.h ../dap/Array.h ../dap/dods-limits.h \
   ../dap/Vector.h ../dap/BaseType.h ../dap/AttrTable.h \
   ../../include/Pix.h ../../include/IteratorAdapter.h ../dap/Error.h \
-  ../dap/InternalErr.h ../dap/dods-datatypes.h ../dap/DDS.h ../dap/DAS.h \
-  ../dap/DODSResponseObject.h ../dap/Clause.h ../dap/expr.h \
-  ../dap/RValue.h ../dap/PassiveStructure.h ../dap/Structure.h \
-  ../dap/Constructor.h ../dap/PassiveInt16.h ../dap/Int16.h \
+  ../dap/InternalErr.h ../dap/dods-datatypes.h ../dap/DDS.h \
+  ../dap/Constructor.h ../dap/DAS.h ../dap/DODSResponseObject.h \
+  ../dap/Clause.h ../dap/expr.h ../dap/RValue.h ../dap/PassiveStructure.h \
+  ../dap/Structure.h ../dap/PassiveInt16.h ../dap/Int16.h \
   ../dap/PassiveUInt16.h ../dap/UInt16.h cedar_read_descriptors.h \
   ../dap/util.h ../dap/Byte.h ../dap/Int32.h ../dap/UInt32.h \
   ../dap/Float32.h ../dap/Float64.h ../dap/Str.h ../dap/Url.h \
@@ -158,16 +158,15 @@ cedar_read_tab.o: cedar_read_tab.cc \
   ../dispatch/DODSInfo.h ../dap/DODSResponseObject.h ../dap/cgi_util.h \
   ../dap/DDS.h ../../include/Pix.h ../../include/IteratorAdapter.h \
   ../dap/BaseType.h ../dap/AttrTable.h ../dap/Error.h \
-  ../dap/InternalErr.h ../dap/dods-datatypes.h ../dap/DAS.h \
-  ../dap/Clause.h ../dap/expr.h ../dap/RValue.h ../dap/ObjectType.h \
-  ../dap/EncodingType.h cedar_read_tab.h \
+  ../dap/InternalErr.h ../dap/dods-datatypes.h ../dap/Constructor.h \
+  ../dap/DAS.h ../dap/Clause.h ../dap/expr.h ../dap/RValue.h \
+  ../dap/ObjectType.h ../dap/EncodingType.h cedar_read_tab.h \
   /project/cedar/lib/Cedar-2.0.1/include/CedarException.h \
   cedar_read_descriptors.h ../dap/util.h ../dap/Byte.h ../dap/Int16.h \
   ../dap/UInt16.h ../dap/Int32.h ../dap/UInt32.h ../dap/Float32.h \
   ../dap/Float64.h ../dap/Str.h ../dap/dods-limits.h ../dap/Url.h \
-  ../dap/Array.h ../dap/Vector.h ../dap/Structure.h ../dap/Constructor.h \
-  ../dap/Sequence.h ../dap/Grid.h \
-  /project/cedar/lib/Cedar-2.0.1/include/CedarDataRecord.h \
+  ../dap/Array.h ../dap/Vector.h ../dap/Structure.h ../dap/Sequence.h \
+  ../dap/Grid.h /project/cedar/lib/Cedar-2.0.1/include/CedarDataRecord.h \
   /project/cedar/lib/Cedar-2.0.1/include/CedarLogicalRecord.h \
   /project/cedar/lib/Cedar-2.0.1/include/CedarArray.h \
   /project/cedar/lib/Cedar-2.0.1/include/CedarDate.h \
@@ -209,8 +208,8 @@ cedar_read_info.o: cedar_read_info.cc \
   ../dap/cgi_util.h ../dap/DDS.h ../../include/Pix.h \
   ../../include/IteratorAdapter.h ../dap/BaseType.h ../dap/AttrTable.h \
   ../dap/Error.h ../dap/InternalErr.h ../dap/dods-datatypes.h \
-  ../dap/DAS.h ../dap/Clause.h ../dap/expr.h ../dap/RValue.h \
-  ../dap/ObjectType.h ../dap/EncodingType.h \
+  ../dap/Constructor.h ../dap/DAS.h ../dap/Clause.h ../dap/expr.h \
+  ../dap/RValue.h ../dap/ObjectType.h ../dap/EncodingType.h \
   /project/cedar/lib/Cedar-2.0.1/include/CedarException.h \
   /project/cedar/lib/Cedar-2.0.1/include/CedarConstraintEvaluator.h \
   /project/cedar/lib/Cedar-2.0.1/include/CedarParameter.h
@@ -218,21 +217,24 @@ CedarFilter.o: CedarFilter.cc CedarFilter.h ../dap/DODSFilter.h \
   ../dap/DAS.h ../../include/Pix.h ../../include/IteratorAdapter.h \
   ../dap/AttrTable.h ../dap/Error.h ../dap/DODSResponseObject.h \
   ../dap/DDS.h ../dap/BaseType.h ../dap/InternalErr.h \
-  ../dap/dods-datatypes.h ../dap/Clause.h ../dap/expr.h ../dap/RValue.h \
-  CedarResponseNames.h CedarTab.h ../dispatch/DODSInfo.h \
-  ../dap/cgi_util.h ../dap/ObjectType.h ../dap/EncodingType.h CedarFlat.h
+  ../dap/dods-datatypes.h ../dap/Constructor.h ../dap/Clause.h \
+  ../dap/expr.h ../dap/RValue.h CedarResponseNames.h CedarTab.h \
+  ../dispatch/DODSInfo.h ../dap/cgi_util.h ../dap/ObjectType.h \
+  ../dap/EncodingType.h CedarFlat.h
 CedarTab.o: CedarTab.cc CedarTab.h ../dispatch/DODSInfo.h \
   ../dap/DODSResponseObject.h ../dap/cgi_util.h ../dap/DDS.h \
   ../../include/Pix.h ../../include/IteratorAdapter.h ../dap/BaseType.h \
   ../dap/AttrTable.h ../dap/Error.h ../dap/InternalErr.h \
-  ../dap/dods-datatypes.h ../dap/DAS.h ../dap/Clause.h ../dap/expr.h \
-  ../dap/RValue.h ../dap/ObjectType.h ../dap/EncodingType.h
+  ../dap/dods-datatypes.h ../dap/Constructor.h ../dap/DAS.h \
+  ../dap/Clause.h ../dap/expr.h ../dap/RValue.h ../dap/ObjectType.h \
+  ../dap/EncodingType.h
 CedarFlat.o: CedarFlat.cc CedarFlat.h ../dispatch/DODSInfo.h \
   ../dap/DODSResponseObject.h ../dap/cgi_util.h ../dap/DDS.h \
   ../../include/Pix.h ../../include/IteratorAdapter.h ../dap/BaseType.h \
   ../dap/AttrTable.h ../dap/Error.h ../dap/InternalErr.h \
-  ../dap/dods-datatypes.h ../dap/DAS.h ../dap/Clause.h ../dap/expr.h \
-  ../dap/RValue.h ../dap/ObjectType.h ../dap/EncodingType.h
+  ../dap/dods-datatypes.h ../dap/Constructor.h ../dap/DAS.h \
+  ../dap/Clause.h ../dap/expr.h ../dap/RValue.h ../dap/ObjectType.h \
+  ../dap/EncodingType.h
 cedar_read_flat.o: cedar_read_flat.cc \
   /project/cedar/lib/Cedar-2.0.1/include/CedarBlock.h \
   /project/cedar/lib/Cedar-2.0.1/include/CedarConfig.h \
@@ -252,9 +254,9 @@ cedar_read_flat.o: cedar_read_flat.cc \
   ../dispatch/DODSInfo.h ../dap/DODSResponseObject.h ../dap/cgi_util.h \
   ../dap/DDS.h ../../include/Pix.h ../../include/IteratorAdapter.h \
   ../dap/BaseType.h ../dap/AttrTable.h ../dap/Error.h \
-  ../dap/InternalErr.h ../dap/dods-datatypes.h ../dap/DAS.h \
-  ../dap/Clause.h ../dap/expr.h ../dap/RValue.h ../dap/ObjectType.h \
-  ../dap/EncodingType.h cedar_read_flat.h \
+  ../dap/InternalErr.h ../dap/dods-datatypes.h ../dap/Constructor.h \
+  ../dap/DAS.h ../dap/Clause.h ../dap/expr.h ../dap/RValue.h \
+  ../dap/ObjectType.h ../dap/EncodingType.h cedar_read_flat.h \
   /project/cedar/lib/Cedar-2.0.1/include/CedarException.h \
   /project/cedar/lib/Cedar-2.0.1/include/CedarConstraintEvaluator.h \
   /project/cedar/lib/Cedar-2.0.1/include/CedarString.h \
@@ -262,9 +264,8 @@ cedar_read_flat.o: cedar_read_flat.cc \
   cedar_read_descriptors.h ../dap/util.h ../dap/Byte.h ../dap/Int16.h \
   ../dap/UInt16.h ../dap/Int32.h ../dap/UInt32.h ../dap/Float32.h \
   ../dap/Float64.h ../dap/Str.h ../dap/dods-limits.h ../dap/Url.h \
-  ../dap/Array.h ../dap/Vector.h ../dap/Structure.h ../dap/Constructor.h \
-  ../dap/Sequence.h ../dap/Grid.h \
-  /project/cedar/lib/Cedar-2.0.1/include/CedarReadParcods.h \
+  ../dap/Array.h ../dap/Vector.h ../dap/Structure.h ../dap/Sequence.h \
+  ../dap/Grid.h /project/cedar/lib/Cedar-2.0.1/include/CedarReadParcods.h \
   /project/cedar/lib/Cedar-2.0.1/include/CedarParcods.h
 cedar_read_stream.o: cedar_read_stream.cc
 CedarRequestHandler.o: CedarRequestHandler.cc CedarRequestHandler.h \
@@ -277,8 +278,8 @@ CedarRequestHandler.o: CedarRequestHandler.cc CedarRequestHandler.h \
   ../../include/IteratorAdapter.h ../dap/AttrTable.h ../dap/Error.h \
   ../dap/DODSResponseObject.h ../dap/cgi_util.h ../dap/DDS.h \
   ../dap/BaseType.h ../dap/InternalErr.h ../dap/dods-datatypes.h \
-  ../dap/Clause.h ../dap/expr.h ../dap/RValue.h ../dap/ObjectType.h \
-  ../dap/EncodingType.h \
+  ../dap/Constructor.h ../dap/Clause.h ../dap/expr.h ../dap/RValue.h \
+  ../dap/ObjectType.h ../dap/EncodingType.h \
   /project/cedar/lib/Cedar-2.0.1/include/CedarFile.h \
   /project/cedar/lib/Cedar-2.0.1/include/CedarConfig.h \
   /project/cedar/lib/Cedar-2.0.1/include/CedarCrayServices.h \
@@ -294,12 +295,11 @@ CedarRequestHandler.o: CedarRequestHandler.cc CedarRequestHandler.h \
   cedar_read_descriptors.h ../dap/util.h ../dap/Byte.h ../dap/Int16.h \
   ../dap/UInt16.h ../dap/Int32.h ../dap/UInt32.h ../dap/Float32.h \
   ../dap/Float64.h ../dap/Str.h ../dap/dods-limits.h ../dap/Url.h \
-  ../dap/Array.h ../dap/Vector.h ../dap/Structure.h ../dap/Constructor.h \
-  ../dap/Sequence.h ../dap/Grid.h cedar_read_tab.h CedarTab.h \
-  ../dispatch/DODSInfo.h cedar_read_flat.h CedarFlat.h \
-  cedar_read_stream.h ../dispatch/DODSTextInfo.h \
-  ../dispatch/DODSHTMLInfo.h cedar_read_info.h cedar_version.h \
-  /project/cedar/lib/Cedar-2.0.1/include/CedarVersion.h \
+  ../dap/Array.h ../dap/Vector.h ../dap/Structure.h ../dap/Sequence.h \
+  ../dap/Grid.h cedar_read_tab.h CedarTab.h ../dispatch/DODSInfo.h \
+  cedar_read_flat.h CedarFlat.h cedar_read_stream.h \
+  ../dispatch/DODSTextInfo.h ../dispatch/DODSHTMLInfo.h cedar_read_info.h \
+  cedar_version.h /project/cedar/lib/Cedar-2.0.1/include/CedarVersion.h \
   /project/cedar/lib/Cedar-2.0.1/include/CedarString.h \
   ../dispatch/TheDODSKeys.h ../dispatch/DODSKeys.h
 cedar_module.o: cedar_module.cc ../dispatch/DODSInitList.h \
@@ -323,10 +323,11 @@ FlatResponseHandler.o: FlatResponseHandler.cc FlatResponseHandler.h \
   ../dap/DODSResponseObject.h ../dap/cgi_util.h ../dap/DDS.h \
   ../../include/Pix.h ../../include/IteratorAdapter.h ../dap/BaseType.h \
   ../dap/AttrTable.h ../dap/Error.h ../dap/InternalErr.h \
-  ../dap/dods-datatypes.h ../dap/DAS.h ../dap/Clause.h ../dap/expr.h \
-  ../dap/RValue.h ../dap/ObjectType.h ../dap/EncodingType.h \
-  ../dispatch/DODSParserException.h ../dispatch/DODSBasicException.h \
-  ../dispatch/DODSException.h ../dispatch/TheRequestHandlerList.h \
+  ../dap/dods-datatypes.h ../dap/Constructor.h ../dap/DAS.h \
+  ../dap/Clause.h ../dap/expr.h ../dap/RValue.h ../dap/ObjectType.h \
+  ../dap/EncodingType.h ../dispatch/DODSParserException.h \
+  ../dispatch/DODSBasicException.h ../dispatch/DODSException.h \
+  ../dispatch/TheRequestHandlerList.h \
   ../dispatch/DODSRequestHandlerList.h
 TabResponseHandler.o: TabResponseHandler.cc TabResponseHandler.h \
   ../dispatch/DODSResponseHandler.h \
@@ -335,10 +336,11 @@ TabResponseHandler.o: TabResponseHandler.cc TabResponseHandler.h \
   ../dap/DODSResponseObject.h ../dap/cgi_util.h ../dap/DDS.h \
   ../../include/Pix.h ../../include/IteratorAdapter.h ../dap/BaseType.h \
   ../dap/AttrTable.h ../dap/Error.h ../dap/InternalErr.h \
-  ../dap/dods-datatypes.h ../dap/DAS.h ../dap/Clause.h ../dap/expr.h \
-  ../dap/RValue.h ../dap/ObjectType.h ../dap/EncodingType.h \
-  ../dispatch/DODSParserException.h ../dispatch/DODSBasicException.h \
-  ../dispatch/DODSException.h ../dispatch/TheRequestHandlerList.h \
+  ../dap/dods-datatypes.h ../dap/Constructor.h ../dap/DAS.h \
+  ../dap/Clause.h ../dap/expr.h ../dap/RValue.h ../dap/ObjectType.h \
+  ../dap/EncodingType.h ../dispatch/DODSParserException.h \
+  ../dispatch/DODSBasicException.h ../dispatch/DODSException.h \
+  ../dispatch/TheRequestHandlerList.h \
   ../dispatch/DODSRequestHandlerList.h
 StreamResponseHandler.o: StreamResponseHandler.cc StreamResponseHandler.h \
   ../dispatch/DODSResponseHandler.h \
@@ -365,9 +367,9 @@ InfoResponseHandler.o: InfoResponseHandler.cc InfoResponseHandler.h \
   ../dispatch/DODSInfo.h ../dap/DODSResponseObject.h ../dap/cgi_util.h \
   ../dap/DDS.h ../../include/Pix.h ../../include/IteratorAdapter.h \
   ../dap/BaseType.h ../dap/AttrTable.h ../dap/Error.h \
-  ../dap/InternalErr.h ../dap/dods-datatypes.h ../dap/DAS.h \
-  ../dap/Clause.h ../dap/expr.h ../dap/RValue.h ../dap/ObjectType.h \
-  ../dap/EncodingType.h ../dispatch/DODSParserException.h \
-  ../dispatch/DODSBasicException.h ../dispatch/DODSException.h \
-  ../dispatch/TheRequestHandlerList.h \
+  ../dap/InternalErr.h ../dap/dods-datatypes.h ../dap/Constructor.h \
+  ../dap/DAS.h ../dap/Clause.h ../dap/expr.h ../dap/RValue.h \
+  ../dap/ObjectType.h ../dap/EncodingType.h \
+  ../dispatch/DODSParserException.h ../dispatch/DODSBasicException.h \
+  ../dispatch/DODSException.h ../dispatch/TheRequestHandlerList.h \
   ../dispatch/DODSRequestHandlerList.h

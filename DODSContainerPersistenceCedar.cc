@@ -48,7 +48,18 @@ DODSContainerPersistenceCedar::add_container( string s_name,
 {
     throw DODSContainerPersistenceException( "Unable to add a container to Cedar Persistence" ) ;
 }
+
+DODSContainer *
+DODSContainerPersistenceCedar::rem_container( string s_name )
+{
+    throw DODSContainerPersistenceException( "Unable to remove a container from Cedar Persistence" ) ;
+    return NULL ;
+}
+
 // $Log: DODSContainerPersistenceCedar.cc,v $
+// Revision 1.4  2005/02/09 20:30:18  pwest
+// catch up to dispatch
+//
 // Revision 1.3  2005/02/01 17:58:37  pwest
 // integration of ESG into opendap
 //

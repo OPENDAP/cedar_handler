@@ -32,6 +32,11 @@ CedarReporter::CedarReporter()
 
 CedarReporter::~CedarReporter()
 {
+    if( _file_buffer )
+    {
+	delete _file_buffer ;
+	_file_buffer = 0 ;
+    }
 }
 
 void
@@ -57,6 +62,9 @@ CedarReporter::report( const DODSDataHandlerInterface &dhi )
 }
 
 // $Log: CedarReporter.cc,v $
+// Revision 1.4  2005/02/09 20:30:18  pwest
+// catch up to dispatch
+//
 // Revision 1.3  2004/12/15 17:44:12  pwest
 // added copyright, updated container persistence method look_for
 //

@@ -225,6 +225,7 @@ void load_dds( PassiveStructure &container, CedarDataRecord *my_data_record,
 		    get_name_for_parameter(MparVarName,pMparVars.get()[j]);
 		    BaseType *pMparvar = new PassiveInt16( MparVarName ); 
 		    DODSAutoPtr<PassiveArray> pmpararray( new PassiveArray( MparVarName, pMparvar ) ) ;
+		    delete pMparvar ; pMparvar = 0 ;
 		    pmpararray->append_dim(nrow_value);
 		    for (int w=0; w<nrow_value;w++)
 		    {
@@ -248,6 +249,9 @@ void load_dds( PassiveStructure &container, CedarDataRecord *my_data_record,
 }
 
 // $Log: cedar_read_descriptors.cc,v $
+// Revision 1.3  2005/02/09 20:30:18  pwest
+// catch up to dispatch
+//
 // Revision 1.2  2004/12/15 17:44:12  pwest
 // added copyright, updated container persistence method look_for
 //
