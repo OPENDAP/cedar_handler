@@ -1,5 +1,7 @@
 // cedar_read_attributes.cc
 
+// 2004 Copyright University Corporation for Atmospheric Research
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -167,6 +169,9 @@ void load_das(DAS &das,CedarDataRecord *dr)
 }
 
 // $Log: cedar_read_attributes.cc,v $
+// Revision 1.2  2004/12/15 17:44:12  pwest
+// added copyright, updated container persistence method look_for
+//
 // Revision 1.1  2004/06/30 21:04:03  pwest
 // cedar_handler uses the new dispatch code and can also be built for normal
 // cgi scripting (except the cgi needs to be updated to not check for

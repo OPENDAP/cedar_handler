@@ -1,5 +1,7 @@
 // CedarRequestHandler.cc
 
+// 2004 Copyright University Corporation for Atmospheric Research
+
 #include <iostream>
 #include <fstream>
 
@@ -195,6 +197,9 @@ CedarRequestHandler::cedar_build_help( DODSDataHandlerInterface &dhi )
 }
 
 // $Log: CedarRequestHandler.cc,v $
+// Revision 1.3  2004/12/15 17:44:12  pwest
+// added copyright, updated container persistence method look_for
+//
 // Revision 1.2  2004/07/02 21:11:47  pwest
 // added function to read data instead of using dds function
 //

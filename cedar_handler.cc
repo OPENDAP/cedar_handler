@@ -1,5 +1,7 @@
 // cedar_handler.cc
 
+// 2004 Copyright University Corporation for Atmospheric Research
+
 // -*- mode: c++; c-basic-offset:4 -*-
 
 // This file is part of libdap, A C++ implementation of the OPeNDAP Data
@@ -26,7 +28,7 @@
  
 #include "config_cedar.h"
 
-static char not_used rcsid[]={"$Id: cedar_handler.cc,v 1.1 2004/06/30 21:04:03 pwest Exp $"};
+static char not_used rcsid[]={"$Id: cedar_handler.cc,v 1.2 2004/12/15 17:44:12 pwest Exp $"};
 
 #include "DODSCgi.h"
 #include "CedarFilter.h"
@@ -43,6 +45,9 @@ main(int argc, char *argv[])
 }
 
 // $Log: cedar_handler.cc,v $
+// Revision 1.2  2004/12/15 17:44:12  pwest
+// added copyright, updated container persistence method look_for
+//
 // Revision 1.1  2004/06/30 21:04:03  pwest
 // cedar_handler uses the new dispatch code and can also be built for normal
 // cgi scripting (except the cgi needs to be updated to not check for

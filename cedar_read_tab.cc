@@ -1,5 +1,7 @@
 // cedar_read_tab.cc
 
+// 2004 Copyright University Corporation for Atmospheric Research
+
 #include <exception>
 #include <cstddef>
 #include <new>
@@ -51,8 +53,8 @@ void send_tab_data(CedarTab &tab_object, CedarDataRecord &dr, CedarConstraintEva
 	oss<<dr.get_jpar()<<'\t';
 	oss<<dr.get_mpar()<<'\t';
 	oss<<dr.get_nrows()<<endl;
-	unsigned int jpar_value=dr.get_jpar();
 
+	unsigned int jpar_value=dr.get_jpar();
 	short int *pJparData =new short int[jpar_value];
 	if (!pJparData)
 	{
@@ -93,6 +95,7 @@ void send_tab_data(CedarTab &tab_object, CedarDataRecord &dr, CedarConstraintEva
 	    }
 	}
 	oss<<endl;
+
 	for (w=0; w<jpar_value; w++)
 	{ 
 	    if (qa.validate_parameter(pJparVars[w]))
@@ -119,6 +122,7 @@ void send_tab_data(CedarTab &tab_object, CedarDataRecord &dr, CedarConstraintEva
 	oss<<endl;
 	delete [] pJparData;
 	delete [] pJparVars;
+
 	int mpar_value=dr.get_mpar();
 	int nrow_value=dr.get_nrows();
 	if ((mpar_value>0) && (nrow_value>0))
@@ -163,6 +167,7 @@ void send_tab_data(CedarTab &tab_object, CedarDataRecord &dr, CedarConstraintEva
 		}
 	    }
 	    oss<<endl;
+
 	    unsigned int number_of_valid_variables=0;
 
 	    printable_parameter valid_printable_parameters[mpar_value];
@@ -319,6 +324,9 @@ int cedar_read_tab(CedarTab &dt, string filename, string query, string &error)
 }
  
 // $Log: cedar_read_tab.cc,v $
+// Revision 1.2  2004/12/15 17:44:12  pwest
+// added copyright, updated container persistence method look_for
+//
 // Revision 1.1  2004/06/30 21:04:03  pwest
 // cedar_handler uses the new dispatch code and can also be built for normal
 // cgi scripting (except the cgi needs to be updated to not check for

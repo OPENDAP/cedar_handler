@@ -1,5 +1,7 @@
 // CedarReporter.cc
 
+// 2004 Copyright University Corporation for Atmospheric Research
+
 #include "CedarReporter.h"
 #include "TheDODSKeys.h"
 #include "DODSLogException.h"
@@ -50,12 +52,14 @@ CedarReporter::report( const DODSDataHandlerInterface &dhi )
     else
 	*(_file_buffer) << dhi.user_name ;
 
-    *(_file_buffer) << " " << dhi.user_address << " "
-		    << dhi.action << " " << dhi.real_name_list << " \""
+    *(_file_buffer) << " " << dhi.action << " " << dhi.real_name_list << " \""
 		    << dhi.request << "\"" << endl ;
 }
 
 // $Log: CedarReporter.cc,v $
+// Revision 1.3  2004/12/15 17:44:12  pwest
+// added copyright, updated container persistence method look_for
+//
 // Revision 1.2  2004/07/09 16:12:40  pwest
 // If the user name is not available then print this information out, otherwise
 // print the user name.

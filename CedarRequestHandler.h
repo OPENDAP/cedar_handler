@@ -1,5 +1,7 @@
 // CedarRequestHandler.h
 
+// 2004 Copyright University Corporation for Atmospheric Research
+
 #ifndef I_CEDARREQUESTHANDLER_H
 #define I_CEDARREQUESTHANDLER_H
 
@@ -24,6 +26,9 @@ public:
 #endif
 
 // $Log: CedarRequestHandler.h,v $
+// Revision 1.3  2004/12/15 17:44:12  pwest
+// added copyright, updated container persistence method look_for
+//
 // Revision 1.2  2004/07/02 21:11:47  pwest
 // added function to read data instead of using dds function
 //

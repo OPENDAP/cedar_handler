@@ -1,5 +1,7 @@
 // cedar_read_flat.cc
 
+// 2004 Copyright University Corporation for Atmospheric Research
+
 #include "CedarBlock.h"
 #include "CedarFile.h"
 #include "CedarFlat.h"
@@ -62,8 +64,8 @@ void send_flat_data(CedarFlat &cf, CedarDataRecord &dr,CedarConstraintEvaluator 
     if (qa.validate_record(dr))
     {
 	ostrstream oss;
-	unsigned int w;
-	int y;
+	unsigned int w = 0 ;
+	int y,z = 0 ;
 	CedarDate bdate,edate;
 	dr.get_record_begin_date(bdate);
 	dr.get_record_end_date(edate);
@@ -78,9 +80,15 @@ void send_flat_data(CedarFlat &cf, CedarDataRecord &dr,CedarConstraintEvaluator 
 	print_blocked(oss, "IEHMT");
 	print_blocked(oss, "IECST");
 	print_blocked(oss, "NROWS");
+
 	unsigned int jpar_value=dr.get_jpar();
 	short int *pJparVars =new short int[jpar_value];
+	if( !pJparVars )
+	{
+	    throw bad_alloc() ;
+	}
 	dr.load_JPAR_vars(pJparVars);
+
 	for (w=0; w<jpar_value; w++)
 	{ 
 	    string JparVarName="";
@@ -94,12 +102,15 @@ void send_flat_data(CedarFlat &cf, CedarDataRecord &dr,CedarConstraintEvaluator 
 		    the_var+="e_";
 		}
 		else
+		{
 		    val=pJparVars[w];
+		}
 		get_name_for_parameter(JparVarName,val);
 		the_var+=JparVarName;
 		print_blocked(oss, the_var);
 	    }
 	}
+
 	int mpar_value=dr.get_mpar();
 	short int *pMparVars=0;
 	if (mpar_value > 0 )
@@ -119,7 +130,9 @@ void send_flat_data(CedarFlat &cf, CedarDataRecord &dr,CedarConstraintEvaluator 
 			the_var+="e_";
 		    }
 		    else
+		    {
 			val=pMparVars[y];
+		    }
 		    get_name_for_parameter(MparVarName,val);
 		    the_var+=MparVarName;
 		    print_blocked(oss, the_var);
@@ -235,30 +248,49 @@ void send_flat_data(CedarFlat &cf, CedarDataRecord &dr,CedarConstraintEvaluator 
 	}
 	dr.load_MPAR_data(pMparData);
 
+	CedarParameter pp ;
 	for (int o=0; o<nrow_value; o++)
 	{
-	    print_blocked(oss, dr.get_record_kind_instrument());
-	    print_blocked(oss, dr.get_record_kind_data());
-	    print_blocked(oss, bdate.get_year());
-	    print_blocked(oss, bdate.get_month_day());
-	    print_blocked(oss, bdate.get_hour_min());
-	    print_blocked(oss, bdate.get_second_centisecond());
-	    print_blocked(oss, edate.get_year());
-	    print_blocked(oss, edate.get_month_day());
-	    print_blocked(oss, edate.get_hour_min());
-	    print_blocked(oss, edate.get_second_centisecond());
-	    print_blocked(oss, dr.get_nrows());
-	    for (w=0; w<jpar_value; w++)
-	    { 
-		if (qa.validate_parameter(pJparVars[w]))
-		    print_blocked(oss, pJparData[w]);
-	    }
-	    for (y=0; y<mpar_value;y++)
+	    bool print_row = true ;
+	    if( qa.got_parameter_constraint() )
 	    {
-		if (qa.validate_parameter(pMparVars[y]))
-		    print_blocked(oss, pMparData[y+(o*mpar_value)]);
+		for( z = 0; z < mpar_value; z++ )
+		{
+		    if( qa.validate_parameter( pMparVars[z] ) )
+		    {
+			pp = qa.get_parameter( pMparVars[z] ) ;
+			if( !pp.validateValue( pMparData[z+(o*mpar_value)] ) )
+			{
+			    print_row = false ;
+			}
+		    }
+		}
 	    }
-	    oss<<endl;
+	    if( print_row )
+	    {
+		print_blocked(oss, dr.get_record_kind_instrument());
+		print_blocked(oss, dr.get_record_kind_data());
+		print_blocked(oss, bdate.get_year());
+		print_blocked(oss, bdate.get_month_day());
+		print_blocked(oss, bdate.get_hour_min());
+		print_blocked(oss, bdate.get_second_centisecond());
+		print_blocked(oss, edate.get_year());
+		print_blocked(oss, edate.get_month_day());
+		print_blocked(oss, edate.get_hour_min());
+		print_blocked(oss, edate.get_second_centisecond());
+		print_blocked(oss, dr.get_nrows());
+		for (w=0; w<jpar_value; w++)
+		{ 
+		    if (qa.validate_parameter(pJparVars[w]))
+			print_blocked(oss, pJparData[w]);
+		}
+		for (y=0; y<mpar_value;y++)
+		{
+		    if (qa.validate_parameter(pMparVars[y]))
+			print_blocked(oss, pMparData[y+(o*mpar_value)]);
+		}
+		oss<<endl;
+	    }
 	}
 
 	delete [] pJparVars;
@@ -343,6 +375,9 @@ int cedar_read_flat(CedarFlat &cf, string filename, string query, string &error)
 }
  
 // $Log: cedar_read_flat.cc,v $
+// Revision 1.2  2004/12/15 17:44:12  pwest
+// added copyright, updated container persistence method look_for
+//
 // Revision 1.1  2004/06/30 21:04:03  pwest
 // cedar_handler uses the new dispatch code and can also be built for normal
 // cgi scripting (except the cgi needs to be updated to not check for
