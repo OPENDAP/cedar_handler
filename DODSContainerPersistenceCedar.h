@@ -20,11 +20,16 @@ public:
     virtual		~DODSContainerPersistenceCedar() ;
 
     virtual void	look_for( DODSContainer &d ) ;
+    virtual void	add_container( string s_name, string r_ame,
+				       string type ) ;
 };
 
 #endif // I_DODSContainerPersistenceCedar_h_
 
 // $Log: DODSContainerPersistenceCedar.h,v $
+// Revision 1.3  2005/02/01 17:58:37  pwest
+// integration of ESG into opendap
+//
 // Revision 1.2  2004/12/15 17:44:12  pwest
 // added copyright, updated container persistence method look_for
 //

@@ -5,6 +5,8 @@
 #include "InfoResponseHandler.h"
 #include "DODSTextInfo.h"
 #include "cgi_util.h"
+#include "DODSParserException.h"
+#include "TheRequestHandlerList.h"
 
 InfoResponseHandler::InfoResponseHandler( string name )
     : DODSResponseHandler( name )
@@ -16,10 +18,17 @@ InfoResponseHandler::~InfoResponseHandler( )
 }
 
 void
+InfoResponseHandler::parse( DODSTokenizer &tokenizer,
+                            DODSDataHandlerInterface &dhi )
+{
+    throw( DODSParserException( (string)"Improper command " + get_name() ) ) ;
+}
+
+void
 InfoResponseHandler::execute( DODSDataHandlerInterface &dhi )
 {
     _response = new DODSTextInfo( dhi.transmit_protocol == "HTTP" ) ;
-    execute_each( dhi ) ;
+    TheRequestHandlerList->execute_each( dhi ) ;
 }
 
 void
@@ -27,7 +36,7 @@ InfoResponseHandler::transmit( DODSTransmitter *transmitter,
                                DODSDataHandlerInterface &dhi )
 {
     if( _response )
-	transmitter->send_text( *((DODSTextInfo *)_response) ) ;
+	transmitter->send_text( *((DODSTextInfo *)_response), dhi ) ;
 }
 
 DODSResponseHandler *
@@ -37,6 +46,9 @@ InfoResponseHandler::InfoResponseBuilder( string handler_name )
 }
 
 // $Log: InfoResponseHandler.cc,v $
+// Revision 1.3  2005/02/01 17:58:37  pwest
+// integration of ESG into opendap
+//
 // Revision 1.2  2004/12/15 17:44:12  pwest
 // added copyright, updated container persistence method look_for
 //

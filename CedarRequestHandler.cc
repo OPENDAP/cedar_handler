@@ -2,7 +2,6 @@
 
 // 2004 Copyright University Corporation for Atmospheric Research
 
-#include <iostream>
 #include <fstream>
 
 using std::ifstream ;
@@ -19,8 +18,10 @@ using std::ifstream ;
 #include "cedar_read_tab.h"
 #include "CedarTab.h"
 #include "cedar_read_flat.h"
+#include "CedarFlat.h"
 #include "cedar_read_stream.h"
-#include "DODSInfo.h"
+#include "DODSTextInfo.h"
+#include "DODSHTMLInfo.h"
 #include "cedar_read_info.h"
 #include "cedar_version.h"
 #include "CedarVersion.h"
@@ -48,7 +49,7 @@ bool
 CedarRequestHandler::cedar_build_das( DODSDataHandlerInterface &dhi )
 {
     bool ret = true ;
-    DAS *das = (DAS *)dhi.response_handler->get_response_object() ;
+    DAS *das = dynamic_cast<DAS *>(dhi.response_handler->get_response_object());
     string cedar_error ;
     if( !cedar_read_attributes( *das, dhi.container->get_real_name(), cedar_error ) )
     {
@@ -61,7 +62,7 @@ bool
 CedarRequestHandler::cedar_build_dds( DODSDataHandlerInterface &dhi )
 {
     bool ret = true ;
-    DDS *dds = (DDS *)dhi.response_handler->get_response_object() ;
+    DDS *dds = dynamic_cast<DDS *>(dhi.response_handler->get_response_object());
     string cedar_error ;
     if( !cedar_read_descriptors( *dds, dhi.container->get_real_name(),
 				 dhi.container->get_symbolic_name(),
@@ -77,7 +78,7 @@ CedarRequestHandler::cedar_build_dds( DODSDataHandlerInterface &dhi )
 bool
 CedarRequestHandler::cedar_build_data( DODSDataHandlerInterface &dhi )
 {
-    DDS *dds = (DDS *)dhi.response_handler->get_response_object() ;
+    DDS *dds = dynamic_cast<DDS *>(dhi.response_handler->get_response_object());
     string cedar_error ;
     if( !cedar_read_descriptors( *dds, dhi.container->get_real_name(),
 				 dhi.container->get_symbolic_name(),
@@ -94,7 +95,7 @@ bool
 CedarRequestHandler::cedar_build_flat( DODSDataHandlerInterface &dhi )
 {
     bool ret = true ;
-    CedarFlat *flat = (CedarFlat *)dhi.response_handler->get_response_object() ;
+    CedarFlat *flat = dynamic_cast<CedarFlat *>(dhi.response_handler->get_response_object()) ;
     string cedar_error ;
     if( !cedar_read_flat( *flat, dhi.container->get_real_name(),
 			  dhi.container->get_constraint(), cedar_error ) )
@@ -121,7 +122,7 @@ bool
 CedarRequestHandler::cedar_build_tab( DODSDataHandlerInterface &dhi )
 {
     bool ret = true ;
-    CedarTab *dtab = (CedarTab *)dhi.response_handler->get_response_object() ;
+    CedarTab *dtab = dynamic_cast<CedarTab *>(dhi.response_handler->get_response_object()) ;
     string cedar_error ;
     if( !cedar_read_tab( *dtab, dhi.container->get_real_name(),
 			 dhi.container->get_constraint(), cedar_error ) )
@@ -135,7 +136,7 @@ bool
 CedarRequestHandler::cedar_build_info( DODSDataHandlerInterface &dhi )
 {
     bool ret = true ;
-    DODSInfo *info = (DODSInfo *)dhi.response_handler->get_response_object() ;
+    DODSTextInfo *info = dynamic_cast<DODSTextInfo *>(dhi.response_handler->get_response_object());
     string cedar_error ;
     if( !cedar_read_info( *info, dhi.container->get_real_name(),
 			  dhi.container->get_symbolic_name(),
@@ -151,7 +152,7 @@ bool
 CedarRequestHandler::cedar_build_vers( DODSDataHandlerInterface &dhi )
 {
     bool ret = true ;
-    DODSInfo *info = (DODSInfo *)dhi.response_handler->get_response_object() ;
+    DODSTextInfo *info = dynamic_cast<DODSTextInfo *>(dhi.response_handler->get_response_object());
     info->add_data( (string)"    " + cedar_version() + "\n" ) ;
     info->add_data( (string)"        libCedar++: " + CedarVersion::get_version_number() + "\n" ) ;
     return ret ;
@@ -161,7 +162,7 @@ bool
 CedarRequestHandler::cedar_build_help( DODSDataHandlerInterface &dhi )
 {
     bool ret = true ;
-    DODSInfo *info = (DODSInfo *)dhi.response_handler->get_response_object() ;
+    DODSHTMLInfo *info = dynamic_cast<DODSHTMLInfo *>(dhi.response_handler->get_response_object());
     info->add_data( (string)"cedar-dods help: " + cedar_version() + "\n" ) ;
     bool found = false ;
     string key = (string)"Cedar.Help." + dhi.transmit_protocol ;
@@ -197,6 +198,9 @@ CedarRequestHandler::cedar_build_help( DODSDataHandlerInterface &dhi )
 }
 
 // $Log: CedarRequestHandler.cc,v $
+// Revision 1.4  2005/02/01 17:58:37  pwest
+// integration of ESG into opendap
+//
 // Revision 1.3  2004/12/15 17:44:12  pwest
 // added copyright, updated container persistence method look_for
 //

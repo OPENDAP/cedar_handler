@@ -3,6 +3,8 @@
 // 2004 Copyright University Corporation for Atmospheric Research
 
 #include "StreamResponseHandler.h"
+#include "DODSParserException.h"
+#include "TheRequestHandlerList.h"
 
 StreamResponseHandler::StreamResponseHandler( string name )
     : DODSResponseHandler( name )
@@ -14,10 +16,17 @@ StreamResponseHandler::~StreamResponseHandler( )
 }
 
 void
+StreamResponseHandler::parse( DODSTokenizer &tokenizer,
+                              DODSDataHandlerInterface &dhi )
+{
+    throw( DODSParserException( (string)"Improper command " + get_name() ) ) ;
+}
+
+void
 StreamResponseHandler::execute( DODSDataHandlerInterface &dhi )
 {
     _response = 0 ;
-    execute_each( dhi ) ;
+    TheRequestHandlerList->execute_each( dhi ) ;
 }
 
 void
@@ -34,6 +43,9 @@ StreamResponseHandler::StreamResponseBuilder( string handler_name )
 }
 
 // $Log: StreamResponseHandler.cc,v $
+// Revision 1.3  2005/02/01 17:58:37  pwest
+// integration of ESG into opendap
+//
 // Revision 1.2  2004/12/15 17:44:12  pwest
 // added copyright, updated container persistence method look_for
 //

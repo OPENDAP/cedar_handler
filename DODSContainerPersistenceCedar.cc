@@ -41,7 +41,17 @@ DODSContainerPersistenceCedar::look_for( DODSContainer &d )
     d.set_container_type( "cedar" ) ;
 }
 
+void
+DODSContainerPersistenceCedar::add_container( string s_name,
+                                            string r_ame,
+					    string type )
+{
+    throw DODSContainerPersistenceException( "Unable to add a container to Cedar Persistence" ) ;
+}
 // $Log: DODSContainerPersistenceCedar.cc,v $
+// Revision 1.3  2005/02/01 17:58:37  pwest
+// integration of ESG into opendap
+//
 // Revision 1.2  2004/12/15 17:44:12  pwest
 // added copyright, updated container persistence method look_for
 //
