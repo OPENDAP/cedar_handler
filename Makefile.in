@@ -1,0 +1,81 @@
+@SET_MAKE@
+
+prefix = @prefix@
+exec_prefix = $(prefix)
+bindir = $(exec_prefix)/bin
+libdir = $(exec_prefix)/lib
+includedir = $(prefix)/include
+AR = ar
+RANLIB = @RANLIB@
+INSTALL = @INSTALL@
+INSTALL_DATA = @INSTALL_DATA@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+
+SRCS:=cedar_read_attributes.cc cedar_read_descriptors.cc cedar_read_tab.cc \
+	cedar_read_tab_support.cc cedar_read_info.cc CedarFilter.cc \
+	CedarTab.cc CedarFlat.cc cedar_read_flat.cc cedar_read_stream.cc \
+	CedarRequestHandler.cc cedar_module.cc cedar_test.cc \
+	FlatResponseHandler.cc TabResponseHandler.cc \
+	StreamResponseHandler.cc DODSContainerPersistenceCedar.cc \
+	CedarReporter.cc InfoResponseHandler.cc
+HDRS:=CedarFilter.h CedarFlat.h CedarRequestHandler.h CedarResponseNames.h \
+	CedarTab.h FlatResponseHandler.h StreamResponseHandler.h \
+	TabResponseHandler.h cedar_read_attributes.h \
+	cedar_read_descriptors.h cedar_read_flat.h cedar_read_info.h \
+	cedar_read_stream.h cedar_read_tab.h cedar_read_tab_support.h \
+	cedar_version.h config_cedar.h DODSContainerPersistenceCedar.h \
+	CedarReporter.h InfoResponseHandler.h
+OBJS:=cedar_read_attributes.o cedar_read_descriptors.o cedar_read_tab.o \
+	cedar_read_tab_support.o cedar_read_info.o CedarFilter.o \
+	CedarTab.o CedarFlat.o cedar_read_flat.o cedar_read_stream.o \
+	CedarRequestHandler.o FlatResponseHandler.o TabResponseHandler.o \
+	StreamResponseHandler.o DODSContainerPersistenceCedar.o \
+	CedarReporter.o InfoResponseHandler.o
+MODOBJS:=cedar_module.o cedar_persistence.o
+INCS:=-I. -I../dispatch @INCS@
+LIB:=libcedar-handler.a
+LIBS = -L../dispatch -ldispatch @LIBS@
+DEFS:=@DEFS@
+CXXFLAGS:=@CXXFLAGS@ -Wall -Wno-deprecated
+CPPFLAGS:=$(CXXFLASGS) $(DEFS) $(INCS)
+
+HANDLER:=cedar_handler
+
+all : $(HANDLER) $(MODOBJS)
+
+lib : $(LIB) $(MODOBJS)
+
+%.o : %.cc
+	g++ -c -gstabs -O2 $(CPPFLAGS) $<
+
+$(LIB) : $(OBJS)
+	$(AR) cru $@ $?
+	$(RANLIB) $@
+
+$(HANDLER) : $(LIB) $(HANDLER).o ../dispatch/test_authenticator.o
+	g++ -o $(HANDLER) $(HANDLER).o ../dispatch/test_authenticator.o $(LIB) $(LIBS)
+
+clean :
+	/bin/rm -rf $(OBJS) $(LIB) $(MODOBJS) $(HANDLER).o $(HANDLER)
+
+install: lib install-headers install-mods
+	-mkdir -p $(libdir)
+	$(INSTALL_DATA) $(LIB) $(libdir)
+	$(RANLIB) $(libdir)/$(LIB)
+
+install-headers:
+	-mkdir -p $(includedir)
+	for h in $(HDRS); \
+	    do $(INSTALL_DATA) $$h $(includedir); done
+
+install-mods:
+	-mkdir -p $(libdir)
+	for h in $(MODOBJS); \
+	    do $(INSTALL_DATA) $$h $(libdir); done
+
+.PHONY: depend
+
+depend: 
+	@depend@ -m Makefile -- $(CPPFLAGS) -- $(SRCS) $(TESTSRCS)
+
+# DO NOT DELETE; depend requires this line
