@@ -13,6 +13,10 @@ using std::ifstream ;
 #include "DODSContainer.h"
 #include "TheDODSKeys.h"
 #include "DODSContainerPersistenceException.h"
+#include "DODSInfo.h"
+#include "OPeNDAPDir.h"
+#include "OPeNDAPFile.h"
+#include "CedarResponseNames.h"
 
 DODSContainerPersistenceCedar::DODSContainerPersistenceCedar( const string &n )
     : DODSContainerPersistence( n )
@@ -49,14 +53,46 @@ DODSContainerPersistenceCedar::add_container( string s_name,
     throw DODSContainerPersistenceException( "Unable to add a container to Cedar Persistence" ) ;
 }
 
-DODSContainer *
-DODSContainerPersistenceCedar::rem_container( string s_name )
+bool
+DODSContainerPersistenceCedar::rem_container( const string &s_name )
 {
     throw DODSContainerPersistenceException( "Unable to remove a container from Cedar Persistence" ) ;
-    return NULL ;
+    return false ;
+}
+
+void
+DODSContainerPersistenceCedar::show_containers( DODSInfo &info )
+{
+    info.add_data( get_name() ) ;
+    info.add_data( "\n" ) ;
+
+    // need to get every file name in the directory and display
+    try
+    {
+	OPeNDAPDir d( _cedar_base, ".*\\.cbf$" ) ;
+	OPeNDAPDir::fileIterator i ;
+	for( i = d.beginOfFileList(); i != d.endOfFileList(); i++ )
+	{
+	    string sym = (*i).getBaseName() ;
+	    string real = (*i).getFullPath() ;
+	    string line = sym + "," + real + "," + CEDAR_NAME + "\n" ;
+	    info.add_data( line ) ;
+	}
+    }
+    catch( const string &err_str )
+    {
+	info.add_data( err_str ) ;
+    }
+    catch( ... )
+    {
+	info.add_data( "Failed to retrieve containers for cedar" ) ;
+    }
 }
 
 // $Log: DODSContainerPersistenceCedar.cc,v $
+// Revision 1.5  2005/03/17 20:46:58  pwest
+// impelementing rem_container and show_containers
+//
 // Revision 1.4  2005/02/09 20:30:18  pwest
 // catch up to dispatch
 //

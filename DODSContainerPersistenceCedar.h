@@ -22,12 +22,16 @@ public:
     virtual void		look_for( DODSContainer &d ) ;
     virtual void		add_container( string s_name, string r_ame,
 					       string type ) ;
-    virtual DODSContainer *	rem_container( string s_name ) ;
+    virtual bool		rem_container( const string &s_name ) ;
+    virtual void		show_containers( DODSInfo &info ) ;
 };
 
 #endif // I_DODSContainerPersistenceCedar_h_
 
 // $Log: DODSContainerPersistenceCedar.h,v $
+// Revision 1.5  2005/03/17 20:46:58  pwest
+// impelementing rem_container and show_containers
+//
 // Revision 1.4  2005/02/09 20:30:18  pwest
 // catch up to dispatch
 //
