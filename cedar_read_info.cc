@@ -105,7 +105,9 @@ cedar_read_info( DODSInfo &info, const string &filename,
 	}
 	else 
 	{
-	    error = "Failure reading data, corrupted file or not a cbf file.\n";
+	    error = (string)"Failure reading data from file "
+		    + filename
+		    + ", corrupted file or not a cbf file.\n" ;
 	    return false ;
 	}
     }
@@ -119,6 +121,9 @@ cedar_read_info( DODSInfo &info, const string &filename,
 }
 
 // $Log: cedar_read_info.cc,v $
+// Revision 1.3  2005/03/17 20:47:54  pwest
+// added more information to error messages
+//
 // Revision 1.2  2004/12/15 17:44:12  pwest
 // added copyright, updated container persistence method look_for
 //
