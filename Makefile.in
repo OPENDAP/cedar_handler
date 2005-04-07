@@ -36,6 +36,8 @@ INCS:=-I. -I../dispatch @INCS@
 LIB:=libcedar-handler.a
 LIBS = -L../dispatch -ldispatch @LIBS@
 DEFS:=@DEFS@
+#CXXFLAGS_DEBUG:=-g3 -O0 -Wall -fno-default-inline -fno-defer-pop
+#CXXFLAGS:=$(CXXFLAGS_DEBUG) 
 CXXFLAGS:=@CXXFLAGS@ -Wall -Wno-deprecated
 CPPFLAGS:=$(CXXFLAGS) $(DEFS) $(INCS)
 
