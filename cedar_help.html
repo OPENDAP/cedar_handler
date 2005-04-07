@@ -1,18 +1,19 @@
 <DIV STYLE="font-weight:none;font-size:12pt;color:black;">
+Commads added by and notes for the Cedar OPeNDAP server:
 <UL>
-    This server recognizes the following actions:
-    <OL>
-	<LI>dds: request the data descriptor structure.</LI>
-	<LI>das: request the data attributes.</LI>
-	<LI>info: extra documentation related to the data set. info is equivalent to the header records and catalog records.</LI>
-	<LI>dods: request for the data stream, this output is an octec binary stream which requires the analysis by the client dods library.</LI>
-	<LI>flat: request for the data stream as a flat file</LI>
-	<LI>tab: request for the data stream as a tab base file</LI>
-	<LI>stream: request the file content as is</LI>
-	<LI>help: prints this help.</LI>
-	<LI>ver: prints the version for this server.</LI>
-    </OL>
+    <LI>
+	get info|flat|tab|stream for <definition_name>;
+	<UL>
+	    <LI>info: extra documentation related to the data set. info is equivalent to the header records and catalog records</LI>
+	    <LI>flat: request for the data stream as a flat file</LI>
+	    <LI>tab: request for the data stream as a tab base file</LI>
+	    <LI>stream: request the file content as is</LI>
+	</UL>
+    </LI>
     <BR />
+    <BR />
+    <LI>Notes:
+    <UL>
     When the access to data is restricted, users must first get authenticated
     into the web server. In some cases this access is performed through a
     proxy which is supplying the login for the authentication. For this
@@ -71,6 +72,9 @@
 	functions are present each data record should satisfy ALL of the
 	constraints in order to be returned.
     </UL>
+    </UL>
+    </LI>
     <BR />
-    For more information please contact Jose Garcia, <A HREF="mailto:jgarcia@ucar.edu">jgarcia@ucar.edu</A>
+    <LI>For more information please contact Jose Garcia, <A HREF="mailto:jgarcia@ucar.edu">jgarcia@ucar.edu</A></LI>
+</UL>
 </DIV>
