@@ -2,10 +2,6 @@
 
 // 2004 Copyright University Corporation for Atmospheric Research
 
-#include <fstream>
-
-using std::ifstream ;
-
 #include "CedarRequestHandler.h"
 #include "DODSResponseHandler.h"
 #include "DODSResponseException.h"
@@ -21,7 +17,7 @@ using std::ifstream ;
 #include "CedarFlat.h"
 #include "cedar_read_stream.h"
 #include "DODSTextInfo.h"
-#include "DODSHTMLInfo.h"
+#include "DODSInfo.h"
 #include "cedar_read_info.h"
 #include "cedar_version.h"
 #include "CedarVersion.h"
@@ -162,42 +158,24 @@ bool
 CedarRequestHandler::cedar_build_help( DODSDataHandlerInterface &dhi )
 {
     bool ret = true ;
-    DODSHTMLInfo *info = dynamic_cast<DODSHTMLInfo *>(dhi.response_handler->get_response_object());
+    DODSInfo *info = dynamic_cast<DODSInfo *>(dhi.response_handler->get_response_object());
+
     info->add_data( (string)"cedar-dods help: " + cedar_version() + "\n" ) ;
-    bool found = false ;
-    string key = (string)"Cedar.Help." + dhi.transmit_protocol ;
-    string file = TheDODSKeys->get_key( key, found ) ;
-    if( found == false )
-    {
-	info->add_data( "no help information available for cedar-dods\n" ) ;
-    }
+
+    string key ;
+    if( dhi.transmit_protocol == "HTTP" )
+	key = (string)"Cedar.Help." + dhi.transmit_protocol ;
     else
-    {
-	ifstream ifs( file.c_str() ) ;
-	if( !ifs )
-	{
-	    info->add_data( "cedar-dods help file not found, help information not available\n" ) ;
-	}
-	else
-	{
-	    char line[4096] ;
-	    while( !ifs.eof() )
-	    {
-		ifs.getline( line, 4096 ) ;
-		if( !ifs.eof() )
-		{
-		    info->add_data( line ) ;
-		    info->add_data( "\n" ) ;
-		}
-	    }
-	    ifs.close() ;
-	}
-    }
+	key = "Cedar.Help.TXT" ;
+    info->add_data_from_file( key, CEDAR_NAME ) ;
 
     return ret ;
 }
 
 // $Log: CedarRequestHandler.cc,v $
+// Revision 1.5  2005/04/07 19:56:06  pwest
+// using add_data_from_file method of DODSInfo
+//
 // Revision 1.4  2005/02/01 17:58:37  pwest
 // integration of ESG into opendap
 //
