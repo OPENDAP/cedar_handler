@@ -260,7 +260,8 @@ void send_tab_data(CedarTab &tab_object, CedarDataRecord &dr, CedarConstraintEva
     }
 }
 
-int cedar_read_tab(CedarTab &dt, string filename, string query, string &error)
+int cedar_read_tab( CedarTab &dt, const string &filename,
+                    const string &query, string &error )
 {
     CedarConstraintEvaluator qa;
     try
@@ -326,6 +327,9 @@ int cedar_read_tab(CedarTab &dt, string filename, string query, string &error)
 }
  
 // $Log: cedar_read_tab.cc,v $
+// Revision 1.4  2005/05/10 00:23:06  pwest
+// using const reference to strings in signature instead of string values
+//
 // Revision 1.3  2005/03/17 20:47:54  pwest
 // added more information to error messages
 //

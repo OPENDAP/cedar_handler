@@ -27,7 +27,8 @@
   @return bool: True if the process have not problem loading the data, false otherwise.
   @see load_das
   */
-bool cedar_read_attributes(DAS &das, string filename, string &cedar_error);
+bool cedar_read_attributes( DAS &das, const string &filename,
+                            string &cedar_error ) ;
 
 /**
   loads a single data record into a DAS object.
@@ -72,6 +73,9 @@ int logged(int dat);
 #endif // cedar_read_attributes_h_
 
 // $Log: cedar_read_attributes.h,v $
+// Revision 1.3  2005/05/10 00:23:06  pwest
+// using const reference to strings in signature instead of string values
+//
 // Revision 1.2  2004/12/15 17:44:12  pwest
 // added copyright, updated container persistence method look_for
 //

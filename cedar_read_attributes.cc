@@ -20,7 +20,7 @@ static const char BYTE[]="Byte";
 static const char INT16[]="Int16";
 static const char FLOAT64[]="Float64";
 
-bool cedar_read_attributes(DAS &das, string filename, string &error)
+bool cedar_read_attributes( DAS &das, const string &filename, string &error )
 {
     try
     {
@@ -169,6 +169,9 @@ void load_das(DAS &das,CedarDataRecord *dr)
 }
 
 // $Log: cedar_read_attributes.cc,v $
+// Revision 1.3  2005/05/10 00:23:06  pwest
+// using const reference to strings in signature instead of string values
+//
 // Revision 1.2  2004/12/15 17:44:12  pwest
 // added copyright, updated container persistence method look_for
 //

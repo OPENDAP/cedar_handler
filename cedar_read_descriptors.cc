@@ -16,12 +16,13 @@
 #include "TheDODSKeys.h"
 #include "cgi_util.h"
 
-bool cedar_read_descriptors( DDS &dds, string filename, string name,
-			     string query, string &error )
+bool cedar_read_descriptors( DDS &dds, const string &filename,
+                             const string &name, const string &query,
+			     string &error )
 {
     int i=0;
     CedarConstraintEvaluator qa;
-    DODSAutoPtr <PassiveStructure> container( new PassiveStructure( name) ) ;
+    DODSAutoPtr <PassiveStructure> container( new PassiveStructure( name ) ) ;
 
     try
     {
@@ -249,6 +250,9 @@ void load_dds( PassiveStructure &container, CedarDataRecord *my_data_record,
 }
 
 // $Log: cedar_read_descriptors.cc,v $
+// Revision 1.4  2005/05/10 00:23:06  pwest
+// using const reference to strings in signature instead of string values
+//
 // Revision 1.3  2005/02/09 20:30:18  pwest
 // catch up to dispatch
 //

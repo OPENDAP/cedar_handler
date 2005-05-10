@@ -13,8 +13,9 @@
 class PassiveStructure ;
 class CedarConstraintEvaluator ;
 
-bool cedar_read_descriptors( DDS &dds, string filename, string name,
-			     string query, string &cedar_error ) ;
+bool cedar_read_descriptors( DDS &dds, const string &filename,
+                             const string &name, const string &query,
+			     string &cedar_error ) ;
 
 void load_dds( PassiveStructure &, CedarDataRecord *my_data_record,
 	       CedarConstraintEvaluator &qa, int &index ) ;
@@ -24,6 +25,9 @@ void get_name_for_parameter( string &str, int par ) ;
 #endif // cedar_read_descriptors_h_
 
 // $Log: cedar_read_descriptors.h,v $
+// Revision 1.3  2005/05/10 00:23:06  pwest
+// using const reference to strings in signature instead of string values
+//
 // Revision 1.2  2004/12/15 17:44:12  pwest
 // added copyright, updated container persistence method look_for
 //

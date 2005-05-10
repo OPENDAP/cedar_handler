@@ -14,7 +14,10 @@ using std::cerr ;
 using std::endl ;
 using std::string ;
 
-bool cedar_read_stream(const string &filename, const string &query, string &error)
+#include "cedar_read_stream.h"
+
+bool cedar_read_stream( const string &filename, const string &query,
+                        string &error )
 {
     int bytes=0;
     ifstream os;
@@ -43,6 +46,9 @@ bool cedar_read_stream(const string &filename, const string &query, string &erro
 }
 
 // $Log: cedar_read_stream.cc,v $
+// Revision 1.3  2005/05/10 00:23:06  pwest
+// using const reference to strings in signature instead of string values
+//
 // Revision 1.2  2004/12/15 17:44:12  pwest
 // added copyright, updated container persistence method look_for
 //

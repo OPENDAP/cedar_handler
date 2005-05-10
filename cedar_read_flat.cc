@@ -310,7 +310,8 @@ void send_flat_data(CedarFlat &cf, CedarDataRecord &dr,CedarConstraintEvaluator 
     }
 }
 
-int cedar_read_flat(CedarFlat &cf, string filename, string query, string &error)
+int cedar_read_flat( CedarFlat &cf, const string &filename,
+                     const string &query, string &error )
 {
     CedarConstraintEvaluator qa;
     try
@@ -377,6 +378,9 @@ int cedar_read_flat(CedarFlat &cf, string filename, string query, string &error)
 }
  
 // $Log: cedar_read_flat.cc,v $
+// Revision 1.4  2005/05/10 00:23:06  pwest
+// using const reference to strings in signature instead of string values
+//
 // Revision 1.3  2005/03/17 20:47:54  pwest
 // added more information to error messages
 //

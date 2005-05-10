@@ -10,11 +10,15 @@ class CedarFlat ;
 
 using std::string ;
 
-int cedar_read_flat(CedarFlat &cf, string filename, string query, string &error);
+int cedar_read_flat( CedarFlat &cf, const string &filename,
+                     const string &query, string &error ) ;
 
 #endif // cedar_read_flat_h_
 
 // $Log: cedar_read_flat.h,v $
+// Revision 1.3  2005/05/10 00:23:06  pwest
+// using const reference to strings in signature instead of string values
+//
 // Revision 1.2  2004/12/15 17:44:12  pwest
 // added copyright, updated container persistence method look_for
 //
