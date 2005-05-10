@@ -79,9 +79,6 @@ install-progs: $(HANDLER)
 	-mkdir -p $(bindir)
 	$(INSTALL_PROGRAM) -s $(HANDLER) $(bindir)
 
-configure: configure.in cdf.m4 $(DODS_ROOT)etc/aclocal.m4
-	autoconf --localdir=$(DODS_ROOT)etc
-
 Makefile: Makefile.in
 	if [ -x ./config.status ]; \
 	then \

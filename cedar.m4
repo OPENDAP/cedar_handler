@@ -1,5 +1,5 @@
 # check for cedar libraries, not in usual location
-AC_DEFUN(DODS_CEDAR_PACKAGE, [dnl
+AC_DEFUN(CEDAR_PACKAGE, [dnl
     AC_ARG_WITH(cedar,
         [  --with-cedar=ARG          Where is the local cedar library sources (directory)],
         CEDAR_PATH=${withval}, CEDAR_PATH="$CEDAR_PATH")
