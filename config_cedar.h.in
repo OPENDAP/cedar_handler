@@ -51,7 +51,8 @@
 #define not_used
 #endif
 
-#define DODS_SERVER_VERSION "cedar-handler/2.0.1"
+/* handler version */
+#undef CEDAR_VERSION
 
 /*
   $Log: config_cedar.h.in,v $

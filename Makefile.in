@@ -34,7 +34,8 @@ OBJS:=cedar_read_attributes.o cedar_read_descriptors.o cedar_read_tab.o \
 MODOBJS:=cedar_module.o cedar_persistence.o
 INCS:=-I. -I../dispatch @INCS@
 LIB:=libcedar-handler.a
-LIBS = -L../dispatch -ldispatch @LIBS@
+LIBS = @LIBS@
+MODS = @MODS@
 DEFS:=@DEFS@
 #CXXFLAGS_DEBUG:=-g3 -O0 -Wall -fno-default-inline -fno-defer-pop
 #CXXFLAGS:=$(CXXFLAGS_DEBUG) 
@@ -54,21 +55,16 @@ $(LIB) : $(OBJS)
 	$(AR) cru $@ $?
 	$(RANLIB) $@
 
-$(HANDLER) : $(LIB) $(MODOBJS) $(HANDLER).o ../dispatch/dods_module.o ../dispatch/test_authenticator.o ../dispatch/no_aggserver.o
-	g++ -o $(HANDLER) $(HANDLER).o ../dispatch/dods_module.o ../dispatch/test_authenticator.o ../dispatch/no_aggserver.o $(MODOBJS) $(LIB) $(LIBS)
+$(HANDLER) : $(LIB) $(MODOBJS) $(HANDLER).o $(MODS)
+	g++ -o $(HANDLER) $(HANDLER).o $(MODS) $(MODOBJS) $(LIB) $(LIBS)
 
 clean :
 	/bin/rm -rf $(OBJS) $(LIB) $(MODOBJS) $(HANDLER).o $(HANDLER)
 
-install: lib install-headers install-mods install-progs
+install: $(HANDLER) install-mods install-progs
 	-mkdir -p $(libdir)
 	$(INSTALL_DATA) $(LIB) $(libdir)
 	$(RANLIB) $(libdir)/$(LIB)
-
-install-headers:
-	-mkdir -p $(includedir)
-	for h in $(HDRS); \
-	    do $(INSTALL_DATA) $$h $(includedir); done
 
 install-mods:
 	-mkdir -p $(libdir)

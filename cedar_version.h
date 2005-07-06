@@ -9,10 +9,12 @@
 
 using std::string ;
 
+#include "config_cedar.h"
+
 inline string
 cedar_version()
 {
-    return (string)"DODS cedar/2.0.1: compiled on " + __DATE__ + ":" + __TIME__ ;
+    return (string)CEDAR_VERSION + ": compiled on " + __DATE__ + ":" + __TIME__ ;
 }
 
 #endif // E_cedar_version_h
