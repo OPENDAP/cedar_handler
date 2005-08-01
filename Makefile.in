@@ -1,5 +1,6 @@
 @SET_MAKE@
 
+something=
 prefix = @prefix@
 exec_prefix = $(prefix)
 bindir = $(exec_prefix)/cgi-bin
