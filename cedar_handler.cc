@@ -28,7 +28,7 @@
  
 #include "config_cedar.h"
 
-static char not_used rcsid[]={"$Id: cedar_handler.cc,v 1.3 2005/04/06 20:14:24 pwest Exp $"};
+static char not_used rcsid[]={"$Id$"};
 
 #include "DODSCgi.h"
 #include "CedarFilter.h"

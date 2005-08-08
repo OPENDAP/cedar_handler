@@ -2,7 +2,7 @@
 dnl -*- m4 -*-
 dnl Process this file with autoconf to produce a configure script.
 
-AC_REVISION($Id: configure.in,v 1.2 2005/05/10 00:22:40 pwest Exp $)
+AC_REVISION($Id$)
 
 AC_INIT(cedar_handler.cc)
 AC_CONFIG_HEADER(config_cedar.h)
