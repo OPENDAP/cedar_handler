@@ -16,13 +16,6 @@ StreamResponseHandler::~StreamResponseHandler( )
 }
 
 void
-StreamResponseHandler::parse( DODSTokenizer &tokenizer,
-                              DODSDataHandlerInterface &dhi )
-{
-    throw( DODSParserException( (string)"Improper command " + get_name() ) ) ;
-}
-
-void
 StreamResponseHandler::execute( DODSDataHandlerInterface &dhi )
 {
     _response = 0 ;

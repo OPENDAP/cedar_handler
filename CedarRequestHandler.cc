@@ -7,6 +7,7 @@
 #include "DODSResponseException.h"
 #include "DODSResponseNames.h"
 #include "CedarResponseNames.h"
+#include "OPeNDAPDataNames.h"
 #include "cedar_read_attributes.h"
 #include "DAS.h"
 #include "cedar_read_descriptors.h"
@@ -67,7 +68,7 @@ CedarRequestHandler::cedar_build_dds( DODSDataHandlerInterface &dhi )
     {
 	throw DODSResponseException( cedar_error ) ;
     }
-    dhi.post_constraint = "" ;
+    dhi.data[POST_CONSTRAINT] = "" ;
     return ret ;
 }
 
@@ -83,7 +84,7 @@ CedarRequestHandler::cedar_build_data( DODSDataHandlerInterface &dhi )
     {
 	throw DODSResponseException( cedar_error ) ;
     }
-    dhi.post_constraint = "" ;
+    dhi.data[POST_CONSTRAINT] = "" ;
     return true ;
 }
 

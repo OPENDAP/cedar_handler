@@ -30,34 +30,13 @@
 
 static char not_used rcsid[]={"$Id$"};
 
-#include "DODSCgi.h"
-#include "CedarFilter.h"
-#include "DODSGlobalIQ.h"
-#include "DODSException.h"
+#include "CedarHandlerApp.h"
 
 int 
 main(int argc, char *argv[])
 {
-    try
-    {
-	putenv( "DODS_INI=/project/cedar/bin/apache_1.3.29/conf/opendap.ini" ) ;
-	DODSGlobalIQ::DODSGlobalInit( argc, argv ) ;
-    }
-    catch( DODSException &e )
-    {
-	cerr << "Error initializing application" << endl ;
-	cerr << "    " << e.get_error_description() << endl ;
-	return 1 ;
-    }
-
-    CedarFilter df(argc, argv);
-
-    DODSCgi d( "cedar", df ) ;
-    d.execute_request() ;
-
-    DODSGlobalIQ::DODSGlobalQuit() ;
-
-    return 0;
+    CedarHandlerApp app ;
+    return app.main( argc, argv ) ;
 }
 
 // $Log: cedar_handler.cc,v $

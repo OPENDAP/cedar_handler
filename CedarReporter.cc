@@ -5,6 +5,7 @@
 #include "CedarReporter.h"
 #include "TheDODSKeys.h"
 #include "DODSLogException.h"
+#include "OPeNDAPDataNames.h"
 
 CedarReporter::CedarReporter()
     : DODSReporter(),
@@ -52,13 +53,29 @@ CedarReporter::report( const DODSDataHandlerInterface &dhi )
 	*(_file_buffer) << b[j] ;
     *(_file_buffer) << "] " ;
 
-    if( dhi.user_name == "" )
+    string user_name = "" ;
+    DODSDataHandlerInterface::data_citer citer ;
+    citer = dhi.data_c().find( USER_NAME ) ;
+    if( citer != dhi.data_c().end() )
+	user_name = (*citer).second ;
+
+    if( user_name == "" )
 	*(_file_buffer) << "USER_UNKNOWN" ;
     else
-	*(_file_buffer) << dhi.user_name ;
+	*(_file_buffer) << user_name ;
 
-    *(_file_buffer) << " " << dhi.action << " " << dhi.real_name_list << " \""
-		    << dhi.request << "\"" << endl ;
+    string request = "" ;
+    citer = dhi.data_c().find( DATA_REQUEST ) ;
+    if( citer != dhi.data_c().end() )
+	request = (*citer).second ;
+
+    string real = "" ;
+    citer = dhi.data_c().find( REAL_NAME_LIST ) ;
+    if( citer != dhi.data_c().end() )
+	real = (*citer).second ;
+
+    *(_file_buffer) << " " << dhi.action << " " << real << " \"" 
+                    << request << "\"" << endl ;
 }
 
 // $Log: CedarReporter.cc,v $

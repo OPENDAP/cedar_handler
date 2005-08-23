@@ -15,6 +15,7 @@ using std::endl ;
 #include "StreamResponseHandler.h"
 #include "InfoResponseHandler.h"
 #include "TheDODSLog.h"
+#include "DODSResponseNames.h"
 #include "CedarResponseNames.h"
 #include "TheReporterList.h"
 #include "CedarReporter.h"

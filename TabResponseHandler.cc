@@ -18,13 +18,6 @@ TabResponseHandler::~TabResponseHandler( )
 }
 
 void
-TabResponseHandler::parse( DODSTokenizer &tokenizer,
-                           DODSDataHandlerInterface &dhi )
-{
-    throw( DODSParserException( (string)"Improper command " + get_name() ) ) ;
-}
-
-void
 TabResponseHandler::execute( DODSDataHandlerInterface &dhi )
 {
     _response = new CedarTab( dhi.transmit_protocol == "HTTP" ) ;

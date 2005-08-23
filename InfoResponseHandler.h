@@ -12,8 +12,6 @@ public:
 				InfoResponseHandler( string name ) ;
     virtual			~InfoResponseHandler( void ) ;
 
-    virtual void		parse( DODSTokenizer &tokenizer,
-                                       DODSDataHandlerInterface &dhi ) ;
     virtual void		execute( DODSDataHandlerInterface &r ) ;
     virtual void		transmit( DODSTransmitter *transmitter,
                                           DODSDataHandlerInterface &r ) ;

@@ -18,13 +18,6 @@ FlatResponseHandler::~FlatResponseHandler( )
 }
 
 void
-FlatResponseHandler::parse( DODSTokenizer &tokenizer,
-                            DODSDataHandlerInterface &dhi )
-{
-    throw( DODSParserException( (string)"Improper command " + get_name() ) ) ;
-}
-
-void
 FlatResponseHandler::execute( DODSDataHandlerInterface &dhi )
 {
     _response = new CedarFlat( dhi.transmit_protocol == "HTTP" ) ;

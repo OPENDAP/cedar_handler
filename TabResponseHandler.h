@@ -12,8 +12,6 @@ public:
 				TabResponseHandler( string handler_name ) ;
     virtual			~TabResponseHandler(void) ;
 
-    virtual void		parse( DODSTokenizer &tokenizer,
-                                       DODSDataHandlerInterface &dhi ) ;
     virtual void		execute( DODSDataHandlerInterface &r ) ;
     virtual void		transmit( DODSTransmitter *transmitter,
                                           DODSDataHandlerInterface &r ) ;

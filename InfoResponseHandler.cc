@@ -18,13 +18,6 @@ InfoResponseHandler::~InfoResponseHandler( )
 }
 
 void
-InfoResponseHandler::parse( DODSTokenizer &tokenizer,
-                            DODSDataHandlerInterface &dhi )
-{
-    throw( DODSParserException( (string)"Improper command " + get_name() ) ) ;
-}
-
-void
 InfoResponseHandler::execute( DODSDataHandlerInterface &dhi )
 {
     _response = new DODSTextInfo( dhi.transmit_protocol == "HTTP" ) ;

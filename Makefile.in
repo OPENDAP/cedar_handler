@@ -15,7 +15,7 @@ INSTALL_PROGRAM = @INSTALL_PROGRAM@
 SRCS:=cedar_read_attributes.cc cedar_read_descriptors.cc cedar_read_tab.cc \
 	cedar_read_tab_support.cc cedar_read_info.cc CedarFilter.cc \
 	CedarTab.cc CedarFlat.cc cedar_read_flat.cc cedar_read_stream.cc \
-	CedarRequestHandler.cc cedar_module.cc \
+	CedarRequestHandler.cc cedar_module.cc cedar_commands.cc \
 	FlatResponseHandler.cc TabResponseHandler.cc \
 	StreamResponseHandler.cc DODSContainerPersistenceCedar.cc \
 	CedarReporter.cc InfoResponseHandler.cc
@@ -33,7 +33,8 @@ OBJS:=cedar_read_attributes.o cedar_read_descriptors.o cedar_read_tab.o \
 	StreamResponseHandler.o DODSContainerPersistenceCedar.o \
 	CedarReporter.o InfoResponseHandler.o
 MODOBJS:=cedar_module.o cedar_persistence.o
-INCS:=-I. -I../dispatch @INCS@
+CMDOBJS:=cedar_commands.o
+INCS:=-I. @INCS@
 LIB:=libcedar-handler.a
 LIBS = @LIBS@
 MODS = @MODS@
@@ -43,9 +44,11 @@ DEFS:=@DEFS@
 CXXFLAGS:=@CXXFLAGS@ -Wall -Wno-deprecated
 CPPFLAGS:=$(CXXFLAGS) $(DEFS) $(INCS)
 
+HANDLER_OBJS:=cedar_handler.o CedarHandlerApp.o
+HANDLER_SRCS:=cedar_handler.cc CedarHandlerApp.cc
 HANDLER:=cedar_handler
 
-all : $(HANDLER)
+all : $(HANDLER) $(CMDOBJS)
 
 lib : $(LIB) $(MODOBJS)
 
@@ -56,11 +59,11 @@ $(LIB) : $(OBJS)
 	$(AR) cru $@ $?
 	$(RANLIB) $@
 
-$(HANDLER) : $(LIB) $(MODOBJS) $(HANDLER).o $(MODS)
-	g++ -o $(HANDLER) $(HANDLER).o $(MODS) $(MODOBJS) $(LIB) $(LIBS)
+$(HANDLER) : $(HANDLER_OBJS) $(LIB) $(MODOBJS) $(MODS)
+	g++ -o $(HANDLER) $(HANDLER_OBJS) $(MODS) $(MODOBJS) $(LIB) $(LIBS)
 
 clean :
-	/bin/rm -rf $(OBJS) $(LIB) $(MODOBJS) $(HANDLER).o $(HANDLER)
+	/bin/rm -rf $(OBJS) $(LIB) $(MODOBJS) $(CMDOBJS) $(HANDLER_OBJS) $(HANDLER)
 
 install: $(HANDLER) install-mods install-progs
 	-mkdir -p $(libdir)
@@ -69,7 +72,7 @@ install: $(HANDLER) install-mods install-progs
 
 install-mods:
 	-mkdir -p $(libdir)
-	for h in $(MODOBJS); \
+	for h in $(MODOBJS) $(CMDOBJS); \
 	    do $(INSTALL_DATA) $$h $(libdir); done
 
 install-progs: $(HANDLER)
@@ -87,7 +90,7 @@ Makefile: Makefile.in
 .PHONY: depend
 
 depend: 
-	@depend@ -m Makefile.in -- $(CPPFLAGS) -- $(SRCS) $(TESTSRCS)
+	@depend@ -m Makefile.in -- $(CPPFLAGS) -- $(SRCS) $(HANDLER_SRCS)
 	$(MAKE) $(MFLAGS) Makefile
 
 # DO NOT DELETE; depend requires this line
