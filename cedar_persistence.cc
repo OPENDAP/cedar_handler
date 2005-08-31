@@ -30,7 +30,7 @@ CedarPersistenceTerm(void) {
     return true ;
 }
 
-FUNINITQUIT( CedarPersistenceInit, CedarPersistenceTerm, FILEPERSISTENCE_INIT ) ;
+FUNINITQUIT( CedarPersistenceInit, CedarPersistenceTerm, PERSISTENCE_INIT ) ;
 
 // $Log: cedar_persistence.cc,v $
 // Revision 1.2  2004/12/15 17:44:12  pwest
