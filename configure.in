@@ -65,23 +65,23 @@ AC_FUNC_ALLOCA
 AC_CHECK_FUNCS(strdup strftime timegm mktime)
 
 # check for opendap-g daemon libraries, not in usual location
-AC_DEFUN(DAEMON_PACKAGE, [dnl
-    AC_ARG_WITH(daemon,
-        [  --with-daemon=ARG          Where is the local opendap-g daemon library sources (directory)],
-        DAEMON_PATH=${withval}, DAEMON_PATH="$OPENDAP_ROOT")
-    if test ! -d "$DAEMON_PATH"
+AC_DEFUN(BES_PACKAGE, [dnl
+    AC_ARG_WITH(bes,
+        [  --with-bes=ARG          Where is the local opendap-g bes library sources (directory)],
+        BES_PATH=${withval}, BES_PATH="$OPENDAP_ROOT")
+    if test ! -d "$BES_PATH"
     then
 	AC_MSG_ERROR([Could not find opendap-g daemon library])
     else
-	INCS="$INCS -I${DAEMON_PATH}/include/opendap-g"
-	LIBS="$LIBS -L${DAEMON_PATH}/lib -ldispatch"
-	MODS="$MODS ${DAEMON_PATH}/lib/dods_module.o ${DAEMON_PATH}/lib/test_authenticator.o"
+	INCS="$INCS -I${BES_PATH}/include/bes"
+	LIBS="$LIBS -L${BES_PATH}/lib -ldispatch"
+	MODS="$MODS ${BES_PATH}/lib/bes/dods_module.o ${BES_PATH}/lib/bes/test_authenticator.o"
 	AC_SUBST(INCS)
 	AC_SUBST(LIBS)
 	AC_SUBST(MODS)
     fi])
 
-DAEMON_PACKAGE
+BES_PACKAGE
 
 # check for cedar libraries, not in usual location
 AC_DEFUN(CEDAR_PACKAGE, [dnl
@@ -100,6 +100,21 @@ AC_DEFUN(CEDAR_PACKAGE, [dnl
 
 CEDAR_PACKAGE
 
+# check for mysql libraries, not in usual location
+AC_DEFUN(MYSQL_PACKAGE, [dnl
+    AC_ARG_WITH(mysql,
+        [  --with-mysql=ARG       Where is the external mysql (directory)],
+        MYSQL_PATH=${withval}, MYSQL_PATH="/usr/local")
+
+        LIBS="`$MYSQL_PATH/bin/mysql_config --libs` $LIBS"
+	INCS="`$MYSQL_PATH/bin/mysql_config --cflags` $INCS"
+
+	AC_SUBST(INCS)
+	AC_SUBST(LIBS)
+    ])
+
+MYSQL_PACKAGE
+
 # check for dap libraries, not in usual location
 AC_DEFUN(DAP_PACKAGE, [dnl
     AC_ARG_WITH(dap,
@@ -117,7 +132,7 @@ AC_DEFUN(DAP_PACKAGE, [dnl
 
 DAP_PACKAGE
 
-# check for dispatch version
+# check for cedar version
 AC_DEFUN(CEDAR_VERSION_CHECK, [dnl
     AC_MSG_CHECKING([version])
     VERSION=`cat version.h`

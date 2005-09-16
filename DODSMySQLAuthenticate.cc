@@ -9,6 +9,7 @@
 #include "DODSMemoryException.h"
 #include "TheDODSKeys.h"
 #include "DODSAuthenticateException.h"
+#include "OPeNDAPDataNames.h"
 
 /** @brief Constructor makes connection to the MySQL database and initializes
  * authentication using MySQL.
@@ -142,7 +143,7 @@ DODSMySQLAuthenticate::authenticate( DODSDataHandlerInterface &dhi )
     {
 	// get the current date and time
 	string query = "select USER_NAME from tbl_sessions " ;
-	query += "where USER_NAME=\"" + dhi.user_name + "\";" ;
+	query += "where USER_NAME=\"" + dhi.data[USER_NAME] + "\";" ;
 	_query->run_query( query ) ;
 	if( !_query->is_empty_set() )
 	{
@@ -151,7 +152,7 @@ DODSMySQLAuthenticate::authenticate( DODSDataHandlerInterface &dhi )
 		char err_str[256] ;
 		sprintf( err_str, "%s %s\n%s: %d rows and %d fields returned",
 			 "Unable to authenticate user",
-			 dhi.user_name.c_str(),
+			 dhi.data[USER_NAME].c_str(),
 			 "Invalid data from MySQL",
 			 _query->get_nrows(),
 			 _query->get_nfields() ) ;
@@ -165,7 +166,7 @@ DODSMySQLAuthenticate::authenticate( DODSDataHandlerInterface &dhi )
 	    char err_str[256] ;
 	    sprintf( err_str, "%s %s",
 		     "Unable to authenticate user",
-		     dhi.user_name.c_str() ) ;
+		     dhi.data[USER_NAME].c_str() ) ;
 	    DODSAuthenticateException pe ;
 	    pe.set_error_description( err_str ) ;
 	    throw pe ;
