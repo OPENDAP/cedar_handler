@@ -8,7 +8,7 @@ using std::endl ;
 
 #include "DODSMySQLChannel.h"
 #include "DODSException.h"
-#include "TheDODSLog.h"
+#include "DODSLog.h"
 
 DODSMySQLChannel::DODSMySQLChannel()
 {
@@ -22,12 +22,12 @@ DODSMySQLChannel::~DODSMySQLChannel()
 {
     if( _channel_open )
     {
-	if( TheDODSLog->is_verbose() )
+	if( DODSLog::TheLog()->is_verbose() )
 	{
-	    (*TheDODSLog) << "MySQL channel disconnected from:" << endl
-			  << "  server = " << _server << endl
-			  << "  user = " << _user << endl
-			  << "  database = " << _database << endl ;
+	    (*DODSLog::TheLog()) << "MySQL channel disconnected from:" << endl
+			         << "  server = " << _server << endl
+			         << "  user = " << _user << endl
+			         << "  database = " << _database << endl ;
 	}
 	mysql_close( _the_channel ) ;
     }
@@ -50,12 +50,12 @@ DODSMySQLChannel::open( const char* server, const char* user,
 	    return false ;
 	else
 	{
-	    if( TheDODSLog->is_verbose() )
+	    if( DODSLog::TheLog()->is_verbose() )
 	    {
-		(*TheDODSLog) << "MySQL channel connected to:" << endl
-			      << "  server = " << _server << endl
-			      << "  user = " << _user << endl
-			      << "  database = " << _database << endl ;
+		(*DODSLog::TheLog()) << "MySQL channel connected to:" << endl
+				     << "  server = " << _server << endl
+				     << "  user = " << _user << endl
+				     << "  database = " << _database << endl ;
 	    }
 	    _channel_open = true ;
 	    return true ;

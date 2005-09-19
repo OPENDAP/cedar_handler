@@ -23,7 +23,7 @@ DODSContainerPersistenceCedar::DODSContainerPersistenceCedar( const string &n )
 {
     string key = "DODS.Container.Persistence.Cedar.BaseDir" ;
     bool found = false ;
-    _cedar_base = TheDODSKeys->get_key( key, found ) ;
+    _cedar_base = TheDODSKeys::TheKeys()->get_key( key, found ) ;
     if( _cedar_base == "" )
     {
 	string s = key + " not defined in key file" ;

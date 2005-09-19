@@ -6,7 +6,7 @@
 #include "DODSTextInfo.h"
 #include "cgi_util.h"
 #include "DODSParserException.h"
-#include "TheRequestHandlerList.h"
+#include "DODSRequestHandlerList.h"
 
 InfoResponseHandler::InfoResponseHandler( string name )
     : DODSResponseHandler( name )
@@ -21,7 +21,7 @@ void
 InfoResponseHandler::execute( DODSDataHandlerInterface &dhi )
 {
     _response = new DODSTextInfo( dhi.transmit_protocol == "HTTP" ) ;
-    TheRequestHandlerList->execute_each( dhi ) ;
+    DODSRequestHandlerList::TheList()->execute_each( dhi ) ;
 }
 
 void

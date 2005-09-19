@@ -9,7 +9,7 @@ using std::endl ;
 #include "DODSMySQLConnect.h"
 #include "DODSMySQLConnectException.h"
 #include "DODSMemoryException.h"
-#include "TheDODSLog.h"
+#include "DODSLog.h"
 #include "DODSEncode.h"
 
 DODSMySQLConnect::DODSMySQLConnect()
@@ -26,12 +26,12 @@ DODSMySQLConnect::~DODSMySQLConnect()
     if( _channel_open )
     {
 	mysql_close( _the_channel ) ;
-	if( TheDODSLog->is_verbose() )
+	if( DODSLog::TheLog()->is_verbose() )
 	{
-	    (*TheDODSLog) << "MySQL channel disconnected from:" << endl
-			  << "  server = " << _server << endl
-			  << "  user = " << _user << endl
-			  << "  database = " << _database << endl ;
+	    (*DODSLog::TheLog()) << "MySQL channel disconnected from:" << endl
+			         << "  server = " << _server << endl
+			         << "  user = " << _user << endl
+			         << "  database = " << _database << endl ;
 	}
     }
 }
@@ -61,12 +61,12 @@ DODSMySQLConnect::open( const string &server, const string &user,
 	}
 	else
 	{
-	    if( TheDODSLog->is_verbose() )
+	    if( DODSLog::TheLog()->is_verbose() )
 	    {
-		(*TheDODSLog) << "MySQL channel connected to:" << endl
-			      << "  server = " << _server << endl
-			      << "  user = " << _user << endl
-			      << "  database = " << _database << endl ;
+		(*DODSLog::TheLog()) << "MySQL channel connected to:" << endl
+				     << "  server = " << _server << endl
+				     << "  user = " << _user << endl
+				     << "  database = " << _database << endl ;
 	    }
 	    _channel_open = true ;
 	}
@@ -81,10 +81,10 @@ DODSMySQLConnect::close()
     {
 	mysql_close( _the_channel ) ;
 	_channel_open = false ;
-	(*TheDODSLog) << "MySQL channel disconnected from:" << endl
-		      << "  server = " << _server << endl
-		      << "  user = " << _user << endl
-		      << "  database = " << _database << endl ;
+	(*DODSLog::TheLog()) << "MySQL channel disconnected from:" << endl
+			     << "  server = " << _server << endl
+			     << "  user = " << _user << endl
+			     << "  database = " << _database << endl ;
     }
 }
 

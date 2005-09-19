@@ -6,7 +6,7 @@
 #include "CedarFlat.h"
 #include "cgi_util.h"
 #include "DODSParserException.h"
-#include "TheRequestHandlerList.h"
+#include "DODSRequestHandlerList.h"
 
 FlatResponseHandler::FlatResponseHandler( string name )
     : DODSResponseHandler( name )
@@ -21,7 +21,7 @@ void
 FlatResponseHandler::execute( DODSDataHandlerInterface &dhi )
 {
     _response = new CedarFlat( dhi.transmit_protocol == "HTTP" ) ;
-    TheRequestHandlerList->execute_each( dhi ) ;
+    DODSRequestHandlerList::TheList()->execute_each( dhi ) ;
 }
 
 void

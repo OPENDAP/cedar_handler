@@ -4,7 +4,7 @@
 
 #include "StreamResponseHandler.h"
 #include "DODSParserException.h"
-#include "TheRequestHandlerList.h"
+#include "DODSRequestHandlerList.h"
 
 StreamResponseHandler::StreamResponseHandler( string name )
     : DODSResponseHandler( name )
@@ -19,7 +19,7 @@ void
 StreamResponseHandler::execute( DODSDataHandlerInterface &dhi )
 {
     _response = 0 ;
-    TheRequestHandlerList->execute_each( dhi ) ;
+    DODSRequestHandlerList::TheList()->execute_each( dhi ) ;
 }
 
 void

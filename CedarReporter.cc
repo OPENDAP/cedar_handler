@@ -12,7 +12,7 @@ CedarReporter::CedarReporter()
       _file_buffer( 0 )
 {
     bool found = false ;
-    string log_name = TheDODSKeys->get_key( "Cedar.LogName", found ) ;
+    string log_name = TheDODSKeys::TheKeys()->get_key( "Cedar.LogName", found );
     if( log_name == "" )
     {
 	DODSLogException e ;

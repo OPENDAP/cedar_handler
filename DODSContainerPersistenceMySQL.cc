@@ -37,7 +37,7 @@ DODSContainerPersistenceMySQL::DODSContainerPersistenceMySQL( const string &n )
     bool found = false ;
     string my_key = "DODS.Container.Persistence.MySQL." + n + "." ;
 
-    string my_server = TheDODSKeys->get_key( my_key + "server", found ) ;
+    string my_server = TheDODSKeys::TheKeys()->get_key( my_key + "server", found ) ;
     if( found == false )
     {
 	DODSContainerPersistenceException pe;
@@ -45,7 +45,7 @@ DODSContainerPersistenceMySQL::DODSContainerPersistenceMySQL( const string &n )
 	throw pe;
     }
 
-    string my_user = TheDODSKeys->get_key( my_key + "user", found  ) ;
+    string my_user = TheDODSKeys::TheKeys()->get_key( my_key + "user", found  ) ;
     if( found == false )
     {
 	DODSContainerPersistenceException pe;
@@ -53,7 +53,7 @@ DODSContainerPersistenceMySQL::DODSContainerPersistenceMySQL( const string &n )
 	throw pe;
     }
 
-    string my_password = TheDODSKeys->get_key( my_key + "password", found  ) ;
+    string my_password = TheDODSKeys::TheKeys()->get_key( my_key + "password", found  ) ;
     if( found == false )
     {
 	DODSContainerPersistenceException pe;
@@ -61,7 +61,7 @@ DODSContainerPersistenceMySQL::DODSContainerPersistenceMySQL( const string &n )
 	throw pe;
     }
 
-    string my_database=TheDODSKeys->get_key( my_key + "database", found ) ;
+    string my_database=TheDODSKeys::TheKeys()->get_key( my_key + "database", found ) ;
     if( found == false )
     {
 	DODSContainerPersistenceException pe;

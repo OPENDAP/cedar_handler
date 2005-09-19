@@ -75,7 +75,7 @@ AC_DEFUN(BES_PACKAGE, [dnl
     else
 	INCS="$INCS -I${BES_PATH}/include/bes"
 	LIBS="$LIBS -L${BES_PATH}/lib -ldispatch"
-	MODS="$MODS ${BES_PATH}/lib/bes/dods_module.o ${BES_PATH}/lib/bes/test_authenticator.o"
+	MODS="$MODS ${BES_PATH}/lib/bes/dods_module.o"
 	AC_SUBST(INCS)
 	AC_SUBST(LIBS)
 	AC_SUBST(MODS)

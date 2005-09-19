@@ -7,48 +7,48 @@
 using std::endl ;
 
 #include "DODSInitList.h"
-#include "TheRequestHandlerList.h"
+#include "DODSRequestHandlerList.h"
 #include "CedarRequestHandler.h"
-#include "TheResponseHandlerList.h"
+#include "DODSResponseHandlerList.h"
 #include "FlatResponseHandler.h"
 #include "TabResponseHandler.h"
 #include "StreamResponseHandler.h"
 #include "InfoResponseHandler.h"
-#include "TheDODSLog.h"
+#include "DODSLog.h"
 #include "DODSResponseNames.h"
 #include "CedarResponseNames.h"
-#include "TheReporterList.h"
+#include "DODSReporterList.h"
 #include "CedarReporter.h"
 
 static bool
 CedarInit(int, char**)
 {
-    if( TheDODSLog->is_verbose() )
-	(*TheDODSLog) << "Initializing Cedar:" << endl ;
+    if( DODSLog::TheLog()->is_verbose() )
+	(*DODSLog::TheLog()) << "Initializing Cedar:" << endl ;
 
-    if( TheDODSLog->is_verbose() )
-	(*TheDODSLog) << "    adding " << CEDAR_NAME << " request handler" << endl ;
-    TheRequestHandlerList->add_handler( CEDAR_NAME, new CedarRequestHandler( CEDAR_NAME ) ) ;
+    if( DODSLog::TheLog()->is_verbose() )
+	(*DODSLog::TheLog()) << "    adding " << CEDAR_NAME << " request handler" << endl ;
+    DODSRequestHandlerList::TheList()->add_handler( CEDAR_NAME, new CedarRequestHandler( CEDAR_NAME ) ) ;
 
-    if( TheDODSLog->is_verbose() )
-	(*TheDODSLog) << "    adding " << FLAT_RESPONSE << " response handler" << endl ;
-    TheResponseHandlerList->add_handler( FLAT_RESPONSE, FlatResponseHandler::FlatResponseBuilder ) ;
+    if( DODSLog::TheLog()->is_verbose() )
+	(*DODSLog::TheLog()) << "    adding " << FLAT_RESPONSE << " response handler" << endl ;
+    DODSResponseHandlerList::TheList()->add_handler( FLAT_RESPONSE, FlatResponseHandler::FlatResponseBuilder ) ;
 
-    if( TheDODSLog->is_verbose() )
-	(*TheDODSLog) << "    adding " << TAB_RESPONSE << " response handler" << endl ;
-    TheResponseHandlerList->add_handler( TAB_RESPONSE, TabResponseHandler::TabResponseBuilder ) ;
+    if( DODSLog::TheLog()->is_verbose() )
+	(*DODSLog::TheLog()) << "    adding " << TAB_RESPONSE << " response handler" << endl ;
+    DODSResponseHandlerList::TheList()->add_handler( TAB_RESPONSE, TabResponseHandler::TabResponseBuilder ) ;
 
-    if( TheDODSLog->is_verbose() )
-	(*TheDODSLog) << "    adding " << STREAM_RESPONSE << " response handler" << endl ;
-    TheResponseHandlerList->add_handler( STREAM_RESPONSE, StreamResponseHandler::StreamResponseBuilder ) ;
+    if( DODSLog::TheLog()->is_verbose() )
+	(*DODSLog::TheLog()) << "    adding " << STREAM_RESPONSE << " response handler" << endl ;
+    DODSResponseHandlerList::TheList()->add_handler( STREAM_RESPONSE, StreamResponseHandler::StreamResponseBuilder ) ;
 
-    if( TheDODSLog->is_verbose() )
-	(*TheDODSLog) << "    adding " << INFO_RESPONSE << " response handler" << endl ;
-    TheResponseHandlerList->add_handler( INFO_RESPONSE, InfoResponseHandler::InfoResponseBuilder ) ;
+    if( DODSLog::TheLog()->is_verbose() )
+	(*DODSLog::TheLog()) << "    adding " << INFO_RESPONSE << " response handler" << endl ;
+    DODSResponseHandlerList::TheList()->add_handler( INFO_RESPONSE, InfoResponseHandler::InfoResponseBuilder ) ;
 
-    if( TheDODSLog->is_verbose() )
-	(*TheDODSLog) << "    adding Cedar reporter" << endl ;
-    if( TheReporterList ) TheReporterList->add_reporter( CEDAR_NAME, new CedarReporter ) ;
+    if( DODSLog::TheLog()->is_verbose() )
+	(*DODSLog::TheLog()) << "    adding Cedar reporter" << endl ;
+    DODSReporterList::TheList()->add_reporter( CEDAR_NAME, new CedarReporter ) ;
 
     return true ;
 }
@@ -56,14 +56,14 @@ CedarInit(int, char**)
 static bool
 CedarTerm(void)
 {
-    if( TheDODSLog->is_verbose() )
-	(*TheDODSLog) << "Removing Cedar Handlers" << endl;
-    DODSRequestHandler *rh = TheRequestHandlerList->remove_handler( CEDAR_NAME ) ;
+    if( DODSLog::TheLog()->is_verbose() )
+	(*DODSLog::TheLog()) << "Removing Cedar Handlers" << endl;
+    DODSRequestHandler *rh = DODSRequestHandlerList::TheList()->remove_handler( CEDAR_NAME ) ;
     if( rh ) delete rh ;
-    TheResponseHandlerList->remove_handler( FLAT_RESPONSE ) ;
-    TheResponseHandlerList->remove_handler( TAB_RESPONSE ) ;
-    TheResponseHandlerList->remove_handler( STREAM_RESPONSE ) ;
-    TheResponseHandlerList->remove_handler( INFO_RESPONSE ) ;
+    DODSResponseHandlerList::TheList()->remove_handler( FLAT_RESPONSE ) ;
+    DODSResponseHandlerList::TheList()->remove_handler( TAB_RESPONSE ) ;
+    DODSResponseHandlerList::TheList()->remove_handler( STREAM_RESPONSE ) ;
+    DODSResponseHandlerList::TheList()->remove_handler( INFO_RESPONSE ) ;
     return true ;
 }
 

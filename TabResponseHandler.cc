@@ -6,7 +6,7 @@
 #include "CedarTab.h"
 #include "cgi_util.h"
 #include "DODSParserException.h"
-#include "TheRequestHandlerList.h"
+#include "DODSRequestHandlerList.h"
 
 TabResponseHandler::TabResponseHandler( string name )
     : DODSResponseHandler( name )
@@ -21,7 +21,7 @@ void
 TabResponseHandler::execute( DODSDataHandlerInterface &dhi )
 {
     _response = new CedarTab( dhi.transmit_protocol == "HTTP" ) ;
-    TheRequestHandlerList->execute_each( dhi ) ;
+    DODSRequestHandlerList::TheList()->execute_each( dhi ) ;
 }
 
 void

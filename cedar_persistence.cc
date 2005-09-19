@@ -9,24 +9,24 @@ using std::endl ;
 #include "DODSInitList.h"
 #include "DODSInitOrder.h"
 #include "DODSContainerPersistenceCedar.h"
-#include "ThePersistenceList.h"
-#include "TheDODSLog.h"
+#include "DODSContainerPersistenceList.h"
+#include "DODSLog.h"
 
 static bool
 CedarPersistenceInit(int, char**) {
-    if( TheDODSLog->is_verbose() )
-	(*TheDODSLog) << "Adding Cedar Persistence" << endl;
+    if( DODSLog::TheLog()->is_verbose() )
+	(*DODSLog::TheLog()) << "Adding Cedar Persistence" << endl;
     DODSContainerPersistenceCedar *cpf =
 	    new DODSContainerPersistenceCedar( "Cedar" ) ;
-    ThePersistenceList->add_persistence( cpf ) ;
+    DODSContainerPersistenceList::TheList()->add_persistence( cpf ) ;
     return true;
 }
 
 static bool
 CedarPersistenceTerm(void) {
-    if( TheDODSLog->is_verbose() )
-	(*TheDODSLog) << "Removing Cedar Persistence" << endl;
-    ThePersistenceList->rem_persistence( "Cedar" ) ;
+    if( DODSLog::TheLog()->is_verbose() )
+	(*DODSLog::TheLog()) << "Removing Cedar Persistence" << endl;
+    DODSContainerPersistenceList::TheList()->rem_persistence( "Cedar" ) ;
     return true ;
 }
 

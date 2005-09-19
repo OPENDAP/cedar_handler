@@ -78,7 +78,7 @@ bool cedar_read_descriptors( DDS &dds, const string &filename,
 	try
 	{
 	    bool found = false ;
-	    max = TheDODSKeys->get_key( "DODS.Memory.GlobalArea.MaximunHeapSize", found ) ;
+	    max = TheDODSKeys::TheKeys()->get_key( "DODS.Memory.GlobalArea.MaximunHeapSize", found ) ;
 	    if(max == "" )
 		max = "[can not determine at this time]" ;
 	}

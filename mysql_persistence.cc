@@ -9,24 +9,24 @@ using std::endl ;
 #include "DODSInitList.h"
 #include "DODSInitOrder.h"
 #include "DODSContainerPersistenceMySQL.h"
-#include "ThePersistenceList.h"
-#include "TheDODSLog.h"
+#include "DODSContainerPersistenceList.h"
+#include "DODSLog.h"
 
 static bool
 MySQLPersistenceInit(int, char**) {
-    if( TheDODSLog->is_verbose() )
-	(*TheDODSLog) << "Adding MySQL Persistence" << endl;
+    if( DODSLog::TheLog()->is_verbose() )
+	(*DODSLog::TheLog()) << "Adding MySQL Persistence" << endl;
     DODSContainerPersistenceMySQL *cpf =
 	    new DODSContainerPersistenceMySQL( "MySQL" ) ;
-    ThePersistenceList->add_persistence( cpf ) ;
+    DODSContainerPersistenceList::TheList()->add_persistence( cpf ) ;
     return true;
 }
 
 static bool
 MySQLPersistenceTerm(void) {
-    if( TheDODSLog->is_verbose() )
-	(*TheDODSLog) << "Removing MySQL Persistence" << endl;
-    ThePersistenceList->rem_persistence( "MySQL" ) ;
+    if( DODSLog::TheLog()->is_verbose() )
+	(*DODSLog::TheLog()) << "Removing MySQL Persistence" << endl;
+    DODSContainerPersistenceList::TheList()->rem_persistence( "MySQL" ) ;
     return true ;
 }
 
