@@ -32,11 +32,13 @@ CedarHandlerApp::~CedarHandlerApp()
 int
 CedarHandlerApp::initialize( int argc, char **argv )
 {
-    OPeNDAPBaseApp::initialize( argc, argv ) ;
+    int retVal = OPeNDAPBaseApp::initialize( argc, argv ) ;
+    if( !retVal )
+    {
+	_df = new CedarFilter( argc, argv ) ;
+    }
 
-    _df = new CedarFilter( argc, argv ) ;
-
-    return 0 ;
+    return retVal ;
 }
 
 int

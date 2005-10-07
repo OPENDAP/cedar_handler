@@ -5,12 +5,6 @@
 #ifndef cedar_read_info_h_
 #define cedar_read_info_h_ 1
 
-#ifdef __GNUG__
-#include <strstream>
-#else
-#include <sstream>
-#endif
-
 #include "DODSInfo.h"
 
 bool

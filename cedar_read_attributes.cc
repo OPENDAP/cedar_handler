@@ -127,7 +127,7 @@ void load_das(DAS &das,CedarDataRecord *dr)
 		t1->append_attr(name, type,info);
 	    }
 	}
-	delete jparvars;
+	delete [] jparvars;
 	int nmpar=dr->get_mpar();
 	short int *mparvars= new short int[nmpar];
 	if (mparvars)
@@ -163,7 +163,7 @@ void load_das(DAS &das,CedarDataRecord *dr)
 		t1->append_attr(name, type,info);
 	    }
 	}
-	delete mparvars;
+	delete [] mparvars;
 	das.add_table(str, at);
     }
 }

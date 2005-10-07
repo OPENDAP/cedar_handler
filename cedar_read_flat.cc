@@ -2,6 +2,10 @@
 
 // 2004 Copyright University Corporation for Atmospheric Research
 
+#include <sstream>
+
+using std::ostringstream ;
+
 #include "CedarBlock.h"
 #include "CedarFile.h"
 #include "CedarFlat.h"
@@ -13,16 +17,10 @@
 #include "CedarParameter.h"
 #include "CedarReadParcods.h"
 
-#ifdef __GNUG__
-#include <strstream>
-#else
-#include <sstream>
-#endif
-
 // This is the size to right format string and pad them with blanks up to seven chars.
 #define PRINTING_BLOCK_SIZE 9 
 
-void print_blocked(ostrstream &oss, string s)
+void print_blocked(ostringstream &oss, string s)
 {
     int l=s.length();
     if (l>PRINTING_BLOCK_SIZE)
@@ -39,7 +37,7 @@ void print_blocked(ostrstream &oss, string s)
     oss<<s<<flush;
 }
 
-void print_blocked(ostrstream &oss, long l)
+void print_blocked(ostringstream &oss, long l)
 {
     char temp[100];
     CedarStringConversions::ltoa(l,temp, 10);
@@ -63,7 +61,7 @@ void send_flat_data(CedarFlat &cf, CedarDataRecord &dr,CedarConstraintEvaluator 
 {
     if (qa.validate_record(dr))
     {
-	ostrstream oss;
+	ostringstream oss;
 	unsigned int w = 0 ;
 	int y,z = 0 ;
 	CedarDate bdate,edate;
@@ -300,13 +298,7 @@ void send_flat_data(CedarFlat &cf, CedarDataRecord &dr,CedarConstraintEvaluator 
 	oss<<'\n'<<endl;
 
 	oss<<'\0';
-	char *p=0;
-	p=oss.str();
-	if (p) 
-	{
-	    cf.add_data(string(p));
-	    delete p;
-	}
+	cf.add_data(oss.str());
     }
 }
 

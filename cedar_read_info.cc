@@ -2,6 +2,11 @@
 
 // 2004 Copyright University Corporation for Atmospheric Research
 
+#include <string>
+#include <sstream>
+
+using std::ostringstream ;
+
 #include "CedarBlock.h"
 #include "CedarFile.h"
 #include "CedarVersion.h"
@@ -10,18 +15,10 @@
 #include "CedarException.h"
 #include "CedarConstraintEvaluator.h"
 
-#include <string>
-#ifdef __GNUG__
-#include <strstream>
-using std::ostrstream ;
-#else
-#include <sstream>
-#endif
-
 void
 route_buffer( const CedarLogicalRecord *pLogRec, DODSInfo &info )
 {
-    ostrstream *oss = new ostrstream() ;
+    ostringstream *oss = new ostringstream() ;
     switch( pLogRec->get_type() )
     {
 	case 2:
@@ -38,12 +35,7 @@ route_buffer( const CedarLogicalRecord *pLogRec, DODSInfo &info )
 	    break ;
     }
     (*oss) << '\0' ;
-    char *p = oss->str() ;
-    if( p ) 
-    {
-	info.add_data( string( p ) ) ;
-	delete p ;
-    }
+    info.add_data( oss->str() ) ;
     delete oss ;
 }
 

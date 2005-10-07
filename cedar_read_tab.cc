@@ -4,7 +4,10 @@
 
 #include <exception>
 #include <cstddef>
-#include <new>
+//#include <new>
+#include <sstream>
+
+using std::ostringstream ;
 
 #include "CedarFile.h"
 #include "CedarTab.h"
@@ -14,12 +17,6 @@
 #include "cedar_read_tab_support.h"
 #include "CedarParameter.h"
 #include "CedarConstraintEvaluator.h"
-
-#ifdef __GNUG__
-#include <strstream>
-#else
-#include <sstream>
-#endif
 
 struct _printable_parameter
 {
@@ -33,7 +30,7 @@ void send_tab_data(CedarTab &tab_object, CedarDataRecord &dr, CedarConstraintEva
 {
     if (qa.validate_record(dr))
     {
-	ostrstream oss;
+	ostringstream oss;
 	unsigned int w = 0 ;
 	int y,z = 0 ;
 	CedarDate bdate,edate;
@@ -250,13 +247,7 @@ void send_tab_data(CedarTab &tab_object, CedarDataRecord &dr, CedarConstraintEva
 	    oss<<endl;
 	}
 	oss<<'\0';
-	char *p=0;
-	p=oss.str();
-	if (p) 
-	{
-	    tab_object.add_data(string(p));
-	    delete p;
-	}
+	tab_object.add_data( oss.str() ) ;
     }
 }
 
