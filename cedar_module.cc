@@ -19,6 +19,9 @@ using std::endl ;
 #include "CedarResponseNames.h"
 #include "DODSReporterList.h"
 #include "CedarReporter.h"
+#include "DODS.h"
+#include "CedarAuthenticate.h"
+#include "CedarAuthenticateException.h"
 
 static bool
 CedarInit(int, char**)
@@ -49,6 +52,14 @@ CedarInit(int, char**)
     if( DODSLog::TheLog()->is_verbose() )
 	(*DODSLog::TheLog()) << "    adding Cedar reporter" << endl ;
     DODSReporterList::TheList()->add_reporter( CEDAR_NAME, new CedarReporter ) ;
+
+    if( DODSLog::TheLog()->is_verbose() )
+	(*DODSLog::TheLog()) << "    adding Cedar authenticate to init callbacks" << endl ;
+    DODS::add_init_callback( CedarAuthenticate::authenticate ) ;
+
+    if( DODSLog::TheLog()->is_verbose() )
+	(*DODSLog::TheLog()) << "    adding Cedar authenticate exception callback" << endl ;
+    DODS::add_ehm_callback( CedarAuthenticateException::handleAuthException ) ;
 
     return true ;
 }

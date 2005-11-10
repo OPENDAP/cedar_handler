@@ -19,10 +19,11 @@ SRCS:=cedar_read_attributes.cc cedar_read_descriptors.cc cedar_read_tab.cc \
 	FlatResponseHandler.cc TabResponseHandler.cc \
 	StreamResponseHandler.cc DODSContainerPersistenceCedar.cc \
 	CedarReporter.cc InfoResponseHandler.cc \
-	DODSContainerPersistenceMySQL.cc DODSMySQLAuthenticate.cc \
+	DODSContainerPersistenceMySQL.cc CedarAuthenticate.cc \
+	CedarAuthenticateException.cc \
 	DODSMySQLChannel.cc DODSMySQLConnect.cc DODSMySQLQuery.cc \
 	DODSMySQLResult.cc DODSEncode.cc \
-	mysql_authenticator.cc mysql_persistence.cc cedar_persistence.cc
+	mysql_persistence.cc cedar_persistence.cc
 HDRS:=CedarFilter.h CedarFlat.h CedarRequestHandler.h CedarResponseNames.h \
 	CedarTab.h FlatResponseHandler.h StreamResponseHandler.h \
 	TabResponseHandler.h cedar_read_attributes.h \
@@ -30,7 +31,8 @@ HDRS:=CedarFilter.h CedarFlat.h CedarRequestHandler.h CedarResponseNames.h \
 	cedar_read_stream.h cedar_read_tab.h cedar_read_tab_support.h \
 	cedar_version.h config_cedar.h DODSContainerPersistenceCedar.h \
 	CedarReporter.h InfoResponseHandler.h \
-	DODSContainerPersistenceMySQL.h DODSMySQLAuthenticate.h \
+	DODSContainerPersistenceMySQL.h CedarAuthenticate.h \
+	CedarAuthenticateException.h \
 	DODSMySQLChannel.h DODSMySQLConnect.h DODSMySQLQuery.h \
 	DODSMySQLResult.h DODSEncode.h \
 	DODSMySQLQueryException.h DODSMySQLConnectException.h
@@ -40,11 +42,12 @@ OBJS:=cedar_read_attributes.o cedar_read_descriptors.o cedar_read_tab.o \
 	CedarRequestHandler.o FlatResponseHandler.o TabResponseHandler.o \
 	StreamResponseHandler.o DODSContainerPersistenceCedar.o \
 	CedarReporter.o InfoResponseHandler.o \
-	DODSContainerPersistenceMySQL.o DODSMySQLAuthenticate.o \
+	DODSContainerPersistenceMySQL.o CedarAuthenticate.o \
+	CedarAuthenticateException.o \
 	DODSMySQLChannel.o DODSMySQLConnect.o DODSMySQLQuery.o \
 	DODSMySQLResult.o DODSEncode.o
 MODOBJS:=cedar_module.o cedar_persistence.o
-MYSQLMODOBJS:=mysql_authenticator.o mysql_persistence.o
+MYSQLMODOBJS:=mysql_persistence.o
 CMDOBJS:=cedar_commands.o
 INCS:=-I. @INCS@
 LIB:=libcedar-handler.a
@@ -728,7 +731,9 @@ cedar_module.o: cedar_module.cc \
   CedarReporter.h \
   /project/cedar/src/pwest/opendap-g/include/bes/DODSReporter.h \
   /project/cedar/src/pwest/opendap-g/include/bes/DODSDataHandlerInterface.h \
-  /project/cedar/src/pwest/opendap-g/include/bes/DODSDataRequestInterface.h
+  /project/cedar/src/pwest/opendap-g/include/bes/DODSDataRequestInterface.h \
+  /project/cedar/src/pwest/opendap-g/include/bes/DODS.h \
+  /project/cedar/src/pwest/opendap-g/include/bes/DODSDataHandlerInterface.h
 cedar_commands.o: cedar_commands.cc \
   /project/cedar/src/pwest/opendap-g/include/bes/DODSInitList.h \
   /project/cedar/src/pwest/opendap-g/include/bes/DODSGlobalInit.h \
@@ -939,8 +944,7 @@ DODSContainerPersistenceMySQL.o: DODSContainerPersistenceMySQL.cc \
   /project/cedar/src/pwest/opendap-g/include/libdap/RValue.h \
   /project/cedar/src/pwest/opendap-g/include/libdap/ObjectType.h \
   /project/cedar/src/pwest/opendap-g/include/libdap/EncodingType.h
-DODSMySQLAuthenticate.o: DODSMySQLAuthenticate.cc DODSMySQLAuthenticate.h \
-  DODSAuthenticate.h \
+CedarAuthenticate.o: CedarAuthenticate.cc CedarAuthenticate.h \
   /project/cedar/src/pwest/opendap-g/include/bes/DODSDataHandlerInterface.h \
   /project/cedar/src/pwest/opendap-g/include/bes/DODSContainer.h \
   DODSMySQLQuery.h DODSMySQLResult.h DODSMySQLQueryException.h \
@@ -950,7 +954,7 @@ DODSMySQLAuthenticate.o: DODSMySQLAuthenticate.cc DODSMySQLAuthenticate.h \
   /project/cedar/src/pwest/opendap-g/include/bes/DODSBasicException.h \
   /project/cedar/src/pwest/opendap-g/include/bes/TheDODSKeys.h \
   /project/cedar/src/pwest/opendap-g/include/bes/DODSKeys.h \
-  DODSAuthenticateException.h \
+  CedarAuthenticateException.h \
   /project/cedar/src/pwest/opendap-g/include/bes/OPeNDAPDataNames.h
 DODSMySQLChannel.o: DODSMySQLChannel.cc DODSMySQLChannel.h \
   /project/cedar/bin/mysql-4.0.18/include/mysql/mysql.h \
@@ -984,18 +988,6 @@ DODSMySQLQuery.o: DODSMySQLQuery.cc DODSMySQLQuery.h DODSMySQLResult.h \
   DODSMySQLConnectException.h DODSMySQLChannel.h
 DODSMySQLResult.o: DODSMySQLResult.cc DODSMySQLResult.h
 DODSEncode.o: DODSEncode.cc DODSEncode.h
-mysql_authenticator.o: mysql_authenticator.cc \
-  /project/cedar/src/pwest/opendap-g/include/bes/DODSInitList.h \
-  /project/cedar/src/pwest/opendap-g/include/bes/DODSGlobalInit.h \
-  /project/cedar/src/pwest/opendap-g/include/bes/DODSInitializer.h \
-  /project/cedar/src/pwest/opendap-g/include/bes/DODSInitFuns.h \
-  /project/cedar/src/pwest/opendap-g/include/bes/DODSInitFuns.h \
-  /project/cedar/src/pwest/opendap-g/include/bes/DODSInitOrder.h \
-  DODSMySQLAuthenticate.h DODSAuthenticate.h \
-  /project/cedar/src/pwest/opendap-g/include/bes/DODSDataHandlerInterface.h \
-  /project/cedar/src/pwest/opendap-g/include/bes/DODSContainer.h \
-  TheDODSAuthenticator.h \
-  /project/cedar/src/pwest/opendap-g/include/bes/DODSLog.h
 mysql_persistence.o: mysql_persistence.cc \
   /project/cedar/src/pwest/opendap-g/include/bes/DODSInitList.h \
   /project/cedar/src/pwest/opendap-g/include/bes/DODSGlobalInit.h \
@@ -1021,7 +1013,8 @@ cedar_persistence.o: cedar_persistence.cc \
 cedar_handler.o: cedar_handler.cc config_cedar.h CedarHandlerApp.h \
   /project/cedar/src/pwest/opendap-g/include/bes/OPeNDAPBaseApp.h \
   /project/cedar/src/pwest/opendap-g/include/bes/OPeNDAPApp.h \
-  /project/cedar/src/pwest/opendap-g/include/bes/OPeNDAPObj.h
+  /project/cedar/src/pwest/opendap-g/include/bes/OPeNDAPObj.h \
+  /project/cedar/src/pwest/opendap-g/include/bes/DODSException.h
 CedarHandlerApp.o: CedarHandlerApp.cc CedarHandlerApp.h \
   /project/cedar/src/pwest/opendap-g/include/bes/OPeNDAPBaseApp.h \
   /project/cedar/src/pwest/opendap-g/include/bes/OPeNDAPApp.h \

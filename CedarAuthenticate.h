@@ -1,13 +1,11 @@
-// DODSMySQLAuthenticate.h
+// CedarAuthenticate.h
 
 // 2004 Copyright University Corporation for Atmospheric Research
 
-#ifndef A_DODSMySQLAuthenticate_h
-#define A_DODSMySQLAuthenticate_h 1
+#ifndef A_CedarAuthenticate_h
+#define A_CedarAuthenticate_h 1
 
-#include "DODSAuthenticate.h"
-
-class DODSMySQLQuery ;
+#include "DODSDataHandlerInterface.h"
 
 /** @brief Authentication is done through the use of MySQL database.
  *
@@ -15,11 +13,11 @@ class DODSMySQLQuery ;
  * specified through the dods initialization file. The database is specified
  * with the following keys in the initialization file:
  *
- * DODS.Authenticate.MySQL.server=&lt;serverName&gt;
- * DODS.Authenticate.MySQL.user=&lt;userName&gt;
- * DODS.Authenticate.MySQL.password=&lt;encryptedPassword&gt;
- * DODS.Authenticate.MySQL.database=&lt;databaseName&gt;
- * DODS.Authenticate.MySQL.mode=&lt;on|off&gt;
+ * Cedar.Authenticate.MySQL.server=&lt;serverName&gt;
+ * Cedar.Authenticate.MySQL.user=&lt;userName&gt;
+ * Cedar.Authenticate.MySQL.password=&lt;encryptedPassword&gt;
+ * Cedar.Authenticate.MySQL.database=&lt;databaseName&gt;
+ * Cedar.Authenticate.MySQL.mode=&lt;on|off&gt;
  *
  * The relevant columns for authentication in the session table tbl_session,
  * looks like this:
@@ -27,31 +25,24 @@ class DODSMySQLQuery ;
  * USER_NAME char(30)
  * CLIENT_IP char(45)
  *
- * DODSMySQLAuthenticate can be specified on the link line as the
+ * CedarAuthenticate can be specified on the link line as the
  * authentication mechanism by linking in the object module
  * mysql_authenticator.o. If, during development and testing of the server,
  * you wish to turn off authentication using mysql, set the mode to off.
  *
  * The password is encrypted.
  *
- * @see DODSAuthenticate
  * @see TheDODSKeys
  */
-class DODSMySQLAuthenticate : public DODSAuthenticate
+class CedarAuthenticate
 {
-private:
-    DODSMySQLQuery *	_query ;
-    bool 		_enforce_authentication;
 public:
-    			DODSMySQLAuthenticate() ;
-    virtual		~DODSMySQLAuthenticate() ;
-
-    virtual void	authenticate( DODSDataHandlerInterface &dhi ) ;
+    static bool		authenticate( DODSDataHandlerInterface &dhi ) ;
 } ;
 
-#endif // A_DODSMySQLAuthenticate_h
+#endif // A_CedarAuthenticate_h
 
-// $Log: DODSMySQLAuthenticate.h,v $
+// $Log: CedarAuthenticate.h,v $
 // Revision 1.3  2004/12/15 17:39:03  pwest
 // Added doxygen comments
 //

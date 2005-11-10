@@ -26,17 +26,46 @@
 //
 // You can contact OPeNDAP, Inc. at PO Box 112, Saunderstown, RI. 02874-0112.
  
+#include <iostream>
+
+using std::cout ;
+using std::endl ;
+
 #include "config_cedar.h"
 
 static char not_used rcsid[]={"$Id$"};
 
 #include "CedarHandlerApp.h"
+#include "DODSException.h"
 
 int 
 main(int argc, char *argv[])
 {
-    CedarHandlerApp app ;
-    return app.main( argc, argv ) ;
+    try
+    {
+	CedarHandlerApp app ;
+	return app.main( argc, argv ) ;
+    }
+    catch( DODSException &e )
+    {
+	cout << "HTTP/1.0 200 OK" << endl ;
+	cout << "XDODS-Server: 3.5.2" << endl ;
+	cout << "Date: 10/08/05" << endl ;
+	cout << "Content-type: text/plain" << endl ;
+	cout << endl ;
+	cout << "Cedar Handler Caught unhandled exception" << endl ;
+	cout << e.get_error_description() << endl ;
+    }
+    catch( ... )
+    {
+	cout << "HTTP/1.0 200 OK" << endl ;
+	cout << "XDODS-Server: 3.5.2" << endl ;
+	cout << "Date: 10/08/05" << endl ;
+	cout << "Content-type: text/plain" << endl ;
+	cout << endl ;
+	cout << "Cedar Handler Caught unhandled, unknown exception" << endl ;
+    }
+    return 0 ;
 }
 
 // $Log: cedar_handler.cc,v $
