@@ -3,7 +3,6 @@
 // 2004 Copyright University Corporation for Atmospheric Research
 
 #include "StreamResponseHandler.h"
-#include "DODSParserException.h"
 #include "DODSRequestHandlerList.h"
 
 StreamResponseHandler::StreamResponseHandler( string name )

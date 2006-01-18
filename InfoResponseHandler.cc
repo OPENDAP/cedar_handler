@@ -5,7 +5,6 @@
 #include "InfoResponseHandler.h"
 #include "DODSTextInfo.h"
 #include "cgi_util.h"
-#include "DODSParserException.h"
 #include "DODSRequestHandlerList.h"
 
 InfoResponseHandler::InfoResponseHandler( string name )

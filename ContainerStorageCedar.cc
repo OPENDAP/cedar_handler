@@ -1,4 +1,4 @@
-// DODSContainerPersistenceCedar.cc
+// ContainerStorageCedar.cc
 
 // 2004 Copyright University Corporation for Atmospheric Research
 
@@ -9,17 +9,17 @@
 using std::stringstream ;
 using std::ifstream ;
 
-#include "DODSContainerPersistenceCedar.h"
+#include "ContainerStorageCedar.h"
 #include "DODSContainer.h"
 #include "TheDODSKeys.h"
-#include "DODSContainerPersistenceException.h"
+#include "ContainerStorageException.h"
 #include "DODSInfo.h"
 #include "OPeNDAPDir.h"
 #include "OPeNDAPFile.h"
 #include "CedarResponseNames.h"
 
-DODSContainerPersistenceCedar::DODSContainerPersistenceCedar( const string &n )
-    : DODSContainerPersistence( n )
+ContainerStorageCedar::ContainerStorageCedar( const string &n )
+    : ContainerStorage( n )
 {
     string key = "DODS.Container.Persistence.Cedar.BaseDir" ;
     bool found = false ;
@@ -27,18 +27,18 @@ DODSContainerPersistenceCedar::DODSContainerPersistenceCedar( const string &n )
     if( _cedar_base == "" )
     {
 	string s = key + " not defined in key file" ;
-	DODSContainerPersistenceException pe ;
+	ContainerStorageException pe ;
 	pe.set_error_description( s ) ;
 	throw pe;
     }
 }
 
-DODSContainerPersistenceCedar::~DODSContainerPersistenceCedar()
+ContainerStorageCedar::~ContainerStorageCedar()
 {
 }
 
 void
-DODSContainerPersistenceCedar::look_for( DODSContainer &d )
+ContainerStorageCedar::look_for( DODSContainer &d )
 {
     d.set_valid_flag( true ) ;
     d.set_real_name( _cedar_base + "/" + d.get_symbolic_name() + ".cbf" ) ;
@@ -46,22 +46,22 @@ DODSContainerPersistenceCedar::look_for( DODSContainer &d )
 }
 
 void
-DODSContainerPersistenceCedar::add_container( string s_name,
-                                            string r_ame,
-					    string type )
+ContainerStorageCedar::add_container( const string &s_name,
+				      const string &r_ame,
+				      const string &type )
 {
-    throw DODSContainerPersistenceException( "Unable to add a container to Cedar Persistence" ) ;
+    throw ContainerStorageException( "Unable to add a container to Cedar Persistence" ) ;
 }
 
 bool
-DODSContainerPersistenceCedar::rem_container( const string &s_name )
+ContainerStorageCedar::rem_container( const string &s_name )
 {
-    throw DODSContainerPersistenceException( "Unable to remove a container from Cedar Persistence" ) ;
+    throw ContainerStorageException( "Unable to remove a container from Cedar Persistence" ) ;
     return false ;
 }
 
 void
-DODSContainerPersistenceCedar::show_containers( DODSInfo &info )
+ContainerStorageCedar::show_containers( DODSInfo &info )
 {
     info.add_data( get_name() ) ;
     info.add_data( "\n" ) ;
@@ -89,7 +89,7 @@ DODSContainerPersistenceCedar::show_containers( DODSInfo &info )
     }
 }
 
-// $Log: DODSContainerPersistenceCedar.cc,v $
+// $Log: ContainerStorageCedar.cc,v $
 // Revision 1.5  2005/03/17 20:46:58  pwest
 // impelementing rem_container and show_containers
 //

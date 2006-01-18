@@ -22,6 +22,8 @@ using std::endl ;
 #include "DODS.h"
 #include "CedarAuthenticate.h"
 #include "CedarAuthenticateException.h"
+#include "ContainerStorageCedar.h"
+#include "ContainerStorageList.h"
 
 static bool
 CedarInit(int, char**)
@@ -61,6 +63,11 @@ CedarInit(int, char**)
 	(*DODSLog::TheLog()) << "    adding Cedar authenticate exception callback" << endl ;
     DODS::add_ehm_callback( CedarAuthenticateException::handleAuthException ) ;
 
+    if( DODSLog::TheLog()->is_verbose() )
+	(*DODSLog::TheLog()) << "Adding Cedar Persistence" << endl;
+    ContainerStorageCedar *cpf = new ContainerStorageCedar( "Cedar" ) ;
+    ContainerStorageList::TheList()->add_persistence( cpf ) ;
+
     return true ;
 }
 
@@ -75,6 +82,11 @@ CedarTerm(void)
     DODSResponseHandlerList::TheList()->remove_handler( TAB_RESPONSE ) ;
     DODSResponseHandlerList::TheList()->remove_handler( STREAM_RESPONSE ) ;
     DODSResponseHandlerList::TheList()->remove_handler( INFO_RESPONSE ) ;
+
+    if( DODSLog::TheLog()->is_verbose() )
+	(*DODSLog::TheLog()) << "Removing Cedar Persistence" << endl;
+    ContainerStorageList::TheList()->rem_persistence( "Cedar" ) ;
+
     return true ;
 }
 

@@ -1,34 +1,35 @@
-// DODSContainerPersistenceCedar.h
+// ContainerStorageCedar.h
 
 // 2004 Copyright University Corporation for Atmospheric Research
 
-#ifndef I_DODSContainerPersistenceCedar_h_
-#define I_DODSContainerPersistenceCedar_h_ 1
+#ifndef I_ContainerStorageCedar_h_
+#define I_ContainerStorageCedar_h_ 1
 
 #include <string>
 
 using std::string ;
 
-#include "DODSContainerPersistence.h"
+#include "ContainerStorage.h"
 
-class DODSContainerPersistenceCedar : public DODSContainerPersistence
+class ContainerStorageCedar : public ContainerStorage
 {
 private:
     string			_cedar_base ;
 public:
-    				DODSContainerPersistenceCedar( const string &n);
-    virtual			~DODSContainerPersistenceCedar() ;
+    				ContainerStorageCedar( const string &n);
+    virtual			~ContainerStorageCedar() ;
 
     virtual void		look_for( DODSContainer &d ) ;
-    virtual void		add_container( string s_name, string r_ame,
-					       string type ) ;
+    virtual void		add_container( const string &s_name,
+                                               const string &r_ame,
+					       const string &type ) ;
     virtual bool		rem_container( const string &s_name ) ;
     virtual void		show_containers( DODSInfo &info ) ;
 };
 
-#endif // I_DODSContainerPersistenceCedar_h_
+#endif // I_ContainerStorageCedar_h_
 
-// $Log: DODSContainerPersistenceCedar.h,v $
+// $Log: ContainerStorageCedar.h,v $
 // Revision 1.5  2005/03/17 20:46:58  pwest
 // impelementing rem_container and show_containers
 //

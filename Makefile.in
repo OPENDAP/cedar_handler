@@ -17,21 +17,20 @@ SRCS:=cedar_read_attributes.cc cedar_read_descriptors.cc cedar_read_tab.cc \
 	CedarTab.cc CedarFlat.cc cedar_read_flat.cc cedar_read_stream.cc \
 	CedarRequestHandler.cc cedar_module.cc cedar_commands.cc \
 	FlatResponseHandler.cc TabResponseHandler.cc \
-	StreamResponseHandler.cc DODSContainerPersistenceCedar.cc \
+	StreamResponseHandler.cc ContainerStorageCedar.cc \
 	CedarReporter.cc InfoResponseHandler.cc \
-	DODSContainerPersistenceMySQL.cc CedarAuthenticate.cc \
+	ContainerStorageMySQL.cc CedarAuthenticate.cc \
 	CedarAuthenticateException.cc \
 	DODSMySQLChannel.cc DODSMySQLConnect.cc DODSMySQLQuery.cc \
 	DODSMySQLResult.cc DODSEncode.cc \
-	mysql_persistence.cc cedar_persistence.cc
 HDRS:=CedarFilter.h CedarFlat.h CedarRequestHandler.h CedarResponseNames.h \
 	CedarTab.h FlatResponseHandler.h StreamResponseHandler.h \
 	TabResponseHandler.h cedar_read_attributes.h \
 	cedar_read_descriptors.h cedar_read_flat.h cedar_read_info.h \
 	cedar_read_stream.h cedar_read_tab.h cedar_read_tab_support.h \
-	cedar_version.h config_cedar.h DODSContainerPersistenceCedar.h \
+	cedar_version.h config_cedar.h ContainerStorageCedar.h \
 	CedarReporter.h InfoResponseHandler.h \
-	DODSContainerPersistenceMySQL.h CedarAuthenticate.h \
+	ContainerStorageMySQL.h CedarAuthenticate.h \
 	CedarAuthenticateException.h \
 	DODSMySQLChannel.h DODSMySQLConnect.h DODSMySQLQuery.h \
 	DODSMySQLResult.h DODSEncode.h \
@@ -40,14 +39,13 @@ OBJS:=cedar_read_attributes.o cedar_read_descriptors.o cedar_read_tab.o \
 	cedar_read_tab_support.o cedar_read_info.o CedarFilter.o \
 	CedarTab.o CedarFlat.o cedar_read_flat.o cedar_read_stream.o \
 	CedarRequestHandler.o FlatResponseHandler.o TabResponseHandler.o \
-	StreamResponseHandler.o DODSContainerPersistenceCedar.o \
+	StreamResponseHandler.o ContainerStorageCedar.o \
 	CedarReporter.o InfoResponseHandler.o \
-	DODSContainerPersistenceMySQL.o CedarAuthenticate.o \
+	ContainerStorageMySQL.o CedarAuthenticate.o \
 	CedarAuthenticateException.o \
 	DODSMySQLChannel.o DODSMySQLConnect.o DODSMySQLQuery.o \
 	DODSMySQLResult.o DODSEncode.o
-MODOBJS:=cedar_module.o cedar_persistence.o
-MYSQLMODOBJS:=mysql_persistence.o
+MODOBJS:=cedar_module.o
 CMDOBJS:=cedar_commands.o
 INCS:=-I. @INCS@
 LIB:=libcedar-handler.a
@@ -63,7 +61,7 @@ HANDLER_OBJS:=cedar_handler.o CedarHandlerApp.o
 HANDLER_SRCS:=cedar_handler.cc CedarHandlerApp.cc
 HANDLER:=cedar_handler
 
-all : $(HANDLER) $(MYSQLMODOBJS) $(CMDOBJS)
+all : $(HANDLER) $(CMDOBJS)
 
 lib : $(LIB) $(MODOBJS)
 
@@ -78,7 +76,7 @@ $(HANDLER) : $(HANDLER_OBJS) $(LIB) $(MODOBJS) $(MODS)
 	g++ -o $(HANDLER) $(HANDLER_OBJS) $(MODS) $(MODOBJS) $(LIB) $(LIBS)
 
 clean :
-	/bin/rm -rf $(OBJS) $(LIB) $(MODOBJS) $(MYSQLMODOBJS) $(CMDOBJS) $(HANDLER_OBJS) $(HANDLER)
+	/bin/rm -rf $(OBJS) $(LIB) $(MODOBJS) $(CMDOBJS) $(HANDLER_OBJS) $(HANDLER)
 
 install: $(HANDLER) install-mods install-progs
 	-mkdir -p $(libdir)

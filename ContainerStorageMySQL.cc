@@ -1,18 +1,18 @@
-// DODSContainerPersistenceMySQL.cc
+// ContainerStorageMySQL.cc
 
 // 2004 Copyright University Corporation for Atmospheric Research
 
-#include "DODSContainerPersistenceMySQL.h"
+#include "ContainerStorageMySQL.h"
 #include "DODSContainer.h"
 #include "DODSMySQLQuery.h"
-#include "DODSContainerPersistenceException.h"
+#include "ContainerStorageException.h"
 #include "DODSMemoryException.h"
 #include "TheDODSKeys.h"
 #include "DODSInfo.h"
 
 /** @brief pull container information from the specified mysql database
  *
- * Constructs a DODSContainerPersistenceMySQL, pulling the mysql database
+ * Constructs a ContainerStorageMySQL, pulling the mysql database
  * information from the dods initialization file and opening up a connection
  * to the MySQL database.
  *
@@ -26,13 +26,13 @@
  * where &lt;name&gt; is the name of this instance of the persistent store.
  *
  * @param n name of this persistent store.
- * @throws DODSContainerPersistenceException if unable to retrieve the MySQL
+ * @throws ContainerStorageException if unable to retrieve the MySQL
  * database connection information from the dods initialization file.
  * @throws DODSMySQLConnectException if unable to connect to the MySQL
  * database.
  */
-DODSContainerPersistenceMySQL::DODSContainerPersistenceMySQL( const string &n )
-    :DODSContainerPersistence( n )
+ContainerStorageMySQL::ContainerStorageMySQL( const string &n )
+    :ContainerStorage( n )
 {
     bool found = false ;
     string my_key = "DODS.Container.Persistence.MySQL." + n + "." ;
@@ -40,7 +40,7 @@ DODSContainerPersistenceMySQL::DODSContainerPersistenceMySQL( const string &n )
     string my_server = TheDODSKeys::TheKeys()->get_key( my_key + "server", found ) ;
     if( found == false )
     {
-	DODSContainerPersistenceException pe;
+	ContainerStorageException pe;
 	pe.set_error_description( "MySQL server not specified for " + n ) ;
 	throw pe;
     }
@@ -48,7 +48,7 @@ DODSContainerPersistenceMySQL::DODSContainerPersistenceMySQL( const string &n )
     string my_user = TheDODSKeys::TheKeys()->get_key( my_key + "user", found  ) ;
     if( found == false )
     {
-	DODSContainerPersistenceException pe;
+	ContainerStorageException pe;
 	pe.set_error_description( "MySQL user not specified for " + n ) ;
 	throw pe;
     }
@@ -56,7 +56,7 @@ DODSContainerPersistenceMySQL::DODSContainerPersistenceMySQL( const string &n )
     string my_password = TheDODSKeys::TheKeys()->get_key( my_key + "password", found  ) ;
     if( found == false )
     {
-	DODSContainerPersistenceException pe;
+	ContainerStorageException pe;
 	pe.set_error_description( "MySQL password not specified for " + n ) ;
 	throw pe;
     }
@@ -64,7 +64,7 @@ DODSContainerPersistenceMySQL::DODSContainerPersistenceMySQL( const string &n )
     string my_database=TheDODSKeys::TheKeys()->get_key( my_key + "database", found ) ;
     if( found == false )
     {
-	DODSContainerPersistenceException pe;
+	ContainerStorageException pe;
 	pe.set_error_description( "MySQL database not specified for " + n ) ;
 	throw pe;
     }
@@ -83,7 +83,7 @@ DODSContainerPersistenceMySQL::DODSContainerPersistenceMySQL( const string &n )
     }
 }
 
-DODSContainerPersistenceMySQL::~DODSContainerPersistenceMySQL()
+ContainerStorageMySQL::~ContainerStorageMySQL()
 {
     if( _query ) delete _query ;
     _query =0 ;
@@ -101,13 +101,13 @@ DODSContainerPersistenceMySQL::~DODSContainerPersistenceMySQL()
  * is set to true. If not found, then is_valid is set to false.
  *
  * @param d container to look for and, if found, store the information in.
- * @throws DODSContainerPersistenceException if the information in the
+ * @throws ContainerStorageException if the information in the
  * database is corrupt
  * @throws DODSMySQLQueryException if error running the query
  * @see DODSContainer
  */
 void
-DODSContainerPersistenceMySQL::look_for( DODSContainer &d )
+ContainerStorageMySQL::look_for( DODSContainer &d )
 {
     d.set_valid_flag( false ) ;
     string query = "select REAL_NAME, CONTAINER_TYPE from tbl_containers where SYMBOLIC_NAME=\"";
@@ -118,7 +118,7 @@ DODSContainerPersistenceMySQL::look_for( DODSContainer &d )
     {
 	if( (_query->get_nrows() != 1) || (_query->get_nfields() != 2) )
 	{
-	    DODSContainerPersistenceException pe ;
+	    ContainerStorageException pe ;
 	    pe.set_error_description( "Invalid data from MySQL" ) ;
 	    throw pe ;
 	}
@@ -145,11 +145,11 @@ DODSContainerPersistenceMySQL::look_for( DODSContainer &d )
  * @param type type of data represented by this container
  */
 void
-DODSContainerPersistenceMySQL::add_container( string s_name,
+ContainerStorageMySQL::add_container( string s_name,
                                             string r_name,
 					    string type )
 {
-    throw DODSContainerPersistenceException( "Unable to add a container to MySQL container persistence, not yet implemented\n" ) ;
+    throw ContainerStorageException( "Unable to add a container to MySQL container persistence, not yet implemented\n" ) ;
 }
 
 /** @brief removes a container with the given symbolic name, not implemented
@@ -162,9 +162,9 @@ DODSContainerPersistenceMySQL::add_container( string s_name,
  * @return true if successfully removed and false otherwise
  */
 bool
-DODSContainerPersistenceMySQL::rem_container( const string &s_name )
+ContainerStorageMySQL::rem_container( const string &s_name )
 {
-    throw DODSContainerPersistenceException( "Unable to remove a container from a MySQL container persistece, not yet implemented\n" ) ;
+    throw ContainerStorageException( "Unable to remove a container from a MySQL container persistece, not yet implemented\n" ) ;
     return false ;
 }
 
@@ -184,7 +184,7 @@ DODSContainerPersistenceMySQL::rem_container( const string &s_name )
  * @see DODSInfo
  */
 void
-DODSContainerPersistenceMySQL::show_containers( DODSInfo &info )
+ContainerStorageMySQL::show_containers( DODSInfo &info )
 {
     info.add_data( get_name() ) ;
     info.add_data( "\n" ) ;
@@ -197,7 +197,7 @@ DODSContainerPersistenceMySQL::show_containers( DODSInfo &info )
 	{
 	    if( ( _query->get_nfields() != 3 ) )
 	    {
-		DODSContainerPersistenceException pe ;
+		ContainerStorageException pe ;
 		pe.set_error_description( "Invalid data from MySQL" ) ;
 		throw pe ;
 	    }
@@ -213,7 +213,7 @@ DODSContainerPersistenceMySQL::show_containers( DODSInfo &info )
     }
 }
 
-// $Log: DODSContainerPersistenceMySQL.cc,v $
+// $Log: ContainerStorageMySQL.cc,v $
 // Revision 1.8  2005/03/17 20:37:50  pwest
 // added documentation for rem_container and show_containers
 //

@@ -5,7 +5,6 @@
 #include "TabResponseHandler.h"
 #include "CedarTab.h"
 #include "cgi_util.h"
-#include "DODSParserException.h"
 #include "DODSRequestHandlerList.h"
 
 TabResponseHandler::TabResponseHandler( string name )

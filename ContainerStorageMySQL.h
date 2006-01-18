@@ -1,21 +1,21 @@
-// DODSContainerPersistenceMySQL.h
+// ContainerStorageMySQL.h
 
 // 2004 Copyright University Corporation for Atmospheric Research
 
-#ifndef DODSContainerPersistenceMySQL_h_
-#define DODSContainerPersistenceMySQL_h_ 1
+#ifndef ContainerStorageMySQL_h_
+#define ContainerStorageMySQL_h_ 1
 
 #include <string>
 
 using std::string ;
 
-#include "DODSContainerPersistence.h"
+#include "ContainerStorage.h"
 
 class DODSMySQLQuery ;
 
 /** @brief persistent storage of containers in a MySQL database
  *
- * This implementation of DODSContainerPersistence looks up container
+ * This implementation of ContainerStorage looks up container
  * information in a MySQL database. The database is sepcified in the dods
  * initialization file using the keys:
  *
@@ -39,16 +39,16 @@ class DODSMySQLQuery ;
  * | CONTAINER_TYPE| char(20)  |      |     |         |       |
  * +---------------+-----------+------+-----+---------+-------+
  *
- * @see DODSContainerPersistence
+ * @see ContainerStorage
  * @see DODSContainer
  * @see DODSKeys
  */
-class DODSContainerPersistenceMySQL : public DODSContainerPersistence
+class ContainerStorageMySQL : public ContainerStorage
 {
     DODSMySQLQuery *		_query ;
 public:
-    				DODSContainerPersistenceMySQL( const string &name ) ;
-    virtual			~DODSContainerPersistenceMySQL();
+    				ContainerStorageMySQL( const string &name ) ;
+    virtual			~ContainerStorageMySQL();
 
     virtual void 		look_for( DODSContainer &d ) ;
     virtual void		add_container( string s_name, string r_name,
@@ -58,9 +58,9 @@ public:
     virtual void		show_containers( DODSInfo &info ) ;
 };
 
-#endif // DODSContainerPersistenceMySQL_h_
+#endif // ContainerStorageMySQL_h_
 
-// $Log: DODSContainerPersistenceMySQL.h,v $
+// $Log: ContainerStorageMySQL.h,v $
 // Revision 1.7  2005/03/17 19:23:58  pwest
 // deleting the container in rem_container instead of returning the removed container, returning true if successfully removed and false otherwise
 //

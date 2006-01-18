@@ -5,7 +5,6 @@
 #include "FlatResponseHandler.h"
 #include "CedarFlat.h"
 #include "cgi_util.h"
-#include "DODSParserException.h"
 #include "DODSRequestHandlerList.h"
 
 FlatResponseHandler::FlatResponseHandler( string name )
