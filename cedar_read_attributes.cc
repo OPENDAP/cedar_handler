@@ -14,6 +14,7 @@ using std::string ;
 #include "CedarReadParcods.h"
 #include "cedar_read_attributes.h"
 #include "CedarException.h"
+#include "CedarFile.h"
 
 static const char STRING[]="String";
 static const char BYTE[]="Byte";

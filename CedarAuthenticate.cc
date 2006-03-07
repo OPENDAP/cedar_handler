@@ -2,6 +2,12 @@
 
 // 2004 Copyright University Corporation for Atmospheric Research
 
+#include <iostream>
+#include <sstream>
+
+using std::endl ;
+using std::ostringstream ;
+
 #include <time.h>
 
 #include "CedarAuthenticate.h"
@@ -130,26 +136,24 @@ CedarAuthenticate::authenticate( DODSDataHandlerInterface &dhi )
 	{
 	    if( (query->get_nfields() != 1) )
 	    {
-		char err_str[256] ;
-		sprintf( err_str, "%s %s\n%s: %d rows and %d fields returned",
-			 "Unable to authenticate user",
-			 dhi.data[USER_NAME].c_str(),
-			 "Invalid data from MySQL",
-			 query->get_nrows(),
-			 query->get_nfields() ) ;
+		ostringstream err_str ;
+		err_str << "Unable to authenticate user "
+		        << dhi.data[USER_NAME] << endl
+			<< "Invalid data from MySQL: "
+			<< query->get_nrows() << " rows and "
+			<< query->get_nfields() << " fields returned" ;
 		CedarAuthenticateException pe ;
-		pe.set_error_description( err_str ) ;
+		pe.set_error_description( err_str.str() ) ;
 		throw pe ;
 	    }
 	}
 	else
 	{
-	    char err_str[256] ;
-	    sprintf( err_str, "%s %s",
-		     "Unable to authenticate user",
-		     dhi.data[USER_NAME].c_str() ) ;
+	    ostringstream err_str ;
+	    err_str << "Unable to authenticate user "
+	            << dhi.data[USER_NAME] ;
 	    CedarAuthenticateException pe ;
-	    pe.set_error_description( err_str ) ;
+	    pe.set_error_description( err_str.str() ) ;
 	    throw pe ;
 	}
 

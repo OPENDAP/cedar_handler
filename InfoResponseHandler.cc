@@ -3,7 +3,7 @@
 // 2004 Copyright University Corporation for Atmospheric Research
 
 #include "InfoResponseHandler.h"
-#include "DODSTextInfo.h"
+#include "DODSInfo.h"
 #include "cgi_util.h"
 #include "DODSRequestHandlerList.h"
 
@@ -19,7 +19,7 @@ InfoResponseHandler::~InfoResponseHandler( )
 void
 InfoResponseHandler::execute( DODSDataHandlerInterface &dhi )
 {
-    _response = new DODSTextInfo( dhi.transmit_protocol == "HTTP" ) ;
+    _response = new DODSInfo( dhi.transmit_protocol == "HTTP" ) ;
     DODSRequestHandlerList::TheList()->execute_each( dhi ) ;
 }
 
@@ -28,7 +28,7 @@ InfoResponseHandler::transmit( DODSTransmitter *transmitter,
                                DODSDataHandlerInterface &dhi )
 {
     if( _response )
-	transmitter->send_text( *((DODSTextInfo *)_response), dhi ) ;
+	transmitter->send_text( *((DODSInfo *)_response), dhi ) ;
 }
 
 DODSResponseHandler *

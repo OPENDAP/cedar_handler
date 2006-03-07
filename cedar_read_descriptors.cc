@@ -122,7 +122,7 @@ void get_name_for_parameter(string &str, int par)
     if (par<0)
     {
 	par=par*-1;
-	str="error_";
+	str="e_";
     }
     string madnam=afx.get_MADNAM(par);
     if (madnam=="")

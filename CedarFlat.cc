@@ -9,15 +9,13 @@
 #include "CedarFlat.h"
 
 CedarFlat::CedarFlat()
-    : DODSInfo( dods_data )
+    : DODSInfo( "Cedar.Flat.Buffered", unknown_type )
 {
-    initialize( "" ) ;
 }
 
 CedarFlat::CedarFlat( bool is_http )
-    : DODSInfo( is_http, dods_data )
+    : DODSInfo( is_http, "Cedar.Flat.Buffered", unknown_type )
 {
-    initialize( "" ) ;
 }
 
 CedarFlat::~CedarFlat()

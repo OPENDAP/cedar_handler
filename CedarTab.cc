@@ -9,15 +9,13 @@
 #include "CedarTab.h"
 
 CedarTab::CedarTab()
-    : DODSInfo( dods_data )
+    : DODSInfo( "Cedar.Tab.Buffered", unknown_type )
 {
-    initialize( "" ) ;
 }
 
 CedarTab::CedarTab( bool is_http )
-    : DODSInfo( is_http, dods_data )
+    : DODSInfo( is_http, "Cedar.Tab.Buffered", unknown_type )
 {
-    initialize( "" ) ;
 }
 
 CedarTab::~CedarTab()

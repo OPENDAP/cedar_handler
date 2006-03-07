@@ -33,8 +33,6 @@ using std::endl ;
 
 #include "config_cedar.h"
 
-static char not_used rcsid[]={"$Id$"};
-
 #include "CedarHandlerApp.h"
 #include "DODSException.h"
 

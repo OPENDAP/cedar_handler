@@ -21,7 +21,7 @@ using std::ifstream ;
 ContainerStorageCedar::ContainerStorageCedar( const string &n )
     : ContainerStorage( n )
 {
-    string key = "DODS.Container.Persistence.Cedar.BaseDir" ;
+    string key = "Cedar.BaseDir" ;
     bool found = false ;
     _cedar_base = TheDODSKeys::TheKeys()->get_key( key, found ) ;
     if( _cedar_base == "" )

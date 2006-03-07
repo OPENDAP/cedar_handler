@@ -17,10 +17,8 @@
 #include "cedar_read_flat.h"
 #include "CedarFlat.h"
 #include "cedar_read_stream.h"
-#include "DODSTextInfo.h"
-#include "DODSInfo.h"
+#include "DODSVersionInfo.h"
 #include "cedar_read_info.h"
-#include "cedar_version.h"
 #include "CedarVersion.h"
 #include "TheDODSKeys.h"
 
@@ -133,7 +131,7 @@ bool
 CedarRequestHandler::cedar_build_info( DODSDataHandlerInterface &dhi )
 {
     bool ret = true ;
-    DODSTextInfo *info = dynamic_cast<DODSTextInfo *>(dhi.response_handler->get_response_object());
+    DODSInfo *info = dynamic_cast<DODSInfo *>(dhi.response_handler->get_response_object());
     string cedar_error ;
     if( !cedar_read_info( *info, dhi.container->get_real_name(),
 			  dhi.container->get_symbolic_name(),
@@ -149,9 +147,8 @@ bool
 CedarRequestHandler::cedar_build_vers( DODSDataHandlerInterface &dhi )
 {
     bool ret = true ;
-    DODSTextInfo *info = dynamic_cast<DODSTextInfo *>(dhi.response_handler->get_response_object());
-    info->add_data( (string)"    " + cedar_version() + "\n" ) ;
-    info->add_data( (string)"        libCedar++: " + CedarVersion::get_version_number() + "\n" ) ;
+    DODSVersionInfo *info = dynamic_cast<DODSVersionInfo *>(dhi.response_handler->get_response_object());
+    info->addHandlerVersion( PACKAGE_NAME, PACKAGE_VERSION ) ;
     return ret ;
 }
 
@@ -161,7 +158,8 @@ CedarRequestHandler::cedar_build_help( DODSDataHandlerInterface &dhi )
     bool ret = true ;
     DODSInfo *info = dynamic_cast<DODSInfo *>(dhi.response_handler->get_response_object());
 
-    info->add_data( (string)"cedar-dods help: " + cedar_version() + "\n" ) ;
+    info->add_data( (string)"cedar-dods help: " + PACKAGE_NAME + ": "
+                    + PACKAGE_VERSION + "\n" ) ;
 
     string key ;
     if( dhi.transmit_protocol == "HTTP" )
