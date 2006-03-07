@@ -7,7 +7,7 @@ AC_CONFIG_AUX_DIR([conf])
 
 AM_INIT_AUTOMAKE
 
-AC_CONFIG_SRCDIR([cedar_version.h])
+AC_CONFIG_SRCDIR([cedar_read_attributes.h])
 AC_CONFIG_HEADER([config_cedar.h])
 
 # Checks for programs.
