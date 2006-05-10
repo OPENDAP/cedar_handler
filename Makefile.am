@@ -9,7 +9,8 @@ AUTOMAKE_OPTIONS = foreign check-news
 
 ACLOCAL_AMFLAGS = -I conf
 
-bin_PROGRAMS = cedar_handler
+bin_PROGRAMS = cedar_handler encode
+lib_LTLIBRARIES = libcedar_handler.la
 
 CEDAR_SRCS:=cedar_read_attributes.cc cedar_read_descriptors.cc \
 	cedar_read_tab.cc cedar_read_tab_support.cc cedar_read_info.cc \
@@ -36,14 +37,37 @@ CEDAR_HDRS:=CedarFilter.h CedarFlat.h CedarRequestHandler.h \
 
 BES_HANDLER_SRC = cedar_handler.cc CedarHandlerApp.cc cedar_module.cc cedar_commands.cc
 
-cedar_handler_SOURCES = $(CEDAR_SRCS) $(BES_HANDLER_SRC) $(CEDAR_HDRS)
+libcedar_handler_la_SOURCES = $(CEDAR_SRCS) $(CEDAR_HDRS)
+cedar_handler_SOURCES = $(BES_HANDLER_SRC)
 cedar_handler_CPPFLAGS = $(BES_CPPFLAGS)
 cedar_handler_LDFLAGS = $(BES_LDFLAGS)
-cedar_handler_LDADD = $(BES_LDADD)
+cedar_handler_LDADD = libcedar_handler.la
+
+encode_SOURCES = encode.cc
+encode_LDADD = libcedar_handler.la
+
+MODOBJS = cedar_module.o cedar_commands.o
+
+all-local: $(MODOBJS)
+
+install-data-local: $(MODOBJS)
+	test -z "$(pkglibdir)" || $(mkdir_p) "$(DESTDIR)$(pkglibdir)"
+	list='$(MODOBJS)'; for p in $$list; do \
+	  if test -f $$p; then \
+	    f=$(am__strip_dir) \
+	    $(INSTALL) $$p $(DESTDIR)$(pkglibdir)/$$f; \
+	  fi; \
+	done
+
+uninstall-local:
+	@set -x; list='$(MODOBJS)'; for p in $$list; do \
+	  f=$(am__strip_dir) \
+	  rm -f "$(DESTDIR)$(pkglibdir)/$$f"; \
+	done
 
 EXTRA_DIST = COPYRIGHT COPYING
 
-CLEANFILES = *~
+CLEANFILES = *~ $(MODOBJS)
 
 ###########################################################################
 
