@@ -16,6 +16,7 @@ using std::ostringstream ;
 #include "TheDODSKeys.h"
 #include "CedarAuthenticateException.h"
 #include "OPeNDAPDataNames.h"
+#include "DODSLog.h"
 
 /** @brief Cedar authentication using MySQL database
  *
@@ -51,6 +52,10 @@ using std::ostringstream ;
 bool
 CedarAuthenticate::authenticate( DODSDataHandlerInterface &dhi )
 {
+    if( DODSLog::TheLog()->is_verbose() )
+    {
+	*(DODSLog::TheLog()) << "authenticating" << endl ;
+    }
     bool found = false ;
     string my_key = "Cedar.Authenticate.MySQL." ;
 
@@ -61,6 +66,10 @@ CedarAuthenticate::authenticate( DODSDataHandlerInterface &dhi )
 	pe.set_error_description( "MySQL server not specified for authentication" ) ;
 	throw pe ;
     }
+    if( DODSLog::TheLog()->is_verbose() )
+    {
+	*(DODSLog::TheLog()) << "  server = " << my_server << endl ;
+    }
 
     string my_user = TheDODSKeys::TheKeys()->get_key( my_key + "user", found  ) ;
     if( found == false )
@@ -68,6 +77,10 @@ CedarAuthenticate::authenticate( DODSDataHandlerInterface &dhi )
 	CedarAuthenticateException pe ;
 	pe.set_error_description( "MySQL user not specified for authentication" ) ;
 	throw pe ;
+    }
+    if( DODSLog::TheLog()->is_verbose() )
+    {
+	*(DODSLog::TheLog()) << "  MySQL user = " << my_user << endl ;
     }
 
     string my_password = TheDODSKeys::TheKeys()->get_key( my_key + "password", found  ) ;
@@ -77,6 +90,10 @@ CedarAuthenticate::authenticate( DODSDataHandlerInterface &dhi )
 	pe.set_error_description( "MySQL password not specified for authentication" ) ;
 	throw pe ;
     }
+    if( DODSLog::TheLog()->is_verbose() )
+    {
+	*(DODSLog::TheLog()) << "  MySQL password = " << my_password << endl ;
+    }
 
     string my_database=TheDODSKeys::TheKeys()->get_key( my_key + "database", found ) ;
     if( found == false )
@@ -85,7 +102,60 @@ CedarAuthenticate::authenticate( DODSDataHandlerInterface &dhi )
 	pe.set_error_description( "MySQL database not specified for authentication" ) ;
 	throw pe ;
     }
+    if( DODSLog::TheLog()->is_verbose() )
+    {
+	*(DODSLog::TheLog()) << "  MySQL database = " << my_database << endl ;
+    }
     
+    bool port_found = false ;
+    string my_sport = TheDODSKeys::TheKeys()->get_key( my_key + "port",
+						       port_found ) ;
+    int mysql_port = 0 ;
+    if( port_found )
+    {
+	mysql_port = atoi( my_sport.c_str() ) ;
+	if( mysql_port == 0 )
+	{
+	    CedarAuthenticateException pe ;
+	    pe.set_error_description( "MySQL port must be set to a valid port number" ) ;
+	    throw pe ;
+	}
+    }
+    if( DODSLog::TheLog()->is_verbose() )
+    {
+	*(DODSLog::TheLog()) << "  MySQL port = " << mysql_port << endl ;
+    }
+
+    bool sock_found = false ;
+    string mysql_sock = TheDODSKeys::TheKeys()->get_key( my_key + "socket",
+						         sock_found ) ;
+    if( !sock_found && !port_found )
+    {
+	char *mysql_home = getenv( "MYSQL_HOME" ) ;
+	if( !mysql_home )
+	{
+	    mysql_sock = "/tmp/mysql.sock" ;
+	}
+	else
+	{
+	    mysql_sock = string( mysql_home ) + "/mysql.sock" ;
+	}
+    }
+    else if( sock_found && mysql_sock != "" )
+    {
+	mysql_port = 0 ;
+    }
+    else if( sock_found && mysql_sock == "" )
+    {
+	CedarAuthenticateException pe ;
+	pe.set_error_description( "MySQL socket must be set to a non-empty string" ) ;
+	throw pe ;
+    }
+    if( DODSLog::TheLog()->is_verbose() )
+    {
+	*(DODSLog::TheLog()) << "  MySQL socket = " << mysql_sock << endl ;
+    }
+
     bool enforce_authentication = false ;
     string authentication_mode = TheDODSKeys::TheKeys()->get_key( my_key + "mode", found ) ;
     if( found == false )
@@ -118,7 +188,8 @@ CedarAuthenticate::authenticate( DODSDataHandlerInterface &dhi )
 	try
 	{
 	    query = new DODSMySQLQuery( my_server, my_user,
-					my_password, my_database ) ;
+					my_password, my_database,
+					mysql_port, mysql_sock ) ;
 	}
 	catch( bad_alloc::bad_alloc )
 	{
@@ -126,6 +197,16 @@ CedarAuthenticate::authenticate( DODSDataHandlerInterface &dhi )
 	    ex.set_error_description( "Can not get memory for query object" );
 	    ex.set_amount_of_memory_required( sizeof( DODSMySQLQuery ) ) ;
 	    throw ex ;
+	}
+	catch( DODSException &e )
+	{
+	    if( DODSLog::TheLog()->is_verbose() )
+	    {
+		*(DODSLog::TheLog()) << "error logging in: " << e.get_error_description() << endl ;
+	    }
+	    CedarAuthenticateException pe ;
+	    pe.set_error_description( e.get_error_description() ) ;
+	    throw pe ;
 	}
 
 	// get the current date and time

@@ -16,7 +16,8 @@ class DODSMySQLQuery ;
 class DODSMySQLConnect
 {
 private:
-    string		_server, _user, _database ;
+    string		_server, _user, _database, _mysql_sock ;
+    int			_mysql_port ;
     string		_error ;
     bool		_channel_open ;
     bool		_has_log ;
@@ -28,7 +29,8 @@ public:
     			DODSMySQLConnect() ;
 			~DODSMySQLConnect() ;
     void		open(const string &server, const string &user,
-			     const string &password, const string &database ) ;
+			     const string &password, const string &database,
+			     int mysql_port, const string &mysql_sock ) ;
     void		close ();
     int			is_channel_open() const { return _channel_open ; }
     string		get_error();

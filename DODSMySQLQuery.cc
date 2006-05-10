@@ -9,7 +9,8 @@
 #include "DODSMySQLChannel.h"
 
 DODSMySQLQuery::DODSMySQLQuery(const string &server, const string &user,
-			       const string &password, const string &dataset)
+			       const string &password, const string &database,
+			       int mysql_port, const string &mysql_sock )
 {
     _my_connection = 0 ;
     _results = 0 ;
@@ -27,7 +28,8 @@ DODSMySQLQuery::DODSMySQLQuery(const string &server, const string &user,
 
     try
     {
-	_my_connection->open( server, user, password, dataset ) ;
+	_my_connection->open( server, user, password, database,
+			      mysql_port, mysql_sock ) ;
     }
     catch( DODSMySQLConnectException &ce )
     {

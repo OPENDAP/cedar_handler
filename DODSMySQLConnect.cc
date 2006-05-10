@@ -31,14 +31,17 @@ DODSMySQLConnect::~DODSMySQLConnect()
 	    (*DODSLog::TheLog()) << "MySQL channel disconnected from:" << endl
 			         << "  server = " << _server << endl
 			         << "  user = " << _user << endl
-			         << "  database = " << _database << endl ;
+			         << "  database = " << _database << endl
+				 << "  port = " << _mysql_port << endl
+				 << "  socket = " << _mysql_sock << endl ;
 	}
     }
 }
 
 void
 DODSMySQLConnect::open( const string &server, const string &user,
-		        const string &password, const string &database )
+		        const string &password, const string &database,
+			int mysql_port, const string &mysql_sock )
 {
     _count++ ;
     if( !_channel_open )
@@ -46,10 +49,13 @@ DODSMySQLConnect::open( const string &server, const string &user,
 	_server = server ;
 	_user = user ;
 	_database = database ;
+	_mysql_port = mysql_port ;
+	_mysql_sock = mysql_sock ;
 	string dp = DODSEncode::decode( password.c_str(), "disp_key" ) ;
 	_the_channel = mysql_real_connect( &_mysql, server.c_str(),
 					   user.c_str(), dp.c_str(),
-					   database.c_str(), 0, 0, 0 ) ;
+					   database.c_str(),
+					   mysql_port, mysql_sock.c_str(), 0 ) ;
 	if( !_the_channel )
 	{
 	    DODSMySQLConnectException ce ;
@@ -66,7 +72,9 @@ DODSMySQLConnect::open( const string &server, const string &user,
 		(*DODSLog::TheLog()) << "MySQL channel connected to:" << endl
 				     << "  server = " << _server << endl
 				     << "  user = " << _user << endl
-				     << "  database = " << _database << endl ;
+				     << "  database = " << _database << endl
+				     << "  port = " << _mysql_port << endl
+				     << "  socket = " << _mysql_sock << endl ;
 	    }
 	    _channel_open = true ;
 	}
@@ -84,7 +92,9 @@ DODSMySQLConnect::close()
 	(*DODSLog::TheLog()) << "MySQL channel disconnected from:" << endl
 			     << "  server = " << _server << endl
 			     << "  user = " << _user << endl
-			     << "  database = " << _database << endl ;
+			     << "  database = " << _database << endl
+			     << "  port = " << _mysql_port << endl
+			     << "  socket = " << _mysql_sock << endl ;
     }
 }
 

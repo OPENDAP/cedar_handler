@@ -22,7 +22,9 @@ class DODSMySQLQuery
 	throw qe;
     }
 public:
-    DODSMySQLQuery(const string &server, const string &user, const string &password, const string &dataset);
+    DODSMySQLQuery( const string &server, const string &user,
+		    const string &password, const string &database,
+		    int mysql_port, const string &mysql_sock );
     ~DODSMySQLQuery();
 
     void run_query(const string &query);
