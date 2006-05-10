@@ -21,7 +21,7 @@ CEDAR_SRCS:=cedar_read_attributes.cc cedar_read_descriptors.cc \
 	CedarReporter.cc InfoResponseHandler.cc \
 	CedarAuthenticate.cc CedarAuthenticateException.cc \
 	DODSMySQLChannel.cc DODSMySQLConnect.cc DODSMySQLQuery.cc \
-	DODSMySQLResult.cc DODSEncode.cc
+	DODSMySQLResult.cc DODSEncode.cc CedarModule.cc
 
 CEDAR_HDRS:=CedarFilter.h CedarFlat.h CedarRequestHandler.h \
 	CedarResponseNames.h CedarTab.h FlatResponseHandler.h \
@@ -33,11 +33,12 @@ CEDAR_HDRS:=CedarFilter.h CedarFlat.h CedarRequestHandler.h \
 	DODSMySQLChannel.h DODSMySQLConnect.h DODSMySQLQuery.h \
 	DODSMySQLResult.h DODSEncode.h \
 	DODSMySQLQueryException.h DODSMySQLConnectException.h \
-	cedar_version.h config_cedar.h 
+	cedar_version.h config_cedar.h CedarModule.h
 
 BES_HANDLER_SRC = cedar_handler.cc CedarHandlerApp.cc cedar_module.cc cedar_commands.cc
 
 libcedar_handler_la_SOURCES = $(CEDAR_SRCS) $(CEDAR_HDRS)
+
 cedar_handler_SOURCES = $(BES_HANDLER_SRC)
 cedar_handler_CPPFLAGS = $(BES_CPPFLAGS)
 cedar_handler_LDFLAGS = $(BES_LDFLAGS)
@@ -78,3 +79,11 @@ srpm:
 
 rpm:
 	rpmbuild -tb fits_handler-@PACKAGE_VERSION@.tar.gz
+
+info:
+	@echo ""
+	@echo ""
+	@echo "Makefile Information"
+	@echo "    CEDAR_CPPFLAGS = $(CEDAR_CPPFLAGS)"
+	@echo "    CEDAR_LDFLAGS = $(CEDAR_LDFLAGS)"
+	@echo "    CEDAR_LIBS = $(CEDAR_LIBS)"
