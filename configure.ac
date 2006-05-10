@@ -13,6 +13,7 @@ AC_CONFIG_HEADER([config_cedar.h])
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_CC
+AC_PROG_LIBTOOL
 
 # Checks for header files.
 AC_HEADER_STDC
@@ -56,7 +57,7 @@ AC_ARG_WITH([cedar],
 AC_ARG_WITH([cedar_inc],
             [AS_HELP_STRING([--with-cedar-include=ARG],[cedar include directory])],
             [CEDAR_PATH_INC=${withval}], 
-            [CEDAR_PATH_INC="$CEDAR_PATH/include"])
+            [CEDAR_PATH_INC="$CEDAR_PATH/include/cedar"])
 
 AC_ARG_WITH([cedar_libdir],
             [AS_HELP_STRING([--with-cedar-libdir=ARG],[cedar library directory])],
@@ -65,7 +66,7 @@ AC_ARG_WITH([cedar_libdir],
 
 AS_IF([test "z$CEDAR_PATH_LIBDIR" = "z"],[CEDAR_PATH_LIBDIR="$CEDAR_PATH/lib"])
 
-AS_IF([test "z$CEDAR_PATH_INC" = "z"],[CEDAR_PATH_INC="$CEDAR_PATH/include"])
+AS_IF([test "z$CEDAR_PATH_INC" = "z"],[CEDAR_PATH_INC="$CEDAR_PATH/include/cedar"])
 
 ac_cedar_ok='yes'
 CEDAR_LIBS="-lCedar"
