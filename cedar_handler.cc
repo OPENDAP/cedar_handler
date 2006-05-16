@@ -35,6 +35,7 @@ using std::endl ;
 
 #include "CedarHandlerApp.h"
 #include "DODSException.h"
+#include "Error.h"
 
 int 
 main(int argc, char *argv[])
@@ -53,6 +54,16 @@ main(int argc, char *argv[])
 	cout << endl ;
 	cout << "Cedar Handler Caught unhandled exception" << endl ;
 	cout << e.get_error_description() << endl ;
+    }
+    catch( Error &e )
+    {
+	cout << "HTTP/1.0 200 OK" << endl ;
+	cout << "XDODS-Server: 3.5.2" << endl ;
+	cout << "Date: 10/08/05" << endl ;
+	cout << "Content-type: text/plain" << endl ;
+	cout << endl ;
+	cout << "Cedar Handler Caught unhandled exception" << endl ;
+	cout << e.get_error_message() << endl ;
     }
     catch( ... )
     {

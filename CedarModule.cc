@@ -134,7 +134,7 @@ CedarModule::terminate()
 
     if( DODSLog::TheLog()->is_verbose() )
 	(*DODSLog::TheLog()) << "Removing Cedar Persistence" << endl;
-    ContainerStorageList::TheList()->rem_persistence( "Cedar" ) ;
+    ContainerStorageList::TheList()->del_persistence( "Cedar" ) ;
 }
 
 extern "C"
