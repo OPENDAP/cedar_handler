@@ -15,7 +15,7 @@ using std::flush ;
 #include "CedarFilter.h"
 #include "DODSCgi.h"
 #include "TheDODSKeys.h"
-#include "dods_module.h"
+#include "default_module.h"
 #include "opendap_commands.h"
 
 CedarHandlerApp::CedarHandlerApp()
@@ -35,7 +35,7 @@ CedarHandlerApp::~CedarHandlerApp()
 int
 CedarHandlerApp::initialize( int argc, char **argv )
 {
-    dods_module::initialize( argc, argv ) ;
+    default_module::initialize( argc, argv ) ;
     opendap_commands::initialize( argc, argv ) ;
 
     int retVal = OPeNDAPBaseApp::initialize( argc, argv ) ;
