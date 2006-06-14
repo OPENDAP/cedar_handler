@@ -1,6 +1,34 @@
 // CedarAuthenticate.cc
 
-// 2004 Copyright University Corporation for Atmospheric Research
+// This file is part of the OPeNDAP Cedar data handler, providing data
+// access views for CedarWEB data
+
+// Copyright (c) 2004,2005 University Corporation for Atmospheric Research
+// Author: Patrick West <pwest@ucar.edu> and Jose Garcia <jgarcia@ucar.edu>
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+// 
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+// 
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+// You can contact University Corporation for Atmospheric Research at
+// 3080 Center Green Drive, Boulder, CO 80301
+ 
+// (c) COPYRIGHT University Corporation for Atmostpheric Research 2004-2005
+// Please read the full copyright statement in the file COPYRIGHT_UCAR.
+//
+// Authors:
+//      pwest       Patrick West <pwest@ucar.edu>
+//      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
 #include <iostream>
 #include <sstream>
@@ -12,16 +40,16 @@ using std::ostringstream ;
 
 #include "CedarAuthenticate.h"
 #include "DODSMySQLQuery.h"
-#include "DODSMemoryException.h"
-#include "TheDODSKeys.h"
+#include "BESMemoryException.h"
+#include "TheBESKeys.h"
 #include "CedarAuthenticateException.h"
-#include "OPeNDAPDataNames.h"
-#include "DODSLog.h"
+#include "BESDataNames.h"
+#include "BESLog.h"
 
 /** @brief Cedar authentication using MySQL database
  *
  * First reads the key/value pairs from the opendap initiailization file
- * using TheDODSKeys in order to make a connection to the MySQL database
+ * using TheBESKeys in order to make a connection to the MySQL database
  * and to determine if authentication is turned on or off. The key/value
  * pairs used from the intialization file are:
  *
@@ -31,7 +59,7 @@ using std::ostringstream ;
  * Cedar.Authenticate.MySQL.database=&lt;databaseName&gt;
  * Cedar.Authenticate.MySQL.mode=&lt;on|off&gt;
  *
- * Then authenticates the user specified in the DODSDataHandlerInterface
+ * Then authenticates the user specified in the BESDataHandlerInterface
  * using a MySQL database. The table tbl_session in the MySQL database is
  * used to authenticate the user. The session information must be created
  * prior to this method being called.
@@ -42,73 +70,73 @@ using std::ostringstream ;
  * @throws DODSMySQLConnectException if unable to connect to the MySQL
  * database.
  * @throws DODSMySQLQueryException if unable to query the MySQL database.
- * @see _DODSDataHandlerInterface
+ * @see _BESDataHandlerInterface
  * @see DODSMySQLQuery
  * @see CedarAuthenticateException
  * @see DODSMySQLConnectException
  * @see DODSMySQLQueryException
- * @see DODSKeys
+ * @see BESKeys
  */
 bool
-CedarAuthenticate::authenticate( DODSDataHandlerInterface &dhi )
+CedarAuthenticate::authenticate( BESDataHandlerInterface &dhi )
 {
-    if( DODSLog::TheLog()->is_verbose() )
+    if( BESLog::TheLog()->is_verbose() )
     {
-	*(DODSLog::TheLog()) << "authenticating" << endl ;
+	*(BESLog::TheLog()) << "authenticating" << endl ;
     }
     bool found = false ;
     string my_key = "Cedar.Authenticate.MySQL." ;
 
-    string my_server = TheDODSKeys::TheKeys()->get_key( my_key + "server", found ) ;
+    string my_server = TheBESKeys::TheKeys()->get_key( my_key + "server", found ) ;
     if( found == false )
     {
 	CedarAuthenticateException pe ;
 	pe.set_error_description( "MySQL server not specified for authentication" ) ;
 	throw pe ;
     }
-    if( DODSLog::TheLog()->is_verbose() )
+    if( BESLog::TheLog()->is_verbose() )
     {
-	*(DODSLog::TheLog()) << "  server = " << my_server << endl ;
+	*(BESLog::TheLog()) << "  server = " << my_server << endl ;
     }
 
-    string my_user = TheDODSKeys::TheKeys()->get_key( my_key + "user", found  ) ;
+    string my_user = TheBESKeys::TheKeys()->get_key( my_key + "user", found  ) ;
     if( found == false )
     {
 	CedarAuthenticateException pe ;
 	pe.set_error_description( "MySQL user not specified for authentication" ) ;
 	throw pe ;
     }
-    if( DODSLog::TheLog()->is_verbose() )
+    if( BESLog::TheLog()->is_verbose() )
     {
-	*(DODSLog::TheLog()) << "  MySQL user = " << my_user << endl ;
+	*(BESLog::TheLog()) << "  MySQL user = " << my_user << endl ;
     }
 
-    string my_password = TheDODSKeys::TheKeys()->get_key( my_key + "password", found  ) ;
+    string my_password = TheBESKeys::TheKeys()->get_key( my_key + "password", found  ) ;
     if( found == false )
     {
 	CedarAuthenticateException pe ;
 	pe.set_error_description( "MySQL password not specified for authentication" ) ;
 	throw pe ;
     }
-    if( DODSLog::TheLog()->is_verbose() )
+    if( BESLog::TheLog()->is_verbose() )
     {
-	*(DODSLog::TheLog()) << "  MySQL password = " << my_password << endl ;
+	*(BESLog::TheLog()) << "  MySQL password = " << my_password << endl ;
     }
 
-    string my_database=TheDODSKeys::TheKeys()->get_key( my_key + "database", found ) ;
+    string my_database=TheBESKeys::TheKeys()->get_key( my_key + "database", found ) ;
     if( found == false )
     {
 	CedarAuthenticateException pe ;
 	pe.set_error_description( "MySQL database not specified for authentication" ) ;
 	throw pe ;
     }
-    if( DODSLog::TheLog()->is_verbose() )
+    if( BESLog::TheLog()->is_verbose() )
     {
-	*(DODSLog::TheLog()) << "  MySQL database = " << my_database << endl ;
+	*(BESLog::TheLog()) << "  MySQL database = " << my_database << endl ;
     }
     
     bool port_found = false ;
-    string my_sport = TheDODSKeys::TheKeys()->get_key( my_key + "port",
+    string my_sport = TheBESKeys::TheKeys()->get_key( my_key + "port",
 						       port_found ) ;
     int mysql_port = 0 ;
     if( port_found )
@@ -121,13 +149,13 @@ CedarAuthenticate::authenticate( DODSDataHandlerInterface &dhi )
 	    throw pe ;
 	}
     }
-    if( DODSLog::TheLog()->is_verbose() )
+    if( BESLog::TheLog()->is_verbose() )
     {
-	*(DODSLog::TheLog()) << "  MySQL port = " << mysql_port << endl ;
+	*(BESLog::TheLog()) << "  MySQL port = " << mysql_port << endl ;
     }
 
     bool sock_found = false ;
-    string mysql_sock = TheDODSKeys::TheKeys()->get_key( my_key + "socket",
+    string mysql_sock = TheBESKeys::TheKeys()->get_key( my_key + "socket",
 						         sock_found ) ;
     if( !sock_found && !port_found )
     {
@@ -151,13 +179,13 @@ CedarAuthenticate::authenticate( DODSDataHandlerInterface &dhi )
 	pe.set_error_description( "MySQL socket must be set to a non-empty string" ) ;
 	throw pe ;
     }
-    if( DODSLog::TheLog()->is_verbose() )
+    if( BESLog::TheLog()->is_verbose() )
     {
-	*(DODSLog::TheLog()) << "  MySQL socket = " << mysql_sock << endl ;
+	*(BESLog::TheLog()) << "  MySQL socket = " << mysql_sock << endl ;
     }
 
     bool enforce_authentication = false ;
-    string authentication_mode = TheDODSKeys::TheKeys()->get_key( my_key + "mode", found ) ;
+    string authentication_mode = TheBESKeys::TheKeys()->get_key( my_key + "mode", found ) ;
     if( found == false )
     {
 	CedarAuthenticateException pe ;
@@ -193,16 +221,16 @@ CedarAuthenticate::authenticate( DODSDataHandlerInterface &dhi )
 	}
 	catch( bad_alloc::bad_alloc )
 	{
-	    DODSMemoryException ex ;
+	    BESMemoryException ex ;
 	    ex.set_error_description( "Can not get memory for query object" );
 	    ex.set_amount_of_memory_required( sizeof( DODSMySQLQuery ) ) ;
 	    throw ex ;
 	}
-	catch( DODSException &e )
+	catch( BESException &e )
 	{
-	    if( DODSLog::TheLog()->is_verbose() )
+	    if( BESLog::TheLog()->is_verbose() )
 	    {
-		*(DODSLog::TheLog()) << "error logging in: " << e.get_error_description() << endl ;
+		*(BESLog::TheLog()) << "error logging in: " << e.get_error_description() << endl ;
 	    }
 	    CedarAuthenticateException pe ;
 	    pe.set_error_description( e.get_error_description() ) ;
@@ -245,4 +273,3 @@ CedarAuthenticate::authenticate( DODSDataHandlerInterface &dhi )
     return true ;
 }
 
-// $Log: CedarAuthenticate.cc,v $

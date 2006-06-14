@@ -1,10 +1,10 @@
 // CedarModule.cc
 
-// This file is part of bes, A C++ back-end server implementation framework
-// for the OPeNDAP Data Access Protocol.
+// This file is part of the OPeNDAP Cedar data handler, providing data
+// access views for CedarWEB data
 
 // Copyright (c) 2004,2005 University Corporation for Atmospheric Research
-// Author: Patrick West <pwest@ucar.org>
+// Author: Patrick West <pwest@ucar.edu> and Jose Garcia <jgarcia@ucar.edu>
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -28,118 +28,119 @@
 //
 // Authors:
 //      pwest       Patrick West <pwest@ucar.edu>
+//      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
 #include <iostream>
 
 using std::endl ;
 
 #include "CedarModule.h"
-#include "DODSRequestHandlerList.h"
+#include "BESRequestHandlerList.h"
 #include "CedarRequestHandler.h"
-#include "DODSResponseHandlerList.h"
+#include "BESResponseHandlerList.h"
 #include "FlatResponseHandler.h"
 #include "TabResponseHandler.h"
 #include "StreamResponseHandler.h"
 #include "InfoResponseHandler.h"
-#include "DODSLog.h"
-#include "DODSResponseNames.h"
+#include "BESLog.h"
+#include "BESResponseNames.h"
 #include "CedarResponseNames.h"
-#include "DODSReporterList.h"
+#include "BESReporterList.h"
 #include "CedarReporter.h"
-#include "DODS.h"
+#include "BESInterface.h"
 #include "CedarAuthenticate.h"
 #include "CedarAuthenticateException.h"
 #include "ContainerStorageCedar.h"
-#include "ContainerStorageList.h"
-#include "OPeNDAPCommand.h"
+#include "BESContainerStorageList.h"
+#include "BESCommand.h"
 
 void
 CedarModule::initialize()
 {
-    if( DODSLog::TheLog()->is_verbose() )
-	(*DODSLog::TheLog()) << "Initializing Cedar:" << endl ;
+    if( BESLog::TheLog()->is_verbose() )
+	(*BESLog::TheLog()) << "Initializing Cedar:" << endl ;
 
-    if( DODSLog::TheLog()->is_verbose() )
-	(*DODSLog::TheLog()) << "    adding " << CEDAR_NAME << " request handler" << endl ;
-    DODSRequestHandlerList::TheList()->add_handler( CEDAR_NAME, new CedarRequestHandler( CEDAR_NAME ) ) ;
+    if( BESLog::TheLog()->is_verbose() )
+	(*BESLog::TheLog()) << "    adding " << CEDAR_NAME << " request handler" << endl ;
+    BESRequestHandlerList::TheList()->add_handler( CEDAR_NAME, new CedarRequestHandler( CEDAR_NAME ) ) ;
 
-    if( DODSLog::TheLog()->is_verbose() )
-	(*DODSLog::TheLog()) << "    adding " << FLAT_RESPONSE << " response handler" << endl ;
-    DODSResponseHandlerList::TheList()->add_handler( FLAT_RESPONSE, FlatResponseHandler::FlatResponseBuilder ) ;
+    if( BESLog::TheLog()->is_verbose() )
+	(*BESLog::TheLog()) << "    adding " << FLAT_RESPONSE << " response handler" << endl ;
+    BESResponseHandlerList::TheList()->add_handler( FLAT_RESPONSE, FlatResponseHandler::FlatResponseBuilder ) ;
 
-    if( DODSLog::TheLog()->is_verbose() )
-	(*DODSLog::TheLog()) << "    adding " << TAB_RESPONSE << " response handler" << endl ;
-    DODSResponseHandlerList::TheList()->add_handler( TAB_RESPONSE, TabResponseHandler::TabResponseBuilder ) ;
+    if( BESLog::TheLog()->is_verbose() )
+	(*BESLog::TheLog()) << "    adding " << TAB_RESPONSE << " response handler" << endl ;
+    BESResponseHandlerList::TheList()->add_handler( TAB_RESPONSE, TabResponseHandler::TabResponseBuilder ) ;
 
-    if( DODSLog::TheLog()->is_verbose() )
-	(*DODSLog::TheLog()) << "    adding " << STREAM_RESPONSE << " response handler" << endl ;
-    DODSResponseHandlerList::TheList()->add_handler( STREAM_RESPONSE, StreamResponseHandler::StreamResponseBuilder ) ;
+    if( BESLog::TheLog()->is_verbose() )
+	(*BESLog::TheLog()) << "    adding " << STREAM_RESPONSE << " response handler" << endl ;
+    BESResponseHandlerList::TheList()->add_handler( STREAM_RESPONSE, StreamResponseHandler::StreamResponseBuilder ) ;
 
-    if( DODSLog::TheLog()->is_verbose() )
-	(*DODSLog::TheLog()) << "    adding " << INFO_RESPONSE << " response handler" << endl ;
-    DODSResponseHandlerList::TheList()->add_handler( INFO_RESPONSE, InfoResponseHandler::InfoResponseBuilder ) ;
+    if( BESLog::TheLog()->is_verbose() )
+	(*BESLog::TheLog()) << "    adding " << INFO_RESPONSE << " response handler" << endl ;
+    BESResponseHandlerList::TheList()->add_handler( INFO_RESPONSE, InfoResponseHandler::InfoResponseBuilder ) ;
 
-    if( DODSLog::TheLog()->is_verbose() )
-	(*DODSLog::TheLog()) << "    adding Cedar reporter" << endl ;
-    DODSReporterList::TheList()->add_reporter( CEDAR_NAME, new CedarReporter ) ;
+    if( BESLog::TheLog()->is_verbose() )
+	(*BESLog::TheLog()) << "    adding Cedar reporter" << endl ;
+    BESReporterList::TheList()->add_reporter( CEDAR_NAME, new CedarReporter ) ;
 
-    if( DODSLog::TheLog()->is_verbose() )
-	(*DODSLog::TheLog()) << "    adding Cedar authenticate to init callbacks" << endl ;
-    DODS::add_init_callback( CedarAuthenticate::authenticate ) ;
+    if( BESLog::TheLog()->is_verbose() )
+	(*BESLog::TheLog()) << "    adding Cedar authenticate to init callbacks" << endl ;
+    BESInterface::add_init_callback( CedarAuthenticate::authenticate ) ;
 
-    if( DODSLog::TheLog()->is_verbose() )
-	(*DODSLog::TheLog()) << "    adding Cedar authenticate exception callback" << endl ;
-    DODS::add_ehm_callback( CedarAuthenticateException::handleAuthException ) ;
+    if( BESLog::TheLog()->is_verbose() )
+	(*BESLog::TheLog()) << "    adding Cedar authenticate exception callback" << endl ;
+    BESInterface::add_ehm_callback( CedarAuthenticateException::handleAuthException ) ;
 
-    if( DODSLog::TheLog()->is_verbose() )
-	(*DODSLog::TheLog()) << "Adding Cedar Persistence" << endl;
+    if( BESLog::TheLog()->is_verbose() )
+	(*BESLog::TheLog()) << "Adding Cedar Persistence" << endl;
     ContainerStorageCedar *cpf = new ContainerStorageCedar( "Cedar" ) ;
-    ContainerStorageList::TheList()->add_persistence( cpf ) ;
+    BESContainerStorageList::TheList()->add_persistence( cpf ) ;
 
-    if( DODSLog::TheLog()->is_verbose() )
-	(*DODSLog::TheLog()) << "Initializing Cedar Commands:" << endl ;
+    if( BESLog::TheLog()->is_verbose() )
+	(*BESLog::TheLog()) << "Initializing Cedar Commands:" << endl ;
 
     string cmd_name = string( GET_RESPONSE ) + "." + FLAT_RESPONSE ;
-    if( DODSLog::TheLog()->is_verbose() )
-	(*DODSLog::TheLog()) << "    adding " << cmd_name << " command" << endl;
-    OPeNDAPCommand::add_command( cmd_name, OPeNDAPCommand::TermCommand ) ;
+    if( BESLog::TheLog()->is_verbose() )
+	(*BESLog::TheLog()) << "    adding " << cmd_name << " command" << endl;
+    BESCommand::add_command( cmd_name, BESCommand::TermCommand ) ;
 
     cmd_name = string( GET_RESPONSE ) + "." + TAB_RESPONSE ;
-    if( DODSLog::TheLog()->is_verbose() )
-	(*DODSLog::TheLog()) << "    adding " << cmd_name << " command" << endl;
-    OPeNDAPCommand::add_command( cmd_name, OPeNDAPCommand::TermCommand ) ;
+    if( BESLog::TheLog()->is_verbose() )
+	(*BESLog::TheLog()) << "    adding " << cmd_name << " command" << endl;
+    BESCommand::add_command( cmd_name, BESCommand::TermCommand ) ;
 
     cmd_name = string( GET_RESPONSE ) + "." + STREAM_RESPONSE ;
-    if( DODSLog::TheLog()->is_verbose() )
-	(*DODSLog::TheLog()) << "    adding " << cmd_name << " command" << endl;
-    OPeNDAPCommand::add_command( cmd_name, OPeNDAPCommand::TermCommand ) ;
+    if( BESLog::TheLog()->is_verbose() )
+	(*BESLog::TheLog()) << "    adding " << cmd_name << " command" << endl;
+    BESCommand::add_command( cmd_name, BESCommand::TermCommand ) ;
 
     cmd_name = string( GET_RESPONSE ) + "." + INFO_RESPONSE ;
-    if( DODSLog::TheLog()->is_verbose() )
-	(*DODSLog::TheLog()) << "    adding " << cmd_name << " command" << endl;
-    OPeNDAPCommand::add_command( cmd_name, OPeNDAPCommand::TermCommand ) ;
+    if( BESLog::TheLog()->is_verbose() )
+	(*BESLog::TheLog()) << "    adding " << cmd_name << " command" << endl;
+    BESCommand::add_command( cmd_name, BESCommand::TermCommand ) ;
 }
 
 void
 CedarModule::terminate()
 {
-    if( DODSLog::TheLog()->is_verbose() )
-	(*DODSLog::TheLog()) << "Removing Cedar Handlers" << endl;
-    DODSRequestHandler *rh = DODSRequestHandlerList::TheList()->remove_handler( CEDAR_NAME ) ;
+    if( BESLog::TheLog()->is_verbose() )
+	(*BESLog::TheLog()) << "Removing Cedar Handlers" << endl;
+    BESRequestHandler *rh = BESRequestHandlerList::TheList()->remove_handler( CEDAR_NAME ) ;
     if( rh ) delete rh ;
-    DODSResponseHandlerList::TheList()->remove_handler( FLAT_RESPONSE ) ;
-    DODSResponseHandlerList::TheList()->remove_handler( TAB_RESPONSE ) ;
-    DODSResponseHandlerList::TheList()->remove_handler( STREAM_RESPONSE ) ;
-    DODSResponseHandlerList::TheList()->remove_handler( INFO_RESPONSE ) ;
+    BESResponseHandlerList::TheList()->remove_handler( FLAT_RESPONSE ) ;
+    BESResponseHandlerList::TheList()->remove_handler( TAB_RESPONSE ) ;
+    BESResponseHandlerList::TheList()->remove_handler( STREAM_RESPONSE ) ;
+    BESResponseHandlerList::TheList()->remove_handler( INFO_RESPONSE ) ;
 
-    if( DODSLog::TheLog()->is_verbose() )
-	(*DODSLog::TheLog()) << "Removing Cedar Persistence" << endl;
-    ContainerStorageList::TheList()->del_persistence( "Cedar" ) ;
+    if( BESLog::TheLog()->is_verbose() )
+	(*BESLog::TheLog()) << "Removing Cedar Persistence" << endl;
+    BESContainerStorageList::TheList()->del_persistence( "Cedar" ) ;
 }
 
 extern "C"
 {
-    OPeNDAPAbstractModule *maker()
+    BESAbstractModule *maker()
     {
 	return new CedarModule ;
     }

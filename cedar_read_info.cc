@@ -1,6 +1,34 @@
 // cedar_read_info.cc
 
-// 2004 Copyright University Corporation for Atmospheric Research
+// This file is part of the OPeNDAP Cedar data handler, providing data
+// access views for CedarWEB data
+
+// Copyright (c) 2004,2005 University Corporation for Atmospheric Research
+// Author: Patrick West <pwest@ucar.edu> and Jose Garcia <jgarcia@ucar.edu>
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+// 
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+// 
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+// You can contact University Corporation for Atmospheric Research at
+// 3080 Center Green Drive, Boulder, CO 80301
+ 
+// (c) COPYRIGHT University Corporation for Atmostpheric Research 2004-2005
+// Please read the full copyright statement in the file COPYRIGHT_UCAR.
+//
+// Authors:
+//      pwest       Patrick West <pwest@ucar.edu>
+//      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
 #include <string>
 #include <sstream>
@@ -16,7 +44,7 @@ using std::ostringstream ;
 #include "CedarConstraintEvaluator.h"
 
 void
-route_buffer( const CedarLogicalRecord *pLogRec, DODSInfo &info )
+route_buffer( const CedarLogicalRecord *pLogRec, BESInfo &info )
 {
     ostringstream *oss = new ostringstream() ;
     switch( pLogRec->get_type() )
@@ -42,7 +70,7 @@ route_buffer( const CedarLogicalRecord *pLogRec, DODSInfo &info )
 inline void
 deal_with_record( CedarBlock &block,
                   CedarConstraintEvaluator &qa,
-		  DODSInfo &info )
+		  BESInfo &info )
 {
     const CedarLogicalRecord *pLogRec = block.get_first_record() ;
     if( pLogRec )
@@ -60,7 +88,7 @@ deal_with_record( CedarBlock &block,
 }
 
 bool
-cedar_read_info( DODSInfo &info, const string &filename,
+cedar_read_info( BESInfo &info, const string &filename,
                  const string &name, const string &query, string &error )
 {
     CedarConstraintEvaluator qa ;
@@ -112,16 +140,3 @@ cedar_read_info( DODSInfo &info, const string &filename,
     return true ;
 }
 
-// $Log: cedar_read_info.cc,v $
-// Revision 1.3  2005/03/17 20:47:54  pwest
-// added more information to error messages
-//
-// Revision 1.2  2004/12/15 17:44:12  pwest
-// added copyright, updated container persistence method look_for
-//
-// Revision 1.1  2004/06/30 21:04:03  pwest
-// cedar_handler uses the new dispatch code and can also be built for normal
-// cgi scripting (except the cgi needs to be updated to not check for
-// extensions but allow the handler to do that) The cgi handler also needs the
-// dispatch code.
-//

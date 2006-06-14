@@ -1,21 +1,49 @@
 // CedarReporter.cc
 
-// 2004 Copyright University Corporation for Atmospheric Research
+// This file is part of the OPeNDAP Cedar data handler, providing data
+// access views for CedarWEB data
+
+// Copyright (c) 2004,2005 University Corporation for Atmospheric Research
+// Author: Patrick West <pwest@ucar.edu> and Jose Garcia <jgarcia@ucar.edu>
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+// 
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+// 
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+// You can contact University Corporation for Atmospheric Research at
+// 3080 Center Green Drive, Boulder, CO 80301
+ 
+// (c) COPYRIGHT University Corporation for Atmostpheric Research 2004-2005
+// Please read the full copyright statement in the file COPYRIGHT_UCAR.
+//
+// Authors:
+//      pwest       Patrick West <pwest@ucar.edu>
+//      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
 #include "CedarReporter.h"
-#include "TheDODSKeys.h"
-#include "DODSLogException.h"
-#include "OPeNDAPDataNames.h"
+#include "TheBESKeys.h"
+#include "BESLogException.h"
+#include "BESDataNames.h"
 
 CedarReporter::CedarReporter()
-    : DODSReporter(),
+    : BESReporter(),
       _file_buffer( 0 )
 {
     bool found = false ;
-    string log_name = TheDODSKeys::TheKeys()->get_key( "Cedar.LogName", found );
+    string log_name = TheBESKeys::TheKeys()->get_key( "Cedar.LogName", found );
     if( log_name == "" )
     {
-	DODSLogException e ;
+	BESLogException e ;
 	e.set_error_description( "can not determine Cedar log name" ) ;
 	throw e ;
     }
@@ -24,7 +52,7 @@ CedarReporter::CedarReporter()
 	_file_buffer = new ofstream( log_name.c_str(), ios::out | ios::app ) ;
 	if( !(*_file_buffer) )
 	{
-	    DODSLogException le ;
+	    BESLogException le ;
 	    le.set_error_description( "can not open Cedar log file" ) ;
 	    throw le ;
 	} 
@@ -41,7 +69,7 @@ CedarReporter::~CedarReporter()
 }
 
 void
-CedarReporter::report( const DODSDataHandlerInterface &dhi )
+CedarReporter::report( const BESDataHandlerInterface &dhi )
 {
     const time_t sctime = time( NULL ) ;
     const struct tm *sttime = localtime( &sctime ) ; 
@@ -54,7 +82,7 @@ CedarReporter::report( const DODSDataHandlerInterface &dhi )
     *(_file_buffer) << "] " ;
 
     string user_name = "" ;
-    DODSDataHandlerInterface::data_citer citer ;
+    BESDataHandlerInterface::data_citer citer ;
     citer = dhi.data_c().find( USER_NAME ) ;
     if( citer != dhi.data_c().end() )
 	user_name = (*citer).second ;
@@ -78,20 +106,3 @@ CedarReporter::report( const DODSDataHandlerInterface &dhi )
                     << request << "\"" << endl ;
 }
 
-// $Log: CedarReporter.cc,v $
-// Revision 1.4  2005/02/09 20:30:18  pwest
-// catch up to dispatch
-//
-// Revision 1.3  2004/12/15 17:44:12  pwest
-// added copyright, updated container persistence method look_for
-//
-// Revision 1.2  2004/07/09 16:12:40  pwest
-// If the user name is not available then print this information out, otherwise
-// print the user name.
-//
-// Revision 1.1  2004/06/30 21:04:03  pwest
-// cedar_handler uses the new dispatch code and can also be built for normal
-// cgi scripting (except the cgi needs to be updated to not check for
-// extensions but allow the handler to do that) The cgi handler also needs the
-// dispatch code.
-//

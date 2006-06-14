@@ -1,10 +1,10 @@
 // CedarModule.h
 
-// This file is part of bes, A C++ back-end server implementation framework
-// for the OPeNDAP Data Access Protocol.
+// This file is part of the OPeNDAP Cedar data handler, providing data
+// access views for CedarWEB data
 
 // Copyright (c) 2004,2005 University Corporation for Atmospheric Research
-// Author: Patrick West <pwest@ucar.org>
+// Author: Patrick West <pwest@ucar.edu> and Jose Garcia <jgarcia@ucar.edu>
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -28,13 +28,14 @@
 //
 // Authors:
 //      pwest       Patrick West <pwest@ucar.edu>
+//      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
 #ifndef A_CedarModule_H
 #define A_CedarModule_H 1
 
-#include "OPeNDAPAbstractModule.h"
+#include "BESAbstractModule.h"
 
-class CedarModule : public OPeNDAPAbstractModule
+class CedarModule : public BESAbstractModule
 {
 public:
     				CedarModule() {}

@@ -41,7 +41,7 @@ libcedar_handler_la_SOURCES = $(CEDAR_SRCS) $(CEDAR_HDRS)
 
 cedar_handler_SOURCES = $(BES_HANDLER_SRC)
 cedar_handler_CPPFLAGS = $(BES_CPPFLAGS)
-cedar_handler_LDFLAGS = $(BES_LDFLAGS)
+cedar_handler_LDFLAGS = $(BES_LDFLAGS) -ldap_module -ldap_cmdmodule
 cedar_handler_LDADD = libcedar_handler.la
 
 encode_SOURCES = encode.cc
@@ -51,6 +51,7 @@ MODOBJS = cedar_module.o cedar_commands.o
 
 all-local: $(MODOBJS)
 
+CEDAR_INSTALL_FILES=cedar_help.html cedar_help.txt
 install-data-local: $(MODOBJS)
 	test -z "$(pkglibdir)" || $(mkdir_p) "$(DESTDIR)$(pkglibdir)"
 	list='$(MODOBJS)'; for p in $$list; do \
@@ -59,11 +60,22 @@ install-data-local: $(MODOBJS)
 	    $(INSTALL) $$p $(DESTDIR)$(pkglibdir)/$$f; \
 	  fi; \
 	done
+	test -z "$(sysconfdir)/bes" || $(mkdir_p) "$(DESTDIR)$(sysconfdir)/bes"
+	list='$(CEDAR_INSTALL_FILES)'; for p in $$list; do \
+	  if test -f $$p; then \
+	    f=$(am__strip_dir) \
+	    $(INSTALL_DATA) $$p $(DESTDIR)$(sysconfdir)/bes/$$f; \
+	  fi; \
+	done
 
 uninstall-local:
 	@set -x; list='$(MODOBJS)'; for p in $$list; do \
 	  f=$(am__strip_dir) \
 	  rm -f "$(DESTDIR)$(pkglibdir)/$$f"; \
+	done
+	@set -x; list='$(CEDAR_INSTALL_FILES)'; for p in $$list; do \
+	  f=$(am__strip_dir) \
+	  rm -f "$(DESTDIR)$(sysconfdir)/bes/$$f"; \
 	done
 
 EXTRA_DIST = COPYRIGHT COPYING

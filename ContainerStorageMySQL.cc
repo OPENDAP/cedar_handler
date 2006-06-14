@@ -1,14 +1,42 @@
 // ContainerStorageMySQL.cc
 
-// 2004 Copyright University Corporation for Atmospheric Research
+// This file is part of the OPeNDAP Cedar data handler, providing data
+// access views for CedarWEB data
+
+// Copyright (c) 2004,2005 University Corporation for Atmospheric Research
+// Author: Patrick West <pwest@ucar.edu> and Jose Garcia <jgarcia@ucar.edu>
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+// 
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+// 
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+// You can contact University Corporation for Atmospheric Research at
+// 3080 Center Green Drive, Boulder, CO 80301
+ 
+// (c) COPYRIGHT University Corporation for Atmostpheric Research 2004-2005
+// Please read the full copyright statement in the file COPYRIGHT_UCAR.
+//
+// Authors:
+//      pwest       Patrick West <pwest@ucar.edu>
+//      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
 #include "ContainerStorageMySQL.h"
-#include "DODSContainer.h"
+#include "BESContainer.h"
 #include "DODSMySQLQuery.h"
 #include "ContainerStorageException.h"
-#include "DODSMemoryException.h"
-#include "TheDODSKeys.h"
-#include "DODSInfo.h"
+#include "BESMemoryException.h"
+#include "TheBESKeys.h"
+#include "BESInfo.h"
 
 /** @brief pull container information from the specified mysql database
  *
@@ -18,26 +46,26 @@
  *
  * The keys in the dods initialization file that represent the database are:
  *
- * DODS.Container.Persistence.MySQL.&lt;name&gt;.server
- * DODS.Container.Persistence.MySQL.&lt;name&gt;.user
- * DODS.Container.Persistence.MySQL.&lt;name&gt;.password
- * DODS.Container.Persistence.MySQL.&lt;name&gt;.database
+ * BES.Container.Persistence.MySQL.&lt;name&gt;.server
+ * BES.Container.Persistence.MySQL.&lt;name&gt;.user
+ * BES.Container.Persistence.MySQL.&lt;name&gt;.password
+ * BES.Container.Persistence.MySQL.&lt;name&gt;.database
  *
  * where &lt;name&gt; is the name of this instance of the persistent store.
  *
  * @param n name of this persistent store.
  * @throws ContainerStorageException if unable to retrieve the MySQL
  * database connection information from the dods initialization file.
- * @throws DODSMySQLConnectException if unable to connect to the MySQL
+ * @throws BESMySQLConnectException if unable to connect to the MySQL
  * database.
  */
 ContainerStorageMySQL::ContainerStorageMySQL( const string &n )
     :ContainerStorage( n )
 {
     bool found = false ;
-    string my_key = "DODS.Container.Persistence.MySQL." + n + "." ;
+    string my_key = "BES.Container.Persistence.MySQL." + n + "." ;
 
-    string my_server = TheDODSKeys::TheKeys()->get_key( my_key + "server", found ) ;
+    string my_server = TheBESKeys::TheKeys()->get_key( my_key + "server", found ) ;
     if( found == false )
     {
 	ContainerStorageException pe;
@@ -45,7 +73,7 @@ ContainerStorageMySQL::ContainerStorageMySQL( const string &n )
 	throw pe;
     }
 
-    string my_user = TheDODSKeys::TheKeys()->get_key( my_key + "user", found  ) ;
+    string my_user = TheBESKeys::TheKeys()->get_key( my_key + "user", found  ) ;
     if( found == false )
     {
 	ContainerStorageException pe;
@@ -53,7 +81,7 @@ ContainerStorageMySQL::ContainerStorageMySQL( const string &n )
 	throw pe;
     }
 
-    string my_password = TheDODSKeys::TheKeys()->get_key( my_key + "password", found  ) ;
+    string my_password = TheBESKeys::TheKeys()->get_key( my_key + "password", found  ) ;
     if( found == false )
     {
 	ContainerStorageException pe;
@@ -61,7 +89,7 @@ ContainerStorageMySQL::ContainerStorageMySQL( const string &n )
 	throw pe;
     }
 
-    string my_database=TheDODSKeys::TheKeys()->get_key( my_key + "database", found ) ;
+    string my_database=TheBESKeys::TheKeys()->get_key( my_key + "database", found ) ;
     if( found == false )
     {
 	ContainerStorageException pe;
@@ -76,7 +104,7 @@ ContainerStorageMySQL::ContainerStorageMySQL( const string &n )
     }
     catch( bad_alloc::bad_alloc )
     {
-	DODSMemoryException ex;
+	BESMemoryException ex;
 	ex.set_error_description("Can not get memory for Persistence object");
 	ex.set_amount_of_memory_required(sizeof(DODSMySQLQuery));
 	throw ex;
@@ -92,7 +120,7 @@ ContainerStorageMySQL::~ContainerStorageMySQL()
 /** @brief looks for the specified container information in the MySQL
  * database.
  *
- * Using the symbolic name specified in the passed DODSContianer object, looks
+ * Using the symbolic name specified in the passed BESContianer object, looks
  * up the container information for the symbolic name in the MySQL database
  * opened in the constructor.
  *
@@ -104,10 +132,10 @@ ContainerStorageMySQL::~ContainerStorageMySQL()
  * @throws ContainerStorageException if the information in the
  * database is corrupt
  * @throws DODSMySQLQueryException if error running the query
- * @see DODSContainer
+ * @see BESContainer
  */
 void
-ContainerStorageMySQL::look_for( DODSContainer &d )
+ContainerStorageMySQL::look_for( BESContainer &d )
 {
     d.set_valid_flag( false ) ;
     string query = "select REAL_NAME, CONTAINER_TYPE from tbl_containers where SYMBOLIC_NAME=\"";
@@ -181,10 +209,10 @@ ContainerStorageMySQL::rem_container( const string &s_name )
  * added to the information object.
  *
  * @param info object to store the container and persistent store information
- * @see DODSInfo
+ * @see BESInfo
  */
 void
-ContainerStorageMySQL::show_containers( DODSInfo &info )
+ContainerStorageMySQL::show_containers( BESInfo &info )
 {
     info.add_data( get_name() ) ;
     info.add_data( "\n" ) ;
@@ -213,33 +241,3 @@ ContainerStorageMySQL::show_containers( DODSInfo &info )
     }
 }
 
-// $Log: ContainerStorageMySQL.cc,v $
-// Revision 1.8  2005/03/17 20:37:50  pwest
-// added documentation for rem_container and show_containers
-//
-// Revision 1.7  2005/03/17 19:23:58  pwest
-// deleting the container in rem_container instead of returning the removed container, returning true if successfully removed and false otherwise
-//
-// Revision 1.6  2005/03/15 19:55:36  pwest
-// show containers and show definitions
-//
-// Revision 1.5  2005/02/02 00:03:13  pwest
-// ability to replace containers and definitions
-//
-// Revision 1.4  2005/02/01 17:48:17  pwest
-//
-// integration of ESG into opendap
-//
-// Revision 1.3  2004/12/15 17:36:01  pwest
-//
-// Changed the way in which the parser retrieves container information, going
-// instead to ThePersistenceList, which goes through the list of container
-// persistence instances it has.
-//
-// Revision 1.2  2004/09/09 17:17:12  pwest
-// Added copywrite information
-//
-// Revision 1.1  2004/06/30 20:16:24  pwest
-// dods dispatch code, can be used for apache modules or simple cgi script
-// invocation or opendap daemon. Built during cedar server development.
-//

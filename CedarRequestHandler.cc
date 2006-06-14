@@ -1,13 +1,41 @@
 // CedarRequestHandler.cc
 
-// 2004 Copyright University Corporation for Atmospheric Research
+// This file is part of the OPeNDAP Cedar data handler, providing data
+// access views for CedarWEB data
+
+// Copyright (c) 2004,2005 University Corporation for Atmospheric Research
+// Author: Patrick West <pwest@ucar.edu> and Jose Garcia <jgarcia@ucar.edu>
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+// 
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+// 
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+// You can contact University Corporation for Atmospheric Research at
+// 3080 Center Green Drive, Boulder, CO 80301
+ 
+// (c) COPYRIGHT University Corporation for Atmostpheric Research 2004-2005
+// Please read the full copyright statement in the file COPYRIGHT_UCAR.
+//
+// Authors:
+//      pwest       Patrick West <pwest@ucar.edu>
+//      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
 #include "CedarRequestHandler.h"
-#include "DODSResponseHandler.h"
-#include "DODSResponseException.h"
-#include "DODSResponseNames.h"
+#include "BESResponseHandler.h"
+#include "BESResponseException.h"
+#include "BESResponseNames.h"
 #include "CedarResponseNames.h"
-#include "OPeNDAPDataNames.h"
+#include "BESDataNames.h"
 #include "cedar_read_attributes.h"
 #include "DAS.h"
 #include "cedar_read_descriptors.h"
@@ -17,13 +45,13 @@
 #include "cedar_read_flat.h"
 #include "CedarFlat.h"
 #include "cedar_read_stream.h"
-#include "DODSVersionInfo.h"
+#include "BESVersionInfo.h"
 #include "cedar_read_info.h"
 #include "CedarVersion.h"
-#include "TheDODSKeys.h"
+#include "TheBESKeys.h"
 
 CedarRequestHandler::CedarRequestHandler( string name )
-    : DODSRequestHandler( name )
+    : BESRequestHandler( name )
 {
     add_handler( DAS_RESPONSE, CedarRequestHandler::cedar_build_das ) ;
     add_handler( DDS_RESPONSE, CedarRequestHandler::cedar_build_dds ) ;
@@ -41,20 +69,20 @@ CedarRequestHandler::~CedarRequestHandler()
 }
 
 bool
-CedarRequestHandler::cedar_build_das( DODSDataHandlerInterface &dhi )
+CedarRequestHandler::cedar_build_das( BESDataHandlerInterface &dhi )
 {
     bool ret = true ;
     DAS *das = dynamic_cast<DAS *>(dhi.response_handler->get_response_object());
     string cedar_error ;
     if( !cedar_read_attributes( *das, dhi.container->get_real_name(), cedar_error ) )
     {
-	throw DODSResponseException( cedar_error ) ;
+	throw BESResponseException( cedar_error ) ;
     }
     return ret ;
 }
 
 bool
-CedarRequestHandler::cedar_build_dds( DODSDataHandlerInterface &dhi )
+CedarRequestHandler::cedar_build_dds( BESDataHandlerInterface &dhi )
 {
     bool ret = true ;
     DDS *dds = dynamic_cast<DDS *>(dhi.response_handler->get_response_object());
@@ -64,14 +92,14 @@ CedarRequestHandler::cedar_build_dds( DODSDataHandlerInterface &dhi )
 				 dhi.container->get_constraint(),
 				 cedar_error ) )
     {
-	throw DODSResponseException( cedar_error ) ;
+	throw BESResponseException( cedar_error ) ;
     }
     dhi.data[POST_CONSTRAINT] = "" ;
     return ret ;
 }
 
 bool
-CedarRequestHandler::cedar_build_data( DODSDataHandlerInterface &dhi )
+CedarRequestHandler::cedar_build_data( BESDataHandlerInterface &dhi )
 {
     DDS *dds = dynamic_cast<DDS *>(dhi.response_handler->get_response_object());
     string cedar_error ;
@@ -80,14 +108,14 @@ CedarRequestHandler::cedar_build_data( DODSDataHandlerInterface &dhi )
 				 dhi.container->get_constraint(),
 				 cedar_error ) )
     {
-	throw DODSResponseException( cedar_error ) ;
+	throw BESResponseException( cedar_error ) ;
     }
     dhi.data[POST_CONSTRAINT] = "" ;
     return true ;
 }
 
 bool
-CedarRequestHandler::cedar_build_flat( DODSDataHandlerInterface &dhi )
+CedarRequestHandler::cedar_build_flat( BESDataHandlerInterface &dhi )
 {
     bool ret = true ;
     CedarFlat *flat = dynamic_cast<CedarFlat *>(dhi.response_handler->get_response_object()) ;
@@ -95,26 +123,26 @@ CedarRequestHandler::cedar_build_flat( DODSDataHandlerInterface &dhi )
     if( !cedar_read_flat( *flat, dhi.container->get_real_name(),
 			  dhi.container->get_constraint(), cedar_error ) )
     {
-	throw DODSResponseException( cedar_error ) ;
+	throw BESResponseException( cedar_error ) ;
     }
     return ret ;
 }
 
 bool
-CedarRequestHandler::cedar_build_stream( DODSDataHandlerInterface &dhi )
+CedarRequestHandler::cedar_build_stream( BESDataHandlerInterface &dhi )
 {
     bool ret = true ;
     string cedar_error ;
     if( !cedar_read_stream( dhi.container->get_real_name(),
 			    dhi.container->get_constraint(), cedar_error ) )
     {
-	throw DODSResponseException( cedar_error ) ;
+	throw BESResponseException( cedar_error ) ;
     }
     return ret ;
 }
 
 bool
-CedarRequestHandler::cedar_build_tab( DODSDataHandlerInterface &dhi )
+CedarRequestHandler::cedar_build_tab( BESDataHandlerInterface &dhi )
 {
     bool ret = true ;
     CedarTab *dtab = dynamic_cast<CedarTab *>(dhi.response_handler->get_response_object()) ;
@@ -122,41 +150,41 @@ CedarRequestHandler::cedar_build_tab( DODSDataHandlerInterface &dhi )
     if( !cedar_read_tab( *dtab, dhi.container->get_real_name(),
 			 dhi.container->get_constraint(), cedar_error ) )
     {
-	throw DODSResponseException( cedar_error ) ;
+	throw BESResponseException( cedar_error ) ;
     }
     return ret ;
 }
 
 bool
-CedarRequestHandler::cedar_build_info( DODSDataHandlerInterface &dhi )
+CedarRequestHandler::cedar_build_info( BESDataHandlerInterface &dhi )
 {
     bool ret = true ;
-    DODSInfo *info = dynamic_cast<DODSInfo *>(dhi.response_handler->get_response_object());
+    BESInfo *info = dynamic_cast<BESInfo *>(dhi.response_handler->get_response_object());
     string cedar_error ;
     if( !cedar_read_info( *info, dhi.container->get_real_name(),
 			  dhi.container->get_symbolic_name(),
 			  dhi.container->get_constraint(),
 			  cedar_error ) )
     {
-	throw DODSResponseException( cedar_error ) ;
+	throw BESResponseException( cedar_error ) ;
     }
     return ret ;
 }
 
 bool
-CedarRequestHandler::cedar_build_vers( DODSDataHandlerInterface &dhi )
+CedarRequestHandler::cedar_build_vers( BESDataHandlerInterface &dhi )
 {
     bool ret = true ;
-    DODSVersionInfo *info = dynamic_cast<DODSVersionInfo *>(dhi.response_handler->get_response_object());
+    BESVersionInfo *info = dynamic_cast<BESVersionInfo *>(dhi.response_handler->get_response_object());
     info->addHandlerVersion( PACKAGE_NAME, PACKAGE_VERSION ) ;
     return ret ;
 }
 
 bool
-CedarRequestHandler::cedar_build_help( DODSDataHandlerInterface &dhi )
+CedarRequestHandler::cedar_build_help( BESDataHandlerInterface &dhi )
 {
     bool ret = true ;
-    DODSInfo *info = dynamic_cast<DODSInfo *>(dhi.response_handler->get_response_object());
+    BESInfo *info = dynamic_cast<BESInfo *>(dhi.response_handler->get_response_object());
 
     info->add_data( (string)"cedar-dods help: " + PACKAGE_NAME + ": "
                     + PACKAGE_VERSION + "\n" ) ;
@@ -171,22 +199,3 @@ CedarRequestHandler::cedar_build_help( DODSDataHandlerInterface &dhi )
     return ret ;
 }
 
-// $Log: CedarRequestHandler.cc,v $
-// Revision 1.5  2005/04/07 19:56:06  pwest
-// using add_data_from_file method of DODSInfo
-//
-// Revision 1.4  2005/02/01 17:58:37  pwest
-// integration of ESG into opendap
-//
-// Revision 1.3  2004/12/15 17:44:12  pwest
-// added copyright, updated container persistence method look_for
-//
-// Revision 1.2  2004/07/02 21:11:47  pwest
-// added function to read data instead of using dds function
-//
-// Revision 1.1  2004/06/30 21:04:03  pwest
-// cedar_handler uses the new dispatch code and can also be built for normal
-// cgi scripting (except the cgi needs to be updated to not check for
-// extensions but allow the handler to do that) The cgi handler also needs the
-// dispatch code.
-//
