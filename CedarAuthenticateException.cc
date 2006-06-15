@@ -34,6 +34,7 @@
 #include "BESDataNames.h"
 #include "BESStatusReturn.h"
 #include "cgi_util.h"
+#include "config_cedar.h"
 
 int
 CedarAuthenticateException::handleAuthException( BESException &e,
@@ -78,7 +79,7 @@ CedarAuthenticateException::handleAuthException( BESException &e,
 	    fprintf( stdout, "%s\n", e.get_error_description().c_str() ) ;
 	    fprintf( stdout, "<BR />\n" ) ;
 	    fprintf( stdout, "<BR />\n" ) ;
-	    fprintf( stdout, "Please follow <A HREF=\"https://cedarweb.hao.ucar.edu:8082/cgi-bin/ion-p?page=login.ion\" TARGET=\"NEW\">this link</A> to login.\n" ) ;
+	    fprintf( stdout, "Please follow <A HREF=\"https://cedarweb.hao.ucar.edu:%d/cgi-bin/ion-p?page=login.ion\" TARGET=\"NEW\">this link</A> to login.\n", HTTPS_PORT ) ;
  	    fprintf( stdout, "Then refresh this page to get your data once you have logged in\n" ) ;
 	    fprintf( stdout, "</BODY></HTML>" ) ;
 	}

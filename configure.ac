@@ -201,6 +201,13 @@ AC_CHECK_MYSQL(
    ]
 )
 
+AC_ARG_WITH([https],
+            [AS_HELP_STRING([--with-https=PORT],[port https is sitting on - default 443])],
+            [HTTPS_PORT_VAL=${withval}], 
+            [HTTPS_PORT_VAL=443])
+
+AC_DEFINE_UNQUOTED([HTTPS_PORT], [$HTTPS_PORT_VAL], [Define port cedar login is done through https])
+
 OPENDAP_DEBUG_OPTION
 
 AC_CONFIG_FILES([Makefile])

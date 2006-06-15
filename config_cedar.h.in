@@ -48,6 +48,9 @@
 /* Define to 1 if the system has the type `_Bool'. */
 #undef HAVE__BOOL
 
+/* Define port cedar login is done through https */
+#undef HTTPS_PORT
+
 /* Name of package */
 #undef PACKAGE
 
