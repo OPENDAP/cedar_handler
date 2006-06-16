@@ -125,14 +125,16 @@ AC_DEFUN([AC_CHECK_MYSQL],
 AC_ARG_WITH([mysql],
             [AS_HELP_STRING([--with-mysql=ARG],[mysql directory])],
             [MYSQL_PATH=${withval}], 
-            [MYSQL_PATH="/usr/local"])
+            [MYSQL_PATH=""])
 
-  AC_PATH_PROG([MYSQL_CONFIG], [mysql_config], [no])
+  if test "$MYSQL_PATH" = "" ; then
+    AC_PATH_PROG([MYSQL_CONFIG], [mysql_config], [no])
+  else
+    AC_MSG_CHECKING([for mysql in $MYSQL_PATH])
+    MYSQL_CONFIG="$MYSQL_PATH/bin/mysql_config"
+  fi
   mysql_min_version=m4_if([$1], [], [4.0.18], [$1])
   mysql_no=""
-  if test "$MYSQL_CONFIG" = "no" ; then
-     MYSQL_CONFIG="$MYSQL_PATH/bin/mysql_config"
-  fi
   if test -x "$MYSQL_CONFIG" ; then
     mysql_config_major_version=`$MYSQL_CONFIG --version | sed 's/\([[0-9]]\)*\.\([[0-9]]*\)\.\([[0-9]]*\)$/\1/'`
     mysql_config_minor_version=`$MYSQL_CONFIG --version | sed 's/\([[0-9]]\)*\.\([[0-9]]*\)\.\([[0-9]]*\)$/\2/'`
