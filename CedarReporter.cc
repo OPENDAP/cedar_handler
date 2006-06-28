@@ -43,18 +43,15 @@ CedarReporter::CedarReporter()
     string log_name = TheBESKeys::TheKeys()->get_key( "Cedar.LogName", found );
     if( log_name == "" )
     {
-	BESLogException e ;
-	e.set_error_description( "can not determine Cedar log name" ) ;
-	throw e ;
+	throw BESLogException( "can not determine Cedar log name", __FILE__, __LINE__ ) ;
     }
     else
     {
 	_file_buffer = new ofstream( log_name.c_str(), ios::out | ios::app ) ;
 	if( !(*_file_buffer) )
 	{
-	    BESLogException le ;
-	    le.set_error_description( "can not open Cedar log file" ) ;
-	    throw le ;
+	    string s = "can not open Cedar log file " + log_name ;;
+	    throw BESLogException( s, __FILE__, __LINE__ ) ;
 	} 
     }
 }

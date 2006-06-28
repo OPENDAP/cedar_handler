@@ -31,7 +31,7 @@
 //      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
 #include "InfoResponseHandler.h"
-#include "BESInfo.h"
+#include "CedarInfo.h"
 #include "cgi_util.h"
 #include "BESRequestHandlerList.h"
 
@@ -47,7 +47,7 @@ InfoResponseHandler::~InfoResponseHandler( )
 void
 InfoResponseHandler::execute( BESDataHandlerInterface &dhi )
 {
-    _response = new BESInfo( dhi.transmit_protocol == "HTTP" ) ;
+    _response = new CedarInfo( dhi.transmit_protocol == "HTTP" ) ;
     BESRequestHandlerList::TheList()->execute_each( dhi ) ;
 }
 

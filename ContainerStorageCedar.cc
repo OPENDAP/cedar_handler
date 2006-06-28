@@ -54,10 +54,9 @@ ContainerStorageCedar::ContainerStorageCedar( const string &n )
     _cedar_base = TheBESKeys::TheKeys()->get_key( key, found ) ;
     if( _cedar_base == "" )
     {
-	string s = key + " not defined in key file" ;
-	BESContainerStorageException pe ;
-	pe.set_error_description( s ) ;
-	throw pe;
+	string s = key + " not defined in bes configuration file"
+	           + ", unable to determine Cedar base directory" ;
+	throw BESContainerStorageException( s, __FILE__, __LINE__ ) ;
     }
 }
 
@@ -78,20 +77,23 @@ ContainerStorageCedar::add_container( const string &s_name,
 				      const string &r_ame,
 				      const string &type )
 {
-    throw BESContainerStorageException( "Unable to add a container to Cedar Persistence" ) ;
+    string s = "Unable to add a container to Cedar Persistence"  ;
+    throw BESContainerStorageException( s, __FILE__, __LINE__ ) ;
 }
 
 bool
 ContainerStorageCedar::del_container( const string &s_name )
 {
-    throw BESContainerStorageException( "Unable to remove a container from Cedar Persistence" ) ;
+    string s = "Unable to remove a container from Cedar Persistence"  ;
+    throw BESContainerStorageException( s, __FILE__, __LINE__ ) ;
     return false ;
 }
 
 bool
 ContainerStorageCedar::del_containers( )
 {
-    throw BESContainerStorageException( "Unable to remove a containers from Cedar Persistence" ) ;
+    string s = "Unable to remove a containers from Cedar Persistence" ;
+    throw BESContainerStorageException( s, __FILE__, __LINE__ ) ;
     return false ;
 }
 

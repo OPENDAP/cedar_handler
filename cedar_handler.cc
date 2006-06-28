@@ -57,7 +57,7 @@ main(int argc, char *argv[])
 	cout << "Content-type: text/plain" << endl ;
 	cout << endl ;
 	cout << "Cedar Handler Caught unhandled exception" << endl ;
-	cout << e.get_error_description() << endl ;
+	cout << e.get_message() << endl ;
     }
     catch( Error &e )
     {

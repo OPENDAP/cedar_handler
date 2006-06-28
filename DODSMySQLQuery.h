@@ -40,14 +40,14 @@ class DODSMySQLConnect ;
 
 class DODSMySQLQuery
 {
+private:
     DODSMySQLConnect *_my_connection;
     DODSMySQLResult *_results;
     DODSMySQLQuery(const DODSMySQLQuery &){}   //disable copy constructor
     void empty_query()
     {
-	DODSMySQLQueryException qe;
-	qe.set_error_description("No results loaded for this query");
-	throw qe;
+	string s = "No results loaded for this query" ;
+	throw DODSMySQLQueryException( s, __FILE__, __LINE__ ) ;
     }
 public:
     DODSMySQLQuery( const string &server, const string &user,

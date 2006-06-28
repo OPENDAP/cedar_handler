@@ -49,6 +49,7 @@ using std::endl ;
 #include "CedarReporter.h"
 #include "BESInterface.h"
 #include "CedarAuthenticate.h"
+#include "BESExceptionManager.h"
 #include "CedarAuthenticateException.h"
 #include "ContainerStorageCedar.h"
 #include "BESContainerStorageList.h"
@@ -177,7 +178,7 @@ CedarInit(int, char**)
 
     if( BESLog::TheLog()->is_verbose() )
 	(*BESLog::TheLog()) << "    adding Cedar authenticate exception callback" << endl ;
-    BESInterface::add_ehm_callback( CedarAuthenticateException::handleAuthException ) ;
+    BESExceptionManager::TheEHM()->add_ehm_callback( CedarAuthenticateException::handleAuthException ) ;
 
     if( BESLog::TheLog()->is_verbose() )
 	(*BESLog::TheLog()) << "Adding Cedar Persistence" << endl;

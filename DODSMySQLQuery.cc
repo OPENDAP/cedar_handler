@@ -30,6 +30,10 @@
 //      pwest       Patrick West <pwest@ucar.edu>
 //      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
+#include <new>
+
+using std::bad_alloc ;
+
 #include "DODSMySQLQuery.h"
 #include "BESMemoryException.h"
 #include "DODSMySQLConnect.h"
@@ -49,9 +53,8 @@ DODSMySQLQuery::DODSMySQLQuery(const string &server, const string &user,
     }
     catch( bad_alloc::bad_alloc )
     {
-	BESMemoryException ex ;
-	ex.set_amount_of_memory_required( sizeof( DODSMySQLConnect ) ) ;
-	throw ex ;
+	string s = "Could not allocate memory for MySQL Connect object" ;
+	throw BESMemoryException( s, __FILE__, __LINE__ ) ;
     }
 
     try
@@ -85,9 +88,7 @@ DODSMySQLQuery::run_query(const string &query)
     MYSQL *sql_channel = _my_connection->get_channel() ;
     if( mysql_query( sql_channel, query.c_str() ) )
     {
-	DODSMySQLQueryException qe ;
-	qe.set_error_description( _my_connection->get_error() ) ;
-	throw qe ;
+	throw DODSMySQLQueryException( _my_connection->get_error(), __FILE__, __LINE__ ) ;
     }
     else
     {
@@ -104,9 +105,8 @@ DODSMySQLQuery::run_query(const string &query)
 	}
 	catch(bad_alloc::bad_alloc)
 	{
-	    BESMemoryException ex ;
-	    ex.set_amount_of_memory_required( sizeof( DODSMySQLResult ) ) ;
-	    throw ex ;
+	    string s = "Could not allocate memory for MySQL result object" ;
+	    throw BESMemoryException( s, __FILE__, __LINE__ ) ;
 	}
 	_results->first_row() ;
 	while( (row=mysql_fetch_row( result )) != NULL )

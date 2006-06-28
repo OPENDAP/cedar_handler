@@ -33,6 +33,7 @@
 #include "CedarAuthenticateException.h"
 #include "BESDataNames.h"
 #include "BESStatusReturn.h"
+#include "BESInfo.h"
 #include "cgi_util.h"
 #include "config_cedar.h"
 
@@ -76,7 +77,7 @@ CedarAuthenticateException::handleAuthException( BESException &e,
 		     dhi.data[USER_NAME].c_str() ) ;
 	    fprintf( stdout, "<BR />\n" ) ;
 	    fprintf( stdout, "<BR />\n" ) ;
-	    fprintf( stdout, "%s\n", e.get_error_description().c_str() ) ;
+	    fprintf( stdout, "%s\n", e.get_message().c_str() ) ;
 	    fprintf( stdout, "<BR />\n" ) ;
 	    fprintf( stdout, "<BR />\n" ) ;
 	    fprintf( stdout, "Please follow <A HREF=\"https://cedarweb.hao.ucar.edu:%d/cgi-bin/ion-p?page=login.ion\" TARGET=\"NEW\">this link</A> to login.\n", HTTPS_PORT ) ;
@@ -85,8 +86,11 @@ CedarAuthenticateException::handleAuthException( BESException &e,
 	}
 	else
 	{
-	    fprintf( stdout, "Reporting Authentication Exception.\n" ) ;
-	    fprintf( stdout, "%s\n", e.get_error_description().c_str() ) ;
+	    if( dhi.error_info )
+	    {
+		dhi.error_info->add_exception( "Authentication", e ) ;
+		dhi.error_info->end_response() ;
+	    }
 	}
 	return CEDAR_AUTHENTICATE_EXCEPTION ;
     } 

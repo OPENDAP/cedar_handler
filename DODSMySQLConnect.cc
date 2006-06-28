@@ -85,12 +85,10 @@ DODSMySQLConnect::open( const string &server, const string &user,
 					   mysql_port, mysql_sock.c_str(), 0 ) ;
 	if( !_the_channel )
 	{
-	    DODSMySQLConnectException ce ;
-	    string error = "can not get connected to MySQL engine." ;
+	    string serr = "can not get connected to MySQL engine." ;
 	    string mysql_error = get_error() ;
-	    error += "\n" + mysql_error ;
-	    ce.set_error_description( error ) ;
-	    throw ce ;
+	    serr += "\n" + mysql_error ;
+	    throw DODSMySQLConnectException( serr, __FILE__, __LINE__ ) ;
 	}
 	else
 	{

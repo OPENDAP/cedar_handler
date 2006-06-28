@@ -36,13 +36,8 @@
 
 #include "CedarTab.h"
 
-CedarTab::CedarTab()
-    : BESInfo( "Cedar.Tab.Buffered", unknown_type )
-{
-}
-
-CedarTab::CedarTab( bool is_http )
-    : BESInfo( is_http, "Cedar.Tab.Buffered", unknown_type )
+CedarTab::CedarTab( bool ishttp )
+    : BESTextInfo( "Cedar.Tab.Buffered", ishttp )
 {
 }
 

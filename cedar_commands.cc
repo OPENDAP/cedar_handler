@@ -51,7 +51,7 @@ using std::endl ;
 #include "BESCatalogCommand.h"
 
 #include "BESParserException.h"
-#include "BESInterface.h"
+#include "BESExceptionManager.h"
 
 static bool
 CedarCmdInit(int, char**)
@@ -127,7 +127,7 @@ CedarCmdInit(int, char**)
 
     if( BESLog::TheLog()->is_verbose() )
 	(*BESLog::TheLog()) << "    adding parser exception callback" << endl ;
-    BESInterface::add_ehm_callback( BESParserException::handleException ) ;
+    BESExceptionManager::TheEHM()->add_ehm_callback( BESParserException::handleException ) ;
 
     /* Initialize Cedar specific commands */
     if( BESLog::TheLog()->is_verbose() )

@@ -32,9 +32,11 @@
 
 #include <iostream>
 #include <sstream>
+#include <new>
 
 using std::endl ;
 using std::ostringstream ;
+using std::bad_alloc ;
 
 #include <time.h>
 
@@ -90,9 +92,9 @@ CedarAuthenticate::authenticate( BESDataHandlerInterface &dhi )
     string my_server = TheBESKeys::TheKeys()->get_key( my_key + "server", found ) ;
     if( found == false )
     {
-	CedarAuthenticateException pe ;
-	pe.set_error_description( "MySQL server not specified for authentication" ) ;
-	throw pe ;
+	string s = (string)"Unable to authenticate: MySQL server not set "
+	           + "in BES configuration file" ;
+	throw CedarAuthenticateException( s, __FILE__, __LINE__ ) ;
     }
     if( BESLog::TheLog()->is_verbose() )
     {
@@ -102,9 +104,9 @@ CedarAuthenticate::authenticate( BESDataHandlerInterface &dhi )
     string my_user = TheBESKeys::TheKeys()->get_key( my_key + "user", found  ) ;
     if( found == false )
     {
-	CedarAuthenticateException pe ;
-	pe.set_error_description( "MySQL user not specified for authentication" ) ;
-	throw pe ;
+	string s = (string)"Unable to authenticate: MySQL user not set "
+	           + "in BES configuration file" ;
+	throw CedarAuthenticateException( s, __FILE__, __LINE__ ) ;
     }
     if( BESLog::TheLog()->is_verbose() )
     {
@@ -114,9 +116,9 @@ CedarAuthenticate::authenticate( BESDataHandlerInterface &dhi )
     string my_password = TheBESKeys::TheKeys()->get_key( my_key + "password", found  ) ;
     if( found == false )
     {
-	CedarAuthenticateException pe ;
-	pe.set_error_description( "MySQL password not specified for authentication" ) ;
-	throw pe ;
+	string s = (string)"Unable to authenticate: MySQL password not set "
+	           + "in BES configuration file" ;
+	throw CedarAuthenticateException( s, __FILE__, __LINE__ ) ;
     }
     if( BESLog::TheLog()->is_verbose() )
     {
@@ -126,9 +128,9 @@ CedarAuthenticate::authenticate( BESDataHandlerInterface &dhi )
     string my_database=TheBESKeys::TheKeys()->get_key( my_key + "database", found ) ;
     if( found == false )
     {
-	CedarAuthenticateException pe ;
-	pe.set_error_description( "MySQL database not specified for authentication" ) ;
-	throw pe ;
+	string s = (string)"Unable to authenticate: MySQL database not set "
+	           + "in BES configuration file" ;
+	throw CedarAuthenticateException( s, __FILE__, __LINE__ ) ;
     }
     if( BESLog::TheLog()->is_verbose() )
     {
@@ -144,9 +146,9 @@ CedarAuthenticate::authenticate( BESDataHandlerInterface &dhi )
 	mysql_port = atoi( my_sport.c_str() ) ;
 	if( mysql_port == 0 )
 	{
-	    CedarAuthenticateException pe ;
-	    pe.set_error_description( "MySQL port must be set to a valid port number" ) ;
-	    throw pe ;
+	    string s = "Unable to authenticate: MySQL port " + my_sport
+	               + " is not valid in BES configuration file" ;
+	    throw CedarAuthenticateException( s, __FILE__, __LINE__ ) ;
 	}
     }
     if( BESLog::TheLog()->is_verbose() )
@@ -175,9 +177,9 @@ CedarAuthenticate::authenticate( BESDataHandlerInterface &dhi )
     }
     else if( sock_found && mysql_sock == "" )
     {
-	CedarAuthenticateException pe ;
-	pe.set_error_description( "MySQL socket must be set to a non-empty string" ) ;
-	throw pe ;
+	string s = (string)"Unable to authenticate: MySQL socket is not set "
+		   + "in BES configuration file" ;
+	throw CedarAuthenticateException( s, __FILE__, __LINE__ ) ;
     }
     if( BESLog::TheLog()->is_verbose() )
     {
@@ -188,9 +190,10 @@ CedarAuthenticate::authenticate( BESDataHandlerInterface &dhi )
     string authentication_mode = TheBESKeys::TheKeys()->get_key( my_key + "mode", found ) ;
     if( found == false )
     {
-	CedarAuthenticateException pe ;
-	pe.set_error_description( "Authentication mode (on/off) is not specified" ) ;
-	throw pe ;
+	string s = (string)"Unable to authenticate: "
+	           + "Authentication mode (on/off) is not set "
+		   + "in BES configuration file" ;
+	throw CedarAuthenticateException( s, __FILE__, __LINE__ ) ;
     }
     else
     {
@@ -202,9 +205,10 @@ CedarAuthenticate::authenticate( BESDataHandlerInterface &dhi )
 		enforce_authentication = false ;
 	    else
 	    {
-		CedarAuthenticateException pe ;
-		pe.set_error_description( "Authentication mode is neither on nor off" ) ;
-		throw pe ;
+		string s = "Unable to authenticate: Authentication mode set to "
+		           + authentication_mode + " in BES configuration file"
+			   + ", should be set to on or off)" ;
+		throw CedarAuthenticateException( s, __FILE__, __LINE__ ) ;
 	    }
 	}
     }
@@ -221,20 +225,17 @@ CedarAuthenticate::authenticate( BESDataHandlerInterface &dhi )
 	}
 	catch( bad_alloc::bad_alloc )
 	{
-	    BESMemoryException ex ;
-	    ex.set_error_description( "Can not get memory for query object" );
-	    ex.set_amount_of_memory_required( sizeof( DODSMySQLQuery ) ) ;
-	    throw ex ;
+	    string s = "Can not get memory for MySQL Query object" ;
+	    throw BESMemoryException( s, __FILE__, __LINE__ ) ;
 	}
 	catch( BESException &e )
 	{
 	    if( BESLog::TheLog()->is_verbose() )
 	    {
-		*(BESLog::TheLog()) << "error logging in: " << e.get_error_description() << endl ;
+		*(BESLog::TheLog()) << "error logging in: "
+		                    << e.get_message() << endl ;
 	    }
-	    CedarAuthenticateException pe ;
-	    pe.set_error_description( e.get_error_description() ) ;
-	    throw pe ;
+	    throw CedarAuthenticateException( e.get_message(), __FILE__, __LINE__ ) ;
 	}
 
 	// get the current date and time
@@ -245,25 +246,21 @@ CedarAuthenticate::authenticate( BESDataHandlerInterface &dhi )
 	{
 	    if( (query->get_nfields() != 1) )
 	    {
-		ostringstream err_str ;
-		err_str << "Unable to authenticate user "
-		        << dhi.data[USER_NAME] << endl
-			<< "Invalid data from MySQL: "
-			<< query->get_nrows() << " rows and "
-			<< query->get_nfields() << " fields returned" ;
-		CedarAuthenticateException pe ;
-		pe.set_error_description( err_str.str() ) ;
-		throw pe ;
+		ostringstream s ;
+		s << "Unable to authenticate user "
+		  << dhi.data[USER_NAME] << endl
+		  << "Invalid data from MySQL: "
+		  << query->get_nrows() << " rows and "
+		  << query->get_nfields() << " fields returned" ;
+		throw CedarAuthenticateException( s.str(), __FILE__, __LINE__ );
 	    }
 	}
 	else
 	{
-	    ostringstream err_str ;
-	    err_str << "Unable to authenticate user "
-	            << dhi.data[USER_NAME] ;
-	    CedarAuthenticateException pe ;
-	    pe.set_error_description( err_str.str() ) ;
-	    throw pe ;
+	    ostringstream s ;
+	    s << "Unable to authenticate user "
+	      << dhi.data[USER_NAME] ;
+	    throw CedarAuthenticateException( s.str(), __FILE__, __LINE__ ) ;
 	}
 
 	if( query ) delete query ;

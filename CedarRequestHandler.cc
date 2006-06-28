@@ -49,6 +49,7 @@
 #include "cedar_read_info.h"
 #include "CedarVersion.h"
 #include "TheBESKeys.h"
+#include "config_cedar.h"
 
 CedarRequestHandler::CedarRequestHandler( string name )
     : BESRequestHandler( name )
@@ -76,7 +77,7 @@ CedarRequestHandler::cedar_build_das( BESDataHandlerInterface &dhi )
     string cedar_error ;
     if( !cedar_read_attributes( *das, dhi.container->get_real_name(), cedar_error ) )
     {
-	throw BESResponseException( cedar_error ) ;
+	throw BESResponseException( cedar_error, __FILE__, __LINE__ ) ;
     }
     return ret ;
 }
@@ -92,7 +93,7 @@ CedarRequestHandler::cedar_build_dds( BESDataHandlerInterface &dhi )
 				 dhi.container->get_constraint(),
 				 cedar_error ) )
     {
-	throw BESResponseException( cedar_error ) ;
+	throw BESResponseException( cedar_error, __FILE__, __LINE__ ) ;
     }
     dhi.data[POST_CONSTRAINT] = "" ;
     return ret ;
@@ -108,7 +109,7 @@ CedarRequestHandler::cedar_build_data( BESDataHandlerInterface &dhi )
 				 dhi.container->get_constraint(),
 				 cedar_error ) )
     {
-	throw BESResponseException( cedar_error ) ;
+	throw BESResponseException( cedar_error, __FILE__, __LINE__ ) ;
     }
     dhi.data[POST_CONSTRAINT] = "" ;
     return true ;
@@ -123,7 +124,7 @@ CedarRequestHandler::cedar_build_flat( BESDataHandlerInterface &dhi )
     if( !cedar_read_flat( *flat, dhi.container->get_real_name(),
 			  dhi.container->get_constraint(), cedar_error ) )
     {
-	throw BESResponseException( cedar_error ) ;
+	throw BESResponseException( cedar_error, __FILE__, __LINE__ ) ;
     }
     return ret ;
 }
@@ -136,7 +137,7 @@ CedarRequestHandler::cedar_build_stream( BESDataHandlerInterface &dhi )
     if( !cedar_read_stream( dhi.container->get_real_name(),
 			    dhi.container->get_constraint(), cedar_error ) )
     {
-	throw BESResponseException( cedar_error ) ;
+	throw BESResponseException( cedar_error, __FILE__, __LINE__ ) ;
     }
     return ret ;
 }
@@ -150,7 +151,7 @@ CedarRequestHandler::cedar_build_tab( BESDataHandlerInterface &dhi )
     if( !cedar_read_tab( *dtab, dhi.container->get_real_name(),
 			 dhi.container->get_constraint(), cedar_error ) )
     {
-	throw BESResponseException( cedar_error ) ;
+	throw BESResponseException( cedar_error, __FILE__, __LINE__ ) ;
     }
     return ret ;
 }
@@ -166,7 +167,7 @@ CedarRequestHandler::cedar_build_info( BESDataHandlerInterface &dhi )
 			  dhi.container->get_constraint(),
 			  cedar_error ) )
     {
-	throw BESResponseException( cedar_error ) ;
+	throw BESResponseException( cedar_error, __FILE__, __LINE__ ) ;
     }
     return ret ;
 }
@@ -185,16 +186,22 @@ CedarRequestHandler::cedar_build_help( BESDataHandlerInterface &dhi )
 {
     bool ret = true ;
     BESInfo *info = dynamic_cast<BESInfo *>(dhi.response_handler->get_response_object());
+    string handles = (string)DAS_RESPONSE
+                     + "," + DDS_RESPONSE
+                     + "," + DATA_RESPONSE
+                     + "," + FLAT_RESPONSE
+                     + "," + TAB_RESPONSE
+                     + "," + INFO_RESPONSE
+                     + "," + STREAM_RESPONSE
+                     + "," + HELP_RESPONSE
+                     + "," + VERS_RESPONSE ;
+    info->add_tag( "handles", handles ) ;
+    info->add_tag( "version", PACKAGE_STRING ) ;
+    info->begin_tag( "help" ) ;
 
-    info->add_data( (string)"cedar-dods help: " + PACKAGE_NAME + ": "
-                    + PACKAGE_VERSION + "\n" ) ;
+    info->add_data_from_file( "Cedar.Help", CEDAR_NAME ) ;
 
-    string key ;
-    if( dhi.transmit_protocol == "HTTP" )
-	key = (string)"Cedar.Help." + dhi.transmit_protocol ;
-    else
-	key = "Cedar.Help.TXT" ;
-    info->add_data_from_file( key, CEDAR_NAME ) ;
+    info->end_tag( "help" ) ;
 
     return ret ;
 }

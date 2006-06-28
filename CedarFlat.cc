@@ -36,13 +36,8 @@
 
 #include "CedarFlat.h"
 
-CedarFlat::CedarFlat()
-    : BESInfo( "Cedar.Flat.Buffered", unknown_type )
-{
-}
-
 CedarFlat::CedarFlat( bool is_http )
-    : BESInfo( is_http, "Cedar.Flat.Buffered", unknown_type )
+    : BESTextInfo( "Cedar.Flat.Buffered", is_http )
 {
 }
 

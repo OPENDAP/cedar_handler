@@ -33,12 +33,17 @@
 #ifndef DODSMySQLQueryException_h_
 #define DODSMySQLQueryException_h_ 1
 
-#include "BESBasicException.h"
+#include "BESDatabaseException.h"
 
-class DODSMySQLQueryException: public BESBasicException
+class DODSMySQLQueryException: public BESDatabaseException
 {
-public:
+protected:
       			DODSMySQLQueryException() {}
+public:
+      			DODSMySQLQueryException( const string &msg,
+			                         const string &file,
+						 int line )
+			    : BESDatabaseException( msg, file, line ) {}
       virtual		~DODSMySQLQueryException() {}
 };  
 

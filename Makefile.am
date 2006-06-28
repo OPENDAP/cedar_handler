@@ -14,8 +14,8 @@ lib_LTLIBRARIES = libcedar_handler.la
 
 CEDAR_SRCS:=cedar_read_attributes.cc cedar_read_descriptors.cc \
 	cedar_read_tab.cc cedar_read_tab_support.cc cedar_read_info.cc \
-	CedarFilter.cc CedarTab.cc CedarFlat.cc cedar_read_flat.cc \
-	cedar_read_stream.cc CedarRequestHandler.cc \
+	cedar_read_flat.cc cedar_read_stream.cc CedarRequestHandler.cc \
+	CedarFilter.cc CedarTab.cc CedarFlat.cc CedarInfo.cc \
 	FlatResponseHandler.cc TabResponseHandler.cc \
 	StreamResponseHandler.cc ContainerStorageCedar.cc \
 	CedarReporter.cc InfoResponseHandler.cc \
@@ -24,7 +24,7 @@ CEDAR_SRCS:=cedar_read_attributes.cc cedar_read_descriptors.cc \
 	DODSMySQLResult.cc DODSEncode.cc CedarModule.cc
 
 CEDAR_HDRS:=CedarFilter.h CedarFlat.h CedarRequestHandler.h \
-	CedarResponseNames.h CedarTab.h FlatResponseHandler.h \
+	CedarResponseNames.h CedarTab.h CedarInfo.h FlatResponseHandler.h \
 	StreamResponseHandler.h TabResponseHandler.h cedar_read_attributes.h \
 	cedar_read_descriptors.h cedar_read_flat.h cedar_read_info.h \
 	cedar_read_stream.h cedar_read_tab.h cedar_read_tab_support.h \

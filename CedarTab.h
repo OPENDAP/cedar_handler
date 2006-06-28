@@ -33,12 +33,11 @@
 #ifndef CedarTab_h_
 #define CedarTab_h_ 1
 
-#include "BESInfo.h"
+#include "BESTextInfo.h"
 
-class CedarTab : public BESInfo {
+class CedarTab : public BESTextInfo {
 public:
-  			CedarTab() ;
-  			CedarTab( bool is_http ) ;
+  			CedarTab( bool ishttp ) ;
     virtual 		~CedarTab() ;
 };
 

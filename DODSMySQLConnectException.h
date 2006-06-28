@@ -33,12 +33,17 @@
 #ifndef DODSMySQLConnectException_h_
 #define DODSMySQLConnectException_h_ 1
 
-#include "BESBasicException.h"
+#include "BESDatabaseException.h"
 
-class DODSMySQLConnectException: public BESBasicException
+class DODSMySQLConnectException: public BESDatabaseException
 {
-public:
+protected:
       			DODSMySQLConnectException() {}
+public:
+      			DODSMySQLConnectException( const string &msg,
+			                           const string &file,
+						   int line )
+			    : BESDatabaseException( msg, file, line ) {}
     virtual		~DODSMySQLConnectException() {}
 };  
 

@@ -1,4 +1,4 @@
-// CedarFlat.h
+// CedarInfo.h
 
 // This file is part of the OPeNDAP Cedar data handler, providing data
 // access views for CedarWEB data
@@ -30,16 +30,16 @@
 //      pwest       Patrick West <pwest@ucar.edu>
 //      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
-#ifndef CedarFlat_h_
-#define CedarFlat_h_ 1
+#ifndef CedarInfo_h_
+#define CedarInfo_h_ 1
 
 #include "BESTextInfo.h"
 
-class CedarFlat : public BESTextInfo {
+class CedarInfo : public BESTextInfo {
 public:
-  			CedarFlat( bool is_http ) ;
-    virtual 		~CedarFlat() ;
+  			CedarInfo( bool is_http ) ;
+    virtual 		~CedarInfo() ;
 };
 
-#endif // CedarFlat_h_
+#endif // CedarInfo_h_
 

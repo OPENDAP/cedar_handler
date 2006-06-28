@@ -68,33 +68,29 @@ ContainerStorageMySQL::ContainerStorageMySQL( const string &n )
     string my_server = TheBESKeys::TheKeys()->get_key( my_key + "server", found ) ;
     if( found == false )
     {
-	ContainerStorageException pe;
-	pe.set_error_description( "MySQL server not specified for " + n ) ;
-	throw pe;
+	string s = "MySQL server not specified for " + n ;
+	throw ContainerStorageException( s, __FILE__, __LINE__ ) ;
     }
 
     string my_user = TheBESKeys::TheKeys()->get_key( my_key + "user", found  ) ;
     if( found == false )
     {
-	ContainerStorageException pe;
-	pe.set_error_description( "MySQL user not specified for " + n ) ;
-	throw pe;
+	string s = "MySQL user not specified for " + n ;
+	throw ContainerStorageException( s, __FILE__, __LINE__ ) ;
     }
 
     string my_password = TheBESKeys::TheKeys()->get_key( my_key + "password", found  ) ;
     if( found == false )
     {
-	ContainerStorageException pe;
-	pe.set_error_description( "MySQL password not specified for " + n ) ;
-	throw pe;
+	string s = "MySQL password not specified for " + n ;
+	throw ContainerStorageException( s, __FILE__, __LINE__ ) ;
     }
 
     string my_database=TheBESKeys::TheKeys()->get_key( my_key + "database", found ) ;
     if( found == false )
     {
-	ContainerStorageException pe;
-	pe.set_error_description( "MySQL database not specified for " + n ) ;
-	throw pe;
+	string s = "MySQL database not specified for " + n ;
+	throw ContainerStorageException( s, __FILE__, __LINE__ ) ;
     }
 
     try
@@ -104,10 +100,8 @@ ContainerStorageMySQL::ContainerStorageMySQL( const string &n )
     }
     catch( bad_alloc::bad_alloc )
     {
-	BESMemoryException ex;
-	ex.set_error_description("Can not get memory for Persistence object");
-	ex.set_amount_of_memory_required(sizeof(DODSMySQLQuery));
-	throw ex;
+	string s = "Can not get memory for Persistence object" ;
+	throw BESMemoryException( s, __FILE__, __LINE__ ) ;
     }
 }
 
@@ -146,9 +140,8 @@ ContainerStorageMySQL::look_for( BESContainer &d )
     {
 	if( (_query->get_nrows() != 1) || (_query->get_nfields() != 2) )
 	{
-	    ContainerStorageException pe ;
-	    pe.set_error_description( "Invalid data from MySQL" ) ;
-	    throw pe ;
+	    string s = "Invalid data from MySQL" ;
+	    throw ContainerStorageException( s, __FILE__, __LINE__ ) ;
 	}
 	else
 	{
@@ -177,7 +170,8 @@ ContainerStorageMySQL::add_container( string s_name,
                                             string r_name,
 					    string type )
 {
-    throw ContainerStorageException( "Unable to add a container to MySQL container persistence, not yet implemented\n" ) ;
+    string s = "Unable to add a container to MySQL container storage, not yet implemented" ;
+    throw ContainerStorageException( s, __FILE__, __LINE__ ) ;
 }
 
 /** @brief removes a container with the given symbolic name, not implemented
@@ -192,7 +186,8 @@ ContainerStorageMySQL::add_container( string s_name,
 bool
 ContainerStorageMySQL::rem_container( const string &s_name )
 {
-    throw ContainerStorageException( "Unable to remove a container from a MySQL container persistece, not yet implemented\n" ) ;
+    string s = "Unable to remove a container from a MySQL container persistece, not yet implemented" ;
+    throw ContainerStorageException( s, __FILE__, __LINE__ ) ;
     return false ;
 }
 
@@ -225,9 +220,8 @@ ContainerStorageMySQL::show_containers( BESInfo &info )
 	{
 	    if( ( _query->get_nfields() != 3 ) )
 	    {
-		ContainerStorageException pe ;
-		pe.set_error_description( "Invalid data from MySQL" ) ;
-		throw pe ;
+		string s = "Invalid data from MySQL" ;
+		throw ContainerStorageException( s, __FILE__, __LINE__ ) ;
 	    }
 	    _query->first_field() ;
 	    string sym = _query->get_field() ;
