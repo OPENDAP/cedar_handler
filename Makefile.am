@@ -33,9 +33,9 @@ CEDAR_HDRS:=CedarFilter.h CedarFlat.h CedarRequestHandler.h \
 	DODSMySQLChannel.h DODSMySQLConnect.h DODSMySQLQuery.h \
 	DODSMySQLResult.h DODSEncode.h \
 	DODSMySQLQueryException.h DODSMySQLConnectException.h \
-	cedar_version.h config_cedar.h CedarModule.h
+	config_cedar.h CedarModule.h
 
-BES_HANDLER_SRC = cedar_handler.cc CedarHandlerApp.cc cedar_module.cc cedar_commands.cc
+BES_HANDLER_SRC = cedar_handler.cc CedarHandlerApp.cc cedar_module.cc cedar_commands.cc CedarHandlerApp.h
 
 libcedar_handler_la_SOURCES = $(CEDAR_SRCS) $(CEDAR_HDRS)
 
