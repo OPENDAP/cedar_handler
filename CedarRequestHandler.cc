@@ -186,6 +186,8 @@ CedarRequestHandler::cedar_build_help( BESDataHandlerInterface &dhi )
 {
     bool ret = true ;
     BESInfo *info = dynamic_cast<BESInfo *>(dhi.response_handler->get_response_object());
+    info->begin_tag( "Handler" ) ;
+    info->add_tag( "name", PACKAGE_NAME ) ;
     string handles = (string)DAS_RESPONSE
                      + "," + DDS_RESPONSE
                      + "," + DATA_RESPONSE
@@ -202,6 +204,7 @@ CedarRequestHandler::cedar_build_help( BESDataHandlerInterface &dhi )
     info->add_data_from_file( "Cedar.Help", CEDAR_NAME ) ;
 
     info->end_tag( "help" ) ;
+    info->end_tag( "Handler" ) ;
 
     return ret ;
 }
