@@ -240,7 +240,15 @@ CedarAuthenticate::authenticate( BESDataHandlerInterface &dhi )
 
 	// get the current date and time
 	string query_str = "select USER_NAME from tbl_sessions " ;
-	query_str += "where USER_NAME=\"" + dhi.data[USER_NAME] + "\";" ;
+	query_str += "where USER_NAME=\"" + dhi.data[USER_NAME] + "\"" ;
+	if( dhi.data[USER_TOKEN] != "" )
+	{
+	    query_str += " AND TOKEN=\"" + dhi.data[USER_TOKEN] + "\";" ;
+	}
+	else
+	{
+	    query_str += " AND TOKEN IS NULL;" ;
+	}
 	query->run_query( query_str ) ;
 	if( !query->is_empty_set() )
 	{
