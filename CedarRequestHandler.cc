@@ -75,7 +75,7 @@ CedarRequestHandler::cedar_build_das( BESDataHandlerInterface &dhi )
     bool ret = true ;
     DAS *das = dynamic_cast<DAS *>(dhi.response_handler->get_response_object());
     string cedar_error ;
-    if( !cedar_read_attributes( *das, dhi.container->get_real_name(), cedar_error ) )
+    if( !cedar_read_attributes( *das, dhi.container->access(), cedar_error ) )
     {
 	throw BESResponseException( cedar_error, __FILE__, __LINE__ ) ;
     }
@@ -88,7 +88,7 @@ CedarRequestHandler::cedar_build_dds( BESDataHandlerInterface &dhi )
     bool ret = true ;
     DDS *dds = dynamic_cast<DDS *>(dhi.response_handler->get_response_object());
     string cedar_error ;
-    if( !cedar_read_descriptors( *dds, dhi.container->get_real_name(),
+    if( !cedar_read_descriptors( *dds, dhi.container->access(),
 				 dhi.container->get_symbolic_name(),
 				 dhi.container->get_constraint(),
 				 cedar_error ) )
@@ -104,7 +104,7 @@ CedarRequestHandler::cedar_build_data( BESDataHandlerInterface &dhi )
 {
     DDS *dds = dynamic_cast<DDS *>(dhi.response_handler->get_response_object());
     string cedar_error ;
-    if( !cedar_read_descriptors( *dds, dhi.container->get_real_name(),
+    if( !cedar_read_descriptors( *dds, dhi.container->access(),
 				 dhi.container->get_symbolic_name(),
 				 dhi.container->get_constraint(),
 				 cedar_error ) )
@@ -121,7 +121,7 @@ CedarRequestHandler::cedar_build_flat( BESDataHandlerInterface &dhi )
     bool ret = true ;
     CedarFlat *flat = dynamic_cast<CedarFlat *>(dhi.response_handler->get_response_object()) ;
     string cedar_error ;
-    if( !cedar_read_flat( *flat, dhi.container->get_real_name(),
+    if( !cedar_read_flat( *flat, dhi.container->access(),
 			  dhi.container->get_constraint(), cedar_error ) )
     {
 	throw BESResponseException( cedar_error, __FILE__, __LINE__ ) ;
@@ -134,7 +134,7 @@ CedarRequestHandler::cedar_build_stream( BESDataHandlerInterface &dhi )
 {
     bool ret = true ;
     string cedar_error ;
-    if( !cedar_read_stream( dhi.container->get_real_name(),
+    if( !cedar_read_stream( dhi.container->access(),
 			    dhi.container->get_constraint(), cedar_error ) )
     {
 	throw BESResponseException( cedar_error, __FILE__, __LINE__ ) ;
@@ -148,7 +148,7 @@ CedarRequestHandler::cedar_build_tab( BESDataHandlerInterface &dhi )
     bool ret = true ;
     CedarTab *dtab = dynamic_cast<CedarTab *>(dhi.response_handler->get_response_object()) ;
     string cedar_error ;
-    if( !cedar_read_tab( *dtab, dhi.container->get_real_name(),
+    if( !cedar_read_tab( *dtab, dhi.container->access(),
 			 dhi.container->get_constraint(), cedar_error ) )
     {
 	throw BESResponseException( cedar_error, __FILE__, __LINE__ ) ;
@@ -162,7 +162,7 @@ CedarRequestHandler::cedar_build_info( BESDataHandlerInterface &dhi )
     bool ret = true ;
     BESInfo *info = dynamic_cast<BESInfo *>(dhi.response_handler->get_response_object());
     string cedar_error ;
-    if( !cedar_read_info( *info, dhi.container->get_real_name(),
+    if( !cedar_read_info( *info, dhi.container->access(),
 			  dhi.container->get_symbolic_name(),
 			  dhi.container->get_constraint(),
 			  cedar_error ) )
