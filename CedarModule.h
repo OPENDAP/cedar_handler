@@ -40,8 +40,8 @@ class CedarModule : public BESAbstractModule
 public:
     				CedarModule() {}
     virtual		    	~CedarModule() {}
-    virtual void		initialize() ;
-    virtual void		terminate() ;
+    virtual void		initialize( const string &modname ) ;
+    virtual void		terminate( const string &modname ) ;
 } ;
 
 #endif // A_CedarModule_H

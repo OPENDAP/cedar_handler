@@ -56,14 +56,14 @@ using std::endl ;
 #include "BESCommand.h"
 
 void
-CedarModule::initialize()
+CedarModule::initialize( const string &modname )
 {
     if( BESLog::TheLog()->is_verbose() )
 	(*BESLog::TheLog()) << "Initializing Cedar:" << endl ;
 
     if( BESLog::TheLog()->is_verbose() )
-	(*BESLog::TheLog()) << "    adding " << CEDAR_NAME << " request handler" << endl ;
-    BESRequestHandlerList::TheList()->add_handler( CEDAR_NAME, new CedarRequestHandler( CEDAR_NAME ) ) ;
+	(*BESLog::TheLog()) << "    adding " << modname << " request handler" << endl ;
+    BESRequestHandlerList::TheList()->add_handler( modname, new CedarRequestHandler( modname ) ) ;
 
     if( BESLog::TheLog()->is_verbose() )
 	(*BESLog::TheLog()) << "    adding " << FLAT_RESPONSE << " response handler" << endl ;
@@ -83,7 +83,7 @@ CedarModule::initialize()
 
     if( BESLog::TheLog()->is_verbose() )
 	(*BESLog::TheLog()) << "    adding Cedar reporter" << endl ;
-    BESReporterList::TheList()->add_reporter( CEDAR_NAME, new CedarReporter ) ;
+    BESReporterList::TheList()->add_reporter( modname, new CedarReporter ) ;
 
     if( BESLog::TheLog()->is_verbose() )
 	(*BESLog::TheLog()) << "    adding Cedar authenticate to init callbacks" << endl ;
@@ -123,11 +123,11 @@ CedarModule::initialize()
 }
 
 void
-CedarModule::terminate()
+CedarModule::terminate( const string &modname )
 {
     if( BESLog::TheLog()->is_verbose() )
 	(*BESLog::TheLog()) << "Removing Cedar Handlers" << endl;
-    BESRequestHandler *rh = BESRequestHandlerList::TheList()->remove_handler( CEDAR_NAME ) ;
+    BESRequestHandler *rh = BESRequestHandlerList::TheList()->remove_handler( modname ) ;
     if( rh ) delete rh ;
     BESResponseHandlerList::TheList()->remove_handler( FLAT_RESPONSE ) ;
     BESResponseHandlerList::TheList()->remove_handler( TAB_RESPONSE ) ;
