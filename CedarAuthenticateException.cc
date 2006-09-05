@@ -34,8 +34,11 @@
 #include "BESDataNames.h"
 #include "BESStatusReturn.h"
 #include "BESInfo.h"
+#include "TheBESKeys.h"
 #include "cgi_util.h"
 #include "config_cedar.h"
+
+#define DEFAULT_ADMINISTRATOR "cedar_db@hao.ucar.edu"
 
 int
 CedarAuthenticateException::handleAuthException( BESException &e,
@@ -43,6 +46,37 @@ CedarAuthenticateException::handleAuthException( BESException &e,
 {
     CedarAuthenticateException *ae =
 	dynamic_cast<CedarAuthenticateException*>(&e);
+
+    if( ae )
+    {
+	if( dhi.error_info )
+	{
+	    dhi.error_info->add_data_from_file( "Cedar.LoginScreen",
+						"Login Failed" ) ;
+	    string administrator = "" ;
+	    try
+	    {
+		bool found = false ;
+		administrator =
+		    TheBESKeys::TheKeys()->get_key( "BES.ServerAdministrator", found ) ;
+	    }
+	    catch( ... )
+	    {
+		administrator = DEFAULT_ADMINISTRATOR ;
+	    }
+	    dhi.error_info->add_tag( "Error Encountered", ae->get_message() ) ;
+	    dhi.error_info->add_break( 1 ) ;
+	    string admin_email = "<A HREF=\"mailto:" + administrator + "\">"
+	                         + administrator + "</A>" ;
+	    dhi.error_info->add_tag( "If you continue to have problems contact",
+				     admin_email ) ;
+	    dhi.error_info->add_data( "</TD></TR></TABLE>" ) ;
+	}
+	return CEDAR_AUTHENTICATE_EXCEPTION ;
+    }
+    return BES_EXECUTED_OK ;
+
+    /*
     if( ae )
     {
 	bool ishttp = false ;
@@ -94,6 +128,6 @@ CedarAuthenticateException::handleAuthException( BESException &e,
 	}
 	return CEDAR_AUTHENTICATE_EXCEPTION ;
     } 
-    return BES_EXECUTED_OK ;
+    */
 }
 

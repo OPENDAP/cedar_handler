@@ -78,6 +78,11 @@ using std::endl ;
 #include "BESDefinitionStorageList.h"
 #include "BESDefinitionStorageVolatile.h"
 
+#include "BESDapTransmit.h"
+#include "BESTransmitter.h"
+#include "BESReturnManager.h"
+#include "BESTransmitterNames.h"
+
 static bool
 CedarInit(int, char**)
 {
@@ -184,6 +189,46 @@ CedarInit(int, char**)
 	(*BESLog::TheLog()) << "Adding Cedar Persistence" << endl;
     ContainerStorageCedar *cpf = new ContainerStorageCedar( "Cedar" ) ;
     BESContainerStorageList::TheList()->add_persistence( cpf ) ;
+
+    BESTransmitter *t = BESReturnManager::TheManager()->find_transmitter( BASIC_TRANSMITTER ) ;
+    if( t )
+    {
+	if( BESLog::TheLog()->is_verbose() )
+	    (*BESLog::TheLog()) << "    adding basic " << DAS_TRANSMITTER << " transmit function" << endl ;
+	t->add_method( DAS_TRANSMITTER, BESDapTransmit::send_basic_das ) ;
+
+	if( BESLog::TheLog()->is_verbose() )
+	    (*BESLog::TheLog()) << "    adding basic " << DDS_TRANSMITTER << " transmit function" << endl ;
+	t->add_method( DDS_TRANSMITTER, BESDapTransmit::send_basic_dds ) ;
+
+	if( BESLog::TheLog()->is_verbose() )
+	    (*BESLog::TheLog()) << "    adding basic " << DDX_TRANSMITTER << " transmit function" << endl ;
+	t->add_method( DDX_TRANSMITTER, BESDapTransmit::send_basic_ddx ) ;
+
+	if( BESLog::TheLog()->is_verbose() )
+	    (*BESLog::TheLog()) << "    adding basic " << DATA_TRANSMITTER << " transmit function" << endl ;
+	t->add_method( DATA_TRANSMITTER, BESDapTransmit::send_basic_data ) ;
+    }
+
+    t = BESReturnManager::TheManager()->find_transmitter( HTTP_TRANSMITTER ) ;
+    if( t )
+    {
+	if( BESLog::TheLog()->is_verbose() )
+	    (*BESLog::TheLog()) << "    adding http " << DAS_TRANSMITTER << " transmit function" << endl ;
+	t->add_method( DAS_TRANSMITTER, BESDapTransmit::send_http_das ) ;
+
+	if( BESLog::TheLog()->is_verbose() )
+	    (*BESLog::TheLog()) << "    adding http " << DDS_TRANSMITTER << " transmit function" << endl ;
+	t->add_method( DDS_TRANSMITTER, BESDapTransmit::send_http_dds ) ;
+
+	if( BESLog::TheLog()->is_verbose() )
+	    (*BESLog::TheLog()) << "    adding http " << DDX_TRANSMITTER << " transmit function" << endl ;
+	t->add_method( DDX_TRANSMITTER, BESDapTransmit::send_http_ddx ) ;
+
+	if( BESLog::TheLog()->is_verbose() )
+	    (*BESLog::TheLog()) << "    adding http " << DATA_TRANSMITTER << " transmit function" << endl ;
+	t->add_method( DATA_TRANSMITTER, BESDapTransmit::send_http_data ) ;
+    }
 
     return true ;
 }
