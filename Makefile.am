@@ -41,7 +41,7 @@ libcedar_handler_la_SOURCES = $(CEDAR_SRCS) $(CEDAR_HDRS)
 
 cedar_handler_SOURCES = $(BES_HANDLER_SRC)
 cedar_handler_CPPFLAGS = $(BES_CPPFLAGS)
-cedar_handler_LDFLAGS = $(BES_LDFLAGS) -ldap_module -ldap_cmd_module
+cedar_handler_LDFLAGS = $(BES_LDFLAGS) -L$(BES_MODULE_DIR) -ldap_module -ldap_cmd_module
 cedar_handler_LDADD = libcedar_handler.la
 
 encode_SOURCES = encode.cc

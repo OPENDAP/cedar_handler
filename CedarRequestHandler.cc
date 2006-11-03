@@ -37,9 +37,9 @@
 #include "CedarResponseNames.h"
 #include "BESDataNames.h"
 #include "cedar_read_attributes.h"
-#include "DAS.h"
+#include "BESDASResponse.h"
 #include "cedar_read_descriptors.h"
-#include "DDS.h"
+#include "BESDDSResponse.h"
 #include "cedar_read_tab.h"
 #include "CedarTab.h"
 #include "cedar_read_flat.h"
@@ -73,7 +73,10 @@ bool
 CedarRequestHandler::cedar_build_das( BESDataHandlerInterface &dhi )
 {
     bool ret = true ;
-    DAS *das = dynamic_cast<DAS *>(dhi.response_handler->get_response_object());
+    BESDASResponse *bdas =
+	dynamic_cast<BESDASResponse *>(dhi.response_handler->get_response_object());
+    DAS *das = bdas->get_das() ;
+
     string cedar_error ;
     if( !cedar_read_attributes( *das, dhi.container->access(), cedar_error ) )
     {
@@ -86,7 +89,10 @@ bool
 CedarRequestHandler::cedar_build_dds( BESDataHandlerInterface &dhi )
 {
     bool ret = true ;
-    DDS *dds = dynamic_cast<DDS *>(dhi.response_handler->get_response_object());
+    BESDDSResponse *bdds =
+	dynamic_cast<BESDDSResponse *>(dhi.response_handler->get_response_object());
+    DDS *dds = bdds->get_dds() ;
+
     string cedar_error ;
     if( !cedar_read_descriptors( *dds, dhi.container->access(),
 				 dhi.container->get_symbolic_name(),
