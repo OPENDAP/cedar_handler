@@ -40,17 +40,17 @@ CedarReporter::CedarReporter()
       _file_buffer( 0 )
 {
     bool found = false ;
-    string log_name = TheBESKeys::TheKeys()->get_key( "Cedar.LogName", found );
-    if( log_name == "" )
+    _log_name = TheBESKeys::TheKeys()->get_key( "Cedar.LogName", found );
+    if( _log_name == "" )
     {
 	throw BESLogException( "can not determine Cedar log name", __FILE__, __LINE__ ) ;
     }
     else
     {
-	_file_buffer = new ofstream( log_name.c_str(), ios::out | ios::app ) ;
+	_file_buffer = new ofstream( _log_name.c_str(), ios::out | ios::app ) ;
 	if( !(*_file_buffer) )
 	{
-	    string s = "can not open Cedar log file " + log_name ;;
+	    string s = "can not open Cedar log file " + _log_name ;;
 	    throw BESLogException( s, __FILE__, __LINE__ ) ;
 	} 
     }
@@ -101,5 +101,22 @@ CedarReporter::report( const BESDataHandlerInterface &dhi )
 
     *(_file_buffer) << " " << dhi.action << " " << real << " \"" 
                     << request << "\"" << endl ;
+}
+
+/** @brief dumps information about this object
+ *
+ * Displays the pointer value of this instance along with information about
+ * the containers stored in this volatile list.
+ *
+ * @param strm C++ i/o stream to dump the information to
+ */
+void
+CedarReporter::dump( ostream &strm ) const
+{
+    strm << BESIndent::LMarg << "CedarReporter::dump - ("
+			     << (void *)this << ")" << endl ;
+    BESIndent::Indent() ;
+    strm << BESIndent::LMarg << "Cedar log name: " << _log_name << endl ;
+    BESIndent::UnIndent() ;
 }
 

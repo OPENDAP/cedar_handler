@@ -126,3 +126,20 @@ ContainerStorageCedar::show_containers( BESInfo &info )
     }
 }
 
+/** @brief dumps information about this object
+ *
+ * Displays the pointer value of this instance along with information about
+ * the containers available to Cedar
+ *
+ * @param strm C++ i/o stream to dump the information to
+ */
+void
+ContainerStorageCedar::dump( ostream &strm ) const
+{
+    strm << BESIndent::LMarg << "ContainerStorageCedar::dump - ("
+			     << (void *)this << ")" << endl ;
+    BESIndent::Indent() ;
+    strm << BESIndent::LMarg << "Cedar base directory: " << _cedar_base << endl;
+    BESIndent::UnIndent() ;
+}
+

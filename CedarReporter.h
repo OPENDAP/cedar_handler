@@ -46,12 +46,15 @@ using std::endl ;
 class CedarReporter : public BESReporter
 {
 private:
-    ofstream *		_file_buffer;
+    ofstream *		_file_buffer ;
+    string		_log_name ;
 public:
 			CedarReporter() ;
     virtual		~CedarReporter() ;
 
     virtual void	report( const BESDataHandlerInterface &dhi ) ;
+
+    virtual void	dump( ostream &strm ) const ;
 } ;
 
 #endif // A_CedarReporter_h

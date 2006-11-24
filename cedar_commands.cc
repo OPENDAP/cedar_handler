@@ -162,31 +162,13 @@ CedarCmdTerm(void)
     if( BESLog::TheLog()->is_verbose() )
 	(*BESLog::TheLog()) << "Removing DAP Commands" << endl;
 
-    BESCommand *cmd = NULL ;
+    BESCommand::del_command( DEFINE_RESPONSE ) ;
+    BESCommand::del_command( SHOWCONTAINERS_RESPONSE ) ;
+    BESCommand::del_command( DELETE_CONTAINER ) ;
+    BESCommand::del_command( DELETE_CONTAINERS ) ;
+    BESCommand::del_command( DELETE_DEFINITION ) ;
+    BESCommand::del_command( DELETE_DEFINITIONS ) ;
 
-    (*BESLog::TheLog()) << "Removing DEFINE_RESPONSE" << endl;
-    cmd = BESCommand::rem_command( DEFINE_RESPONSE ) ;
-    if( cmd ) delete cmd ;
-
-    (*BESLog::TheLog()) << "Removing SHOWCONTAINERS_RESPONSE" << endl;
-    cmd = BESCommand::rem_command( SHOWCONTAINERS_RESPONSE ) ;
-    if( cmd ) delete cmd ;
-
-    (*BESLog::TheLog()) << "Removing DELETE_CONTAINER" << endl;
-    cmd = BESCommand::rem_command( DELETE_CONTAINER ) ;
-    if( cmd ) delete cmd ;
-
-    (*BESLog::TheLog()) << "Removing DELETE_CONTAINERS" << endl;
-    cmd = BESCommand::rem_command( DELETE_CONTAINERS ) ;
-    if( cmd ) delete cmd ;
-
-    (*BESLog::TheLog()) << "Removing DELETE_DEFINITION" << endl;
-    cmd = BESCommand::rem_command( DELETE_DEFINITION ) ;
-    if( cmd ) delete cmd ;
-
-    (*BESLog::TheLog()) << "Removing DELETE_DEFINITIONS" << endl;
-    cmd = BESCommand::rem_command( DELETE_DEFINITIONS ) ;
-    if( cmd ) delete cmd ;
     return true ;
 }
 

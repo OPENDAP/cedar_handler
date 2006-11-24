@@ -45,8 +45,8 @@ using std::flush ;
 #include "CedarFilter.h"
 #include "BESCgiInterface.h"
 #include "TheBESKeys.h"
-#include "default_module.h"
-#include "opendap_commands.h"
+#include "BESDefaultModule.h"
+#include "BESDefaultCommands.h"
 
 CedarHandlerApp::CedarHandlerApp()
     : _df( 0 )
@@ -65,8 +65,8 @@ CedarHandlerApp::~CedarHandlerApp()
 int
 CedarHandlerApp::initialize( int argc, char **argv )
 {
-    default_module::initialize( argc, argv ) ;
-    opendap_commands::initialize( argc, argv ) ;
+    BESDefaultModule::initialize( argc, argv ) ;
+    BESDefaultCommands::initialize( argc, argv ) ;
 
     int retVal = BESBaseApp::initialize( argc, argv ) ;
     if( !retVal )

@@ -139,6 +139,19 @@ CedarModule::terminate( const string &modname )
     BESContainerStorageList::TheList()->del_persistence( "Cedar" ) ;
 }
 
+/** @brief dumps information about this object
+ *
+ * Displays the pointer value of this instance
+ *
+ * @param strm C++ i/o stream to dump the information to
+ */
+void
+CedarModule::dump( ostream &strm ) const
+{
+    strm << BESIndent::LMarg << "CedarModule::dump - ("
+			     << (void *)this << ")" << endl ;
+}
+
 extern "C"
 {
     BESAbstractModule *maker()
