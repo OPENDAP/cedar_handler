@@ -137,7 +137,8 @@ bool cedar_read_descriptors( DDS &dds, const string &filename,
 	return false;
     }
 
-    dds.add_var(container.get());
+    BaseType *bt = container.get() ;
+    dds.add_var( bt ) ;
     dds.set_dataset_name(name_path(filename));
 
     return true;

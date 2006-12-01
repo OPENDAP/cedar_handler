@@ -29,9 +29,9 @@ AC_CHECK_TYPES([ptrdiff_t])
 AC_CHECK_FUNCS([strchr])
 
 dnl Checks for specific libraries
-AC_CHECK_LIBDAP([3.5.3],
+AC_CHECK_LIBDAP([3.7.0],
  [
-  LIBS="$LIBS $DAP_LIBS"
+  LIBS="$LIBS $DAP_SERVER_LIBS"
   CPPFLAGS="$CPPFLAGS $DAP_CFLAGS"
  ],
  [ AC_MSG_ERROR([Cannot find libdap])
@@ -39,9 +39,8 @@ AC_CHECK_LIBDAP([3.5.3],
   
 AC_CHECK_BES([3.1.0],
  [
-  LDFLAGS="$LDFLAGS $BES_LDFLAGS"
+  LIBS="$LIBS $BES_LIBS"
   CPPFLAGS="$CPPFLAGS $BES_CFLAGS"
-  LDADD="$LDADD $BES_LDADD"
  ],
  [ AC_MSG_ERROR([Cannot find bes])
 ])

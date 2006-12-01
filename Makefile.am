@@ -38,14 +38,16 @@ CEDAR_HDRS:=CedarFilter.h CedarFlat.h CedarRequestHandler.h \
 BES_HANDLER_SRC = cedar_handler.cc CedarHandlerApp.cc cedar_module.cc cedar_commands.cc CedarHandlerApp.h
 
 libcedar_handler_la_SOURCES = $(CEDAR_SRCS) $(CEDAR_HDRS)
+libcedar_handler_la_LIBADD = $(BES_LIBS)
 
 cedar_handler_SOURCES = $(BES_HANDLER_SRC)
-cedar_handler_CPPFLAGS = $(BES_CPPFLAGS)
-cedar_handler_LDFLAGS = $(BES_LDFLAGS) -L$(BES_MODULE_DIR) -ldap_module -ldap_cmd_module
-cedar_handler_LDADD = libcedar_handler.la
+#cedar_handler_CPPFLAGS = $(BES_CPPFLAGS)
+#cedar_handler_LDFLAGS = $(BES_LDFLAGS)
+#cedar_handler_LDADD = libcedar_handler.la $(BES_LIBS) -L$(BES_MODULE_DIR) -ldap_module -ldap_cmd_module
+cedar_handler_LDADD = libcedar_handler.la -L$(BES_MODULE_DIR) -ldap_module -ldap_cmd_module
 
 encode_SOURCES = encode.cc
-encode_LDADD = libcedar_handler.la
+encode_LDADD = libcedar_handler.la -lbes_dap
 
 pkgdata_DATA = cedar/cedar_help.html cedar/cedar_help.txt cedar/cedar_login.html
 

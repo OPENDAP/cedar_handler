@@ -133,22 +133,22 @@ CedarCmdInit(int, char**)
     if( BESLog::TheLog()->is_verbose() )
 	(*BESLog::TheLog()) << "Initializing Cedar Commands:" << endl ;
 
-    string cmd_name = string( GET_RESPONSE ) + "." + FLAT_RESPONSE ;
+    string cmd_name = FLAT_RESPONSE ;
     if( BESLog::TheLog()->is_verbose() )
 	(*BESLog::TheLog()) << "    adding " << cmd_name << " command" << endl;
     BESCommand::add_command( cmd_name, BESCommand::TermCommand ) ;
 
-    cmd_name = string( GET_RESPONSE ) + "." + TAB_RESPONSE ;
+    cmd_name = TAB_RESPONSE ;
     if( BESLog::TheLog()->is_verbose() )
 	(*BESLog::TheLog()) << "    adding " << cmd_name << " command" << endl;
     BESCommand::add_command( cmd_name, BESCommand::TermCommand ) ;
 
-    cmd_name = string( GET_RESPONSE ) + "." + STREAM_RESPONSE ;
+    cmd_name = STREAM_RESPONSE ;
     if( BESLog::TheLog()->is_verbose() )
 	(*BESLog::TheLog()) << "    adding " << cmd_name << " command" << endl;
     BESCommand::add_command( cmd_name, BESCommand::TermCommand ) ;
 
-    cmd_name = string( GET_RESPONSE ) + "." + INFO_RESPONSE ;
+    cmd_name = INFO_RESPONSE ;
     if( BESLog::TheLog()->is_verbose() )
 	(*BESLog::TheLog()) << "    adding " << cmd_name << " command" << endl;
     BESCommand::add_command( cmd_name, BESCommand::TermCommand ) ;
@@ -160,7 +160,7 @@ static bool
 CedarCmdTerm(void)
 {
     if( BESLog::TheLog()->is_verbose() )
-	(*BESLog::TheLog()) << "Removing DAP Commands" << endl;
+	(*BESLog::TheLog()) << "Removing Cedar Commands" << endl;
 
     BESCommand::del_command( DEFINE_RESPONSE ) ;
     BESCommand::del_command( SHOWCONTAINERS_RESPONSE ) ;

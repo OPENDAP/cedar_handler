@@ -40,6 +40,7 @@
 #include "BESDASResponse.h"
 #include "cedar_read_descriptors.h"
 #include "BESDDSResponse.h"
+#include "BESDataDDSResponse.h"
 #include "cedar_read_tab.h"
 #include "CedarTab.h"
 #include "cedar_read_flat.h"
@@ -108,7 +109,10 @@ CedarRequestHandler::cedar_build_dds( BESDataHandlerInterface &dhi )
 bool
 CedarRequestHandler::cedar_build_data( BESDataHandlerInterface &dhi )
 {
-    DDS *dds = dynamic_cast<DDS *>(dhi.response_handler->get_response_object());
+    BESDataDDSResponse *bdds = 
+	dynamic_cast<BESDataDDSResponse *>(dhi.response_handler->get_response_object());
+    DataDDS *dds = bdds->get_dds() ;
+
     string cedar_error ;
     if( !cedar_read_descriptors( *dds, dhi.container->access(),
 				 dhi.container->get_symbolic_name(),
