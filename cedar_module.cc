@@ -209,6 +209,12 @@ CedarInit(int, char**)
 	    (*BESLog::TheLog()) << "    adding basic " << DATA_TRANSMITTER << " transmit function" << endl ;
 	t->add_method( DATA_TRANSMITTER, BESDapTransmit::send_basic_data ) ;
     }
+    else
+    {
+	string err = (string)"Unable to initialize basic transmitter "
+	             + "with dap transmit functions" ;
+	throw BESException( err, __FILE__, __LINE__ ) ;
+    }
 
     t = BESReturnManager::TheManager()->find_transmitter( HTTP_TRANSMITTER ) ;
     if( t )
@@ -228,6 +234,12 @@ CedarInit(int, char**)
 	if( BESLog::TheLog()->is_verbose() )
 	    (*BESLog::TheLog()) << "    adding http " << DATA_TRANSMITTER << " transmit function" << endl ;
 	t->add_method( DATA_TRANSMITTER, BESDapTransmit::send_http_data ) ;
+    }
+    else
+    {
+	string err = (string)"Unable to initialize http transmitter "
+	             + "with dap transmit functions" ;
+	throw BESException( err, __FILE__, __LINE__ ) ;
     }
 
     return true ;

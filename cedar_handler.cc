@@ -31,19 +31,30 @@
 //      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
 #include <iostream>
+#include <fstream>
 
 using std::cout ;
 using std::endl ;
+using std::ofstream ;
 
 #include "config_cedar.h"
 
 #include "CedarHandlerApp.h"
 #include "BESException.h"
 #include "Error.h"
+#include "BESDebug.h"
 
 int 
 main(int argc, char *argv[])
 {
+    ostream *fstrm = new ofstream( "./opendap.debug" ) ;
+    if( !(*fstrm) )
+    {
+	cout << "Oh Shit" << endl ;
+	return 1 ;
+    }
+    BESDebug::Set_debugger( new BESDebug( fstrm ) ) ;
+    BESDebug::Begin_debug() ;
     try
     {
 	CedarHandlerApp app ;

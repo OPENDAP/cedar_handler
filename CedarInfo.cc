@@ -45,3 +45,20 @@ CedarInfo::~CedarInfo()
 {
 }
 
+/** @brief dumps information about this object
+ *
+ * Displays the pointer value of this instance and calls dump on the parent
+ * class
+ *
+ * @param strm C++ i/o stream to dump the information to
+ */
+void
+CedarInfo::dump( ostream &strm ) const
+{
+    strm << BESIndent::LMarg << "CedarInfo::dump - ("
+			     << (void *)this << ")" << endl ;
+    BESIndent::Indent() ;
+    BESTextInfo::dump( strm ) ;
+    BESIndent::UnIndent() ;
+}
+

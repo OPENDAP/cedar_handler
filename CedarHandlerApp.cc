@@ -88,3 +88,20 @@ CedarHandlerApp::run()
     return 0 ;
 }
 
+/** @brief dumps information about this object
+ *
+ * Displays the pointer value of this instance and calls dump on the parent
+ * class
+ *
+ * @param strm C++ i/o stream to dump the information to
+ */
+void
+CedarHandlerApp::dump( ostream &strm ) const
+{
+    strm << BESIndent::LMarg << "CedarHandlerApp::dump - ("
+			     << (void *)this << ")" << endl ;
+    BESIndent::Indent() ;
+    BESBaseApp::dump( strm ) ;
+    BESIndent::UnIndent() ;
+}
+

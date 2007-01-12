@@ -44,6 +44,8 @@ public:
     virtual void		transmit( BESTransmitter *transmitter,
                                           BESDataHandlerInterface &r ) ;
 
+    virtual void		dump( ostream &strm ) const ;
+
     static BESResponseHandler *TabResponseBuilder( string handler_name ) ;
 };
 

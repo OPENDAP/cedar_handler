@@ -56,6 +56,23 @@ StreamResponseHandler::transmit( BESTransmitter *transmitter,
     // The Data is transmitted when it is read, dumped to stdout
 }
 
+/** @brief dumps information about this object
+ *
+ * Displays the pointer value of this instance and calls dump on the parent
+ * class.
+ *
+ * @param strm C++ i/o stream to dump the information to
+ */
+void
+StreamResponseHandler::dump( ostream &strm ) const
+{
+    strm << BESIndent::LMarg << "StreamResponseHandler::dump - ("
+			     << (void *)this << ")" << endl ;
+    BESIndent::Indent() ;
+    BESResponseHandler::dump( strm ) ;
+    BESIndent::UnIndent() ;
+}
+
 BESResponseHandler *
 StreamResponseHandler::StreamResponseBuilder( string handler_name )
 {

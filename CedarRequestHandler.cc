@@ -50,6 +50,7 @@
 #include "cedar_read_info.h"
 #include "CedarVersion.h"
 #include "TheBESKeys.h"
+#include "BESDebug.h"
 #include "config_cedar.h"
 
 CedarRequestHandler::CedarRequestHandler( string name )
@@ -70,9 +71,27 @@ CedarRequestHandler::~CedarRequestHandler()
 {
 }
 
+/** @brief dumps information about this object
+ *
+ * Displays the pointer value of this instance and calls the parent dump
+ * method
+ *
+ * @param strm C++ i/o stream to dump the information to
+ */
+void
+CedarRequestHandler::dump( ostream &strm ) const
+{
+    strm << BESIndent::LMarg << "CedarRequestHandler::dump - ("
+			     << (void *)this << ")" << endl ;
+    BESIndent::Indent() ;
+    BESRequestHandler::dump( strm ) ;
+    BESIndent::UnIndent() ;
+}
+
 bool
 CedarRequestHandler::cedar_build_das( BESDataHandlerInterface &dhi )
 {
+    BESDEBUG( "building cedar das response:" << endl )
     bool ret = true ;
     BESDASResponse *bdas =
 	dynamic_cast<BESDASResponse *>(dhi.response_handler->get_response_object());
@@ -83,6 +102,7 @@ CedarRequestHandler::cedar_build_das( BESDataHandlerInterface &dhi )
     {
 	throw BESResponseException( cedar_error, __FILE__, __LINE__ ) ;
     }
+    BESDEBUG( "returning from building cedar das response:" << endl << *das << endl )
     return ret ;
 }
 

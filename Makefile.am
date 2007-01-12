@@ -9,8 +9,8 @@ AUTOMAKE_OPTIONS = foreign check-news
 
 ACLOCAL_AMFLAGS = -I conf
 
-bin_PROGRAMS = cedar_handler encode
-lib_LTLIBRARIES = libcedar_handler.la
+bin_PROGRAMS = dap_cedar_handler encode
+lib_LTLIBRARIES = libcedar_handler.la libcedar_module.la
 
 CEDAR_SRCS:=cedar_read_attributes.cc cedar_read_descriptors.cc \
 	cedar_read_tab.cc cedar_read_tab_support.cc cedar_read_info.cc \
@@ -21,7 +21,7 @@ CEDAR_SRCS:=cedar_read_attributes.cc cedar_read_descriptors.cc \
 	CedarReporter.cc InfoResponseHandler.cc \
 	CedarAuthenticate.cc CedarAuthenticateException.cc \
 	DODSMySQLChannel.cc DODSMySQLConnect.cc DODSMySQLQuery.cc \
-	DODSMySQLResult.cc DODSEncode.cc CedarModule.cc
+	DODSMySQLResult.cc DODSEncode.cc
 
 CEDAR_HDRS:=CedarFilter.h CedarFlat.h CedarRequestHandler.h \
 	CedarResponseNames.h CedarTab.h CedarInfo.h FlatResponseHandler.h \
@@ -33,18 +33,20 @@ CEDAR_HDRS:=CedarFilter.h CedarFlat.h CedarRequestHandler.h \
 	DODSMySQLChannel.h DODSMySQLConnect.h DODSMySQLQuery.h \
 	DODSMySQLResult.h DODSEncode.h \
 	DODSMySQLQueryException.h DODSMySQLConnectException.h \
-	config_cedar.h CedarModule.h
+	config_cedar.h
 
 BES_HANDLER_SRC = cedar_handler.cc CedarHandlerApp.cc cedar_module.cc cedar_commands.cc CedarHandlerApp.h
 
 libcedar_handler_la_SOURCES = $(CEDAR_SRCS) $(CEDAR_HDRS)
 libcedar_handler_la_LIBADD = $(BES_LIBS)
 
-cedar_handler_SOURCES = $(BES_HANDLER_SRC)
-#cedar_handler_CPPFLAGS = $(BES_CPPFLAGS)
-#cedar_handler_LDFLAGS = $(BES_LDFLAGS)
-#cedar_handler_LDADD = libcedar_handler.la $(BES_LIBS) -L$(BES_MODULE_DIR) -ldap_module -ldap_cmd_module
-cedar_handler_LDADD = libcedar_handler.la -L$(BES_MODULE_DIR) -ldap_module -ldap_cmd_module
+dap_cedar_handler_SOURCES = $(BES_HANDLER_SRC)
+dap_cedar_handler_LDADD = libcedar_handler.la -L$(BES_MODULE_DIR) -ldap_module -ldap_cmd_module
+
+libcedar_module_la_SOURCES = $(CEDAR_SRCS) CedarModule.cc $(CEDAR_HDRS) CedarModule.h
+libcedar_module_la_CPPFLAGS = $(BES_CPPFLAGS)
+libcedar_module_la_LDFLAGS = -avoid-version -module 
+libcedar_module_la_LIBADD = $(BES_LIBS)
 
 encode_SOURCES = encode.cc
 encode_LDADD = libcedar_handler.la -lbes_dap

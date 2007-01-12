@@ -59,6 +59,23 @@ TabResponseHandler::transmit( BESTransmitter *transmitter,
 	transmitter->send_text( *((CedarTab *)_response), dhi ) ;
 }
 
+/** @brief dumps information about this object
+ *
+ * Displays the pointer value of this instance and calls dump on the parent
+ * class
+ *
+ * @param strm C++ i/o stream to dump the information to
+ */
+void
+TabResponseHandler::dump( ostream &strm ) const
+{
+    strm << BESIndent::LMarg << "TabResponseHandler::dump - ("
+			     << (void *)this << ")" << endl ;
+    BESIndent::Indent() ;
+    BESResponseHandler::dump( strm ) ;
+    BESIndent::UnIndent() ;
+}
+
 BESResponseHandler *
 TabResponseHandler::TabResponseBuilder( string handler_name )
 {

@@ -45,6 +45,8 @@ public:
     virtual int			initialize( int argc, char **argv ) ;
     virtual int			run() ;
 
+    virtual void		dump( ostream &strm ) const ;
+
     static bool			set_user( BESDataHandlerInterface &dhi ) ;
 } ;
 

@@ -40,6 +40,8 @@ public:
 			CedarRequestHandler( string name ) ;
     virtual		~CedarRequestHandler( void ) ;
 
+    virtual void	dump( ostream &strm ) const ;
+
     static bool		cedar_build_das( BESDataHandlerInterface &dhi ) ;
     static bool		cedar_build_dds( BESDataHandlerInterface &dhi ) ;
     static bool		cedar_build_data( BESDataHandlerInterface &dhi ) ;

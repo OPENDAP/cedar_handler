@@ -39,6 +39,8 @@ class CedarFlat : public BESTextInfo {
 public:
   			CedarFlat( bool is_http ) ;
     virtual 		~CedarFlat() ;
+
+    virtual void	dump( ostream &strm ) const ;
 };
 
 #endif // CedarFlat_h_

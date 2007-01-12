@@ -59,6 +59,23 @@ FlatResponseHandler::transmit( BESTransmitter *transmitter,
 	transmitter->send_text( *((CedarFlat *)_response), dhi ) ;
 }
 
+/** @brief dumps information about this object
+ *
+ * Displays the pointer value of this instance and calls dump on the parent
+ * class
+ *
+ * @param strm C++ i/o stream to dump the information to
+ */
+void
+FlatResponseHandler::dump( ostream &strm ) const
+{
+    strm << BESIndent::LMarg << "FlatResponseHandler::dump - ("
+			     << (void *)this << ")" << endl ;
+    BESIndent::Indent() ;
+    BESResponseHandler::dump( strm ) ;
+    BESIndent::UnIndent() ;
+}
+
 BESResponseHandler *
 FlatResponseHandler::FlatResponseBuilder( string handler_name )
 {
