@@ -1,0 +1,369 @@
+2007-01-11  Patrick West <pwest@ucar.edu>
+
+	Changed the name of the data handler to dap_cedar_handler to keep
+	with naming of other handlers. Added dump methods to the response
+	objects, the response handlers, and the request handler to debugging
+	purposes. Created a bes module library to be loaded by the bes. The
+	dap_cedar_handler and the bes module appear to be working, must now
+	test the apache module portion.
+	M    CedarTab.h
+	M    InfoResponseHandler.h
+	M    CedarHandlerApp.h
+	M    CedarRequestHandler.cc
+	M    CedarFlat.h
+	M    CedarInfo.h
+	M    FlatResponseHandler.cc
+	M    FlatResponseHandler.h
+	M    ContainerStorageCedar.cc
+	M    InfoResponseHandler.cc
+	M    opendap.ini
+	M    CedarTab.cc
+	M    StreamResponseHandler.h
+	M    CedarHandlerApp.cc
+	M    CedarFlat.cc
+	M    CedarRequestHandler.h
+	M    StreamResponseHandler.cc
+	M    cedar_handler.cc
+	M    cedar_module.cc
+	M    TabResponseHandler.cc
+	M    TabResponseHandler.h
+	M    Makefile.am
+	M    CedarInfo.cc
+
+2006-12-01  Patrick West <pwest@ucar.edu>
+
+	Changed configuration to use libdap.m4 from netcdf and changed
+	configure.ac to match. request handler was mis-casting in the
+	build_data call to DDS instead of BESDataDDSResponse.
+	M    configure.ac
+	M    CedarRequestHandler.cc
+	M    opendap.ini
+	M    cedar_commands.cc
+	M    conf/bes.m4
+	M    conf/libdap.m4
+	M    Makefile.am
+	M    cedar_read_descriptors.cc
+
+2006-11-23  Patrick West <pwest@ucar.edu>
+
+	Added a dump method to each of the classes listed below for BES
+	debugging.
+	M    CedarModule.cc
+	M    CedarReporter.cc
+	M    ContainerStorageCedar.cc
+	M    cedar_commands.cc
+	M    ContainerStorageCedar.h
+	M    CedarHandlerApp.cc
+	M    CedarReporter.h
+	M    CedarModule.h
+
+2006-11-02  Patrick West <pwest@ucar.edu>
+
+	ConstraintEvaluator is now a part of the BESDDSResponse and
+	BESDataDDSResponse classes instead of BESDataHandlerInterface. Any
+	Error exceptions need to be caught in the request handlers and
+	converted into BESHandlerException, which is the non-fatal
+	exception. Now using the --moduledir option on bes-config to
+	determine where the module libraries are.
+	M    CedarRequestHandler.cc
+	M    conf/bes.m4
+	M    Makefile.am
+
+2006-09-05  Patrick West <pwest@ucar.edu>
+
+	The Cedar login screen is now created from an outside file instead
+	of inside the code. This way we can make changes to the login screen
+	without having to rebuild the code. Created a cedar_login.html file
+	with the login screen.  Moved the help files to a subdirectory and
+	using pkgdata to install them instead of a local install. The
+	modules still have to be installed that way.
+	D    cedar_help.html
+	M    CedarAuthenticateException.cc
+	D    cedar_help.txt
+	M    cedar_module.cc
+	M    Makefile.am
+	A    cedar/cedar_help.txt
+	A    cedar/cedar_help.html
+	A    cedar/cedar_login.html
+
+2006-09-05  Patrick West <pwest@ucar.edu>
+
+	package directory added to cedar-handler
+
+2006-08-19  Patrick West <pwest@ucar.edu>
+
+	Passing the name of the module to the initialize and terminate
+	methods of the Module class so that it is set in the bes
+	configuration file instead of hard-coded
+
+2006-08-19  Patrick West <pwest@ucar.edu>
+
+	changed access to file to use access method on Container and added
+	compression parameters to the BES configuraiton file
+
+2006-08-15  Patrick West <pwest@ucar.edu>
+
+	updated release number to reflect addition of token string in
+	authentication
+
+2006-08-14  Patrick West <pwest@ucar.edu>
+
+	Cedar now can authenticate with a passed token. Check the token
+	against the tbl_sessions table in the CEDARAUTHEN database. Changed
+	the Makefile to use dap_cmd_module, the new naming scheme for
+	dynamically loaded library modules.
+	M    CedarAuthenticate.cc
+	M    Makefile.am
+
+2006-07-06  Patrick West <pwest@ucar.edu>
+
+	dap_cmdmodule library renamed to dap_cmd_module so that all loaded
+	module libraries are named <something>_module
+
+2006-06-30  Patrick West <pwest@ucar.edu>
+
+	In the help response added begin and end tags called handler to
+	separate the different hander help responses and added a tag called
+	name within the handler tag to say which handler this help is for
+
+2006-06-29  Patrick West <pwest@ucar.edu>
+
+	distribution check
+
+2006-06-28  Patrick West <pwest@ucar.edu>
+
+	bes exception updates, cleaned up configuration file, info classes
+	upgraded to new BESInfo class
+
+2006-06-16  Patrick West <pwest@ucar.edu>
+
+	now at version 2.1.0 of cedar-handler
+
+2006-06-16  Patrick West <pwest@ucar.edu>
+
+	mysql configuration fix
+
+2006-06-14  Patrick West <pwest@ucar.edu>
+
+	https port now configurable with --with-https=<port>
+
+2006-06-14  Patrick West <pwest@ucar.edu>
+
+	configuration updates, bes modules in lib/bes
+
+2006-05-24  Patrick West <pwest@ucar.edu>
+
+	bes module updates
+
+2006-05-16  Patrick West <pwest@ucar.edu>
+
+	container storage method name change rem_persistence to
+	del_persistence, the persistent store is deleted, not just removed.
+	Error handled in cedar_handler.
+
+2006-05-10  Patrick West <pwest@ucar.edu>
+
+	bes enabled
+
+2006-05-10  Patrick West <pwest@ucar.edu>
+
+	configuration updates
+
+2006-05-10  Patrick West <pwest@ucar.edu>
+
+	dap and command initialization automatic
+
+2006-05-10  Patrick West <pwest@ucar.edu>
+
+	added encode test program
+
+2006-05-10  Patrick West <pwest@ucar.edu>
+
+	added unix socket and port for mysql to opendap initialization file
+
+2006-03-07  Patrick West <pwest@ucar.edu>
+
+	removed cedar_version.h so needed to change configure.ac
+
+2006-03-07  Patrick West <pwest@ucar.edu>
+
+	no longer need cedar_version, now using config_cedar.h.in
+
+2006-03-07  Patrick West <pwest@ucar.edu>
+
+	update configuration
+
+2006-01-18  Patrick West <pwest@ucar.edu>
+
+	renamed persistence to storage. Put addition of
+	ContainerStorageCedar in cedar_module.
+
+2005-11-10  Patrick West <pwest@ucar.edu>
+
+	removed dependencies
+
+2005-11-10  Patrick West <pwest@ucar.edu>
+
+	added callbacks for initialization to do cedar authentication and
+	exception handler to catch authentication exception
+
+2005-10-07  Patrick West <pwest@ucar.edu>
+
+	changed deprecated C++ calls and catching problems in base app
+	initialization in cedar handler app
+
+2005-09-19  Patrick West <pwest@ucar.edu>
+
+	globals changed to static singleton references. Move authentication
+	out of bes and into cedar-handler since it is specific to cedar.
+	Moved mysql code out of bes since specific to cedar.
+
+2005-09-19  Patrick West <pwest@ucar.edu>
+
+	removing authentication from bes
+
+2005-09-16  Patrick West <pwest@ucar.edu>
+
+	moved mysql code from bes/dispatch to cedar-handler, updated
+	configuration and code to reflect that move
+
+2005-09-08  Patrick West <pwest@ucar.edu>
+
+	MySQL code is specific to cedar code and is not general
+
+2005-08-31  Patrick West <pwest@ucar.edu>
+
+	moved etc scripts to this directory, no dependency
+
+2005-08-31  Patrick West <pwest@ucar.edu>
+
+	macro changed to just one PERSISTENCE_INIT macro
+
+2005-08-22  Patrick West <pwest@ucar.edu>
+
+	Added comment headers
+
+2005-08-22  Patrick West <pwest@ucar.edu>
+
+	removed parsing from Response Handlers. Moved command building to
+	cedar_commands.cc. Using App class for Handler.
+
+2005-08-08  root
+
+	Auto reset of Subversion properties
+
+2005-08-01  Patrick West <pwest@ucar.edu>
+
+	no need to link in aggregation handler
+
+2005-07-06  Patrick West <pwest@ucar.edu>
+
+	default prefix is $OPENDAP_ROOT. using version like dispatch with
+	version.h file and cear_version function using that. Installing
+	module cedar_module.o and library and handler, but not headers.
+
+2005-07-05  Rob Morris <Robert.O.Morris@jpl.nasa.gov>
+
+	Set eol-style to native on all text file in the trunk
+
+2005-07-05  Patrick West <pwest@ucar.edu>
+
+	Moved configuration functions into configure.in
+
+2005-07-05  Patrick West <pwest@ucar.edu>
+
+	Moving cedar-handler code to top-level directory
+
+2005-05-27  Patrick West <pwest@ucar.edu>
+
+	install the cgi handler into a cgi-bin directory
+
+2005-05-09  Patrick West <pwest@ucar.edu>
+
+	using const reference to strings in signature instead of string values
+
+2005-05-09  Patrick West <pwest@ucar.edu>
+
+	removed dependence on DODS_ROOT, configuring to libdap, removed DODS
+	as much as possible
+
+2005-04-07  Patrick West <pwest@ucar.edu>
+
+	fixed CXXFLAGS
+
+2005-04-07  Patrick West <pwest@ucar.edu>
+
+	using add_data_from_file method of DODSInfo
+
+2005-04-07  Patrick West <pwest@ucar.edu>
+
+	created configure script to be used for releases
+
+2005-04-07  Patrick West <pwest@ucar.edu>
+
+	removed dependencies from checked in version
+
+2005-04-07  Patrick West <pwest@ucar.edu>
+
+	corrected help information removing general OPeNDAP help information
+
+2005-04-06  Patrick West <pwest@ucar.edu>
+
+	added install-program to install cedar_handler
+
+2005-04-06  Patrick West <pwest@ucar.edu>
+
+	added dods_module.o link line
+
+2005-04-06  Patrick West <pwest@ucar.edu>
+
+	added initialization and termination calls
+
+2005-03-17  Patrick West <pwest@ucar.edu>
+
+	added more information to error messages
+
+2005-03-17  Patrick West <pwest@ucar.edu>
+
+	impelementing rem_container and show_containers
+
+2005-02-09  Patrick West <pwest@ucar.edu>
+
+	catch up to dispatch
+
+2005-02-01  Patrick West <pwest@ucar.edu>
+
+	integration of ESG into opendap
+
+2004-12-15  Patrick West <pwest@ucar.edu>
+
+	added copyright, updated container persistence method look_for
+
+2004-07-09  Patrick West <pwest@ucar.edu>
+
+	If the user name is not available then print this information out,
+	otherwise print the user name.
+
+2004-07-09  Patrick West <pwest@ucar.edu>
+
+	Using default key for buffering information instead of uniq keys for
+	flat and tab
+
+2004-07-02  Patrick West <pwest@ucar.edu>
+
+	added function to read data instead of using dds function
+
+2004-06-30  Patrick West <pwest@ucar.edu>
+
+	type in CPPFLAGS
+
+2004-06-30  Patrick West <pwest@ucar.edu>
+
+	cedar_handler uses the new dispatch code and can also be built for
+	normal cgi scripting (except the cgi needs to be updated to not
+	check for extensions but allow the handler to do that) The cgi
+	handler also needs the dispatch code.
+
+;; Local Variables:
+;; coding: utf-8
+;; End:
