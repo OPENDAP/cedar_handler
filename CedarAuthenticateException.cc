@@ -34,6 +34,7 @@
 #include "BESDataNames.h"
 #include "BESStatusReturn.h"
 #include "BESInfo.h"
+#include "BESInfoList.h"
 #include "TheBESKeys.h"
 #include "cgi_util.h"
 #include "config_cedar.h"
@@ -49,6 +50,7 @@ CedarAuthenticateException::handleAuthException( BESException &e,
 
     if( ae )
     {
+	dhi.error_info = BESInfoList::TheList()->build_info() ;
 	if( dhi.error_info )
 	{
 	    dhi.error_info->add_data_from_file( "Cedar.LoginScreen",

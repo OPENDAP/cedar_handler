@@ -50,9 +50,6 @@ using std::endl ;
 #include "BESDelDefsCommand.h"
 #include "BESCatalogCommand.h"
 
-#include "BESParserException.h"
-#include "BESExceptionManager.h"
-
 static bool
 CedarCmdInit(int, char**)
 {
@@ -124,10 +121,6 @@ CedarCmdInit(int, char**)
 	(*BESLog::TheLog()) << "    adding " << DELETE_DEFINITIONS << " command" << endl;
     cmd = new BESDelDefsCommand( DELETE_DEFINITIONS ) ;
     BESCommand::add_command( DELETE_DEFINITIONS, cmd ) ;
-
-    if( BESLog::TheLog()->is_verbose() )
-	(*BESLog::TheLog()) << "    adding parser exception callback" << endl ;
-    BESExceptionManager::TheEHM()->add_ehm_callback( BESParserException::handleException ) ;
 
     /* Initialize Cedar specific commands */
     if( BESLog::TheLog()->is_verbose() )
