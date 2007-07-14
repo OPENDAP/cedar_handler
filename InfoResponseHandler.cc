@@ -35,7 +35,7 @@
 #include "cgi_util.h"
 #include "BESRequestHandlerList.h"
 
-InfoResponseHandler::InfoResponseHandler( string name )
+InfoResponseHandler::InfoResponseHandler( const string &name )
     : BESResponseHandler( name )
 {
 }
@@ -77,7 +77,7 @@ InfoResponseHandler::dump( ostream &strm ) const
 }
 
 BESResponseHandler *
-InfoResponseHandler::InfoResponseBuilder( string handler_name )
+InfoResponseHandler::InfoResponseBuilder( const string &handler_name )
 {
     return new InfoResponseHandler( handler_name ) ;
 }

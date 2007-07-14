@@ -33,7 +33,7 @@
 #include "StreamResponseHandler.h"
 #include "BESRequestHandlerList.h"
 
-StreamResponseHandler::StreamResponseHandler( string name )
+StreamResponseHandler::StreamResponseHandler( const string &name )
     : BESResponseHandler( name )
 {
 }
@@ -74,7 +74,7 @@ StreamResponseHandler::dump( ostream &strm ) const
 }
 
 BESResponseHandler *
-StreamResponseHandler::StreamResponseBuilder( string handler_name )
+StreamResponseHandler::StreamResponseBuilder( const string &handler_name )
 {
     return new StreamResponseHandler( handler_name ) ;
 }

@@ -37,7 +37,7 @@
 
 class TabResponseHandler : public BESResponseHandler {
 public:
-				TabResponseHandler( string handler_name ) ;
+				TabResponseHandler( const string &name ) ;
     virtual			~TabResponseHandler(void) ;
 
     virtual void		execute( BESDataHandlerInterface &r ) ;
@@ -46,7 +46,7 @@ public:
 
     virtual void		dump( ostream &strm ) const ;
 
-    static BESResponseHandler *TabResponseBuilder( string handler_name ) ;
+    static BESResponseHandler *TabResponseBuilder( const string &name ) ;
 };
 
 #endif // I_TABRESPONSEHANDLER_H

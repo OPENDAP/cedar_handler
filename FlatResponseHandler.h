@@ -37,7 +37,7 @@
 
 class FlatResponseHandler : public BESResponseHandler {
 public:
-				FlatResponseHandler( string handler_name ) ;
+				FlatResponseHandler( const string &name ) ;
     virtual			~FlatResponseHandler(void) ;
 
     virtual void		execute( BESDataHandlerInterface &r ) ;
@@ -46,7 +46,7 @@ public:
 
     virtual void		dump( ostream &strm ) const ;
 
-    static BESResponseHandler *FlatResponseBuilder( string handler_name ) ;
+    static BESResponseHandler *FlatResponseBuilder( const string &name ) ;
 };
 
 #endif

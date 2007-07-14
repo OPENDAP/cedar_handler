@@ -38,7 +38,7 @@ using std::stringstream ;
 using std::ifstream ;
 
 #include "ContainerStorageCedar.h"
-#include "BESContainer.h"
+#include "BESFileContainer.h"
 #include "TheBESKeys.h"
 #include "BESContainerStorageException.h"
 #include "BESInfo.h"
@@ -64,12 +64,12 @@ ContainerStorageCedar::~ContainerStorageCedar()
 {
 }
 
-void
-ContainerStorageCedar::look_for( BESContainer &d )
+BESContainer *
+ContainerStorageCedar::look_for( const string &sym_name )
 {
-    d.set_valid_flag( true ) ;
-    d.set_real_name( _cedar_base + "/" + d.get_symbolic_name() + ".cbf" ) ;
-    d.set_container_type( "cedar" ) ;
+    string real_name = _cedar_base + "/" + sym_name + ".cbf" ;
+    BESContainer *c = new BESFileContainer( sym_name, real_name, "cedar" ) ;
+    return c ;
 }
 
 void

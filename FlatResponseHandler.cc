@@ -35,7 +35,7 @@
 #include "cgi_util.h"
 #include "BESRequestHandlerList.h"
 
-FlatResponseHandler::FlatResponseHandler( string name )
+FlatResponseHandler::FlatResponseHandler( const string &name )
     : BESResponseHandler( name )
 {
 }
@@ -77,7 +77,7 @@ FlatResponseHandler::dump( ostream &strm ) const
 }
 
 BESResponseHandler *
-FlatResponseHandler::FlatResponseBuilder( string handler_name )
+FlatResponseHandler::FlatResponseBuilder( const string &handler_name )
 {
     return new FlatResponseHandler( handler_name ) ;
 }

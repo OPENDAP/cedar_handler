@@ -37,7 +37,7 @@
 
 class InfoResponseHandler : public BESResponseHandler {
 public:
-				InfoResponseHandler( string name ) ;
+				InfoResponseHandler( const string &name ) ;
     virtual			~InfoResponseHandler( void ) ;
 
     virtual void		execute( BESDataHandlerInterface &r ) ;
@@ -46,7 +46,7 @@ public:
 
     virtual void		dump( ostream &strm ) const ;
 
-    static BESResponseHandler *InfoResponseBuilder( string handler_name ) ;
+    static BESResponseHandler *InfoResponseBuilder( const string &name ) ;
 };
 
 #endif // I_InfoResponseHandler_h

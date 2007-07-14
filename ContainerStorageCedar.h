@@ -47,7 +47,7 @@ public:
     				ContainerStorageCedar( const string &n);
     virtual			~ContainerStorageCedar() ;
 
-    virtual void		look_for( BESContainer &d ) ;
+    virtual BESContainer * 	look_for( const string &sym_name ) ;
     virtual void		add_container( const string &s_name,
                                                const string &r_ame,
 					       const string &type ) ;

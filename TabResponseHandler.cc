@@ -35,7 +35,7 @@
 #include "cgi_util.h"
 #include "BESRequestHandlerList.h"
 
-TabResponseHandler::TabResponseHandler( string name )
+TabResponseHandler::TabResponseHandler( const string &name )
     : BESResponseHandler( name )
 {
 }
@@ -77,7 +77,7 @@ TabResponseHandler::dump( ostream &strm ) const
 }
 
 BESResponseHandler *
-TabResponseHandler::TabResponseBuilder( string handler_name )
+TabResponseHandler::TabResponseBuilder( const string &handler_name )
 {
     return new TabResponseHandler( handler_name ) ;
 }
