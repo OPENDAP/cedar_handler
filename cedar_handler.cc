@@ -47,14 +47,10 @@ using std::ofstream ;
 int 
 main(int argc, char *argv[])
 {
-    ostream *fstrm = new ofstream( "./opendap.debug" ) ;
-    if( !(*fstrm) )
-    {
-	cout << "Oh Shit" << endl ;
-	return 1 ;
-    }
-    BESDebug::Set_debugger( new BESDebug( fstrm ) ) ;
-    BESDebug::Begin_debug() ;
+    BESDebug::SetUp( "./cedar.debug,cedar,bes,dap" ) ;
+    BESDebug::Set( "cedar", true ) ;
+    BESDebug::Set( "bes", true ) ;
+    BESDebug::Set( "dap", true ) ;
     try
     {
 	CedarHandlerApp app ;

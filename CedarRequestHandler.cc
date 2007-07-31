@@ -91,7 +91,7 @@ CedarRequestHandler::dump( ostream &strm ) const
 bool
 CedarRequestHandler::cedar_build_das( BESDataHandlerInterface &dhi )
 {
-    BESDEBUG( "building cedar das response:" << endl )
+    BESDEBUG( "cedar", "building cedar das response:" << endl )
     bool ret = true ;
     BESDASResponse *bdas =
 	dynamic_cast<BESDASResponse *>(dhi.response_handler->get_response_object());
@@ -102,7 +102,7 @@ CedarRequestHandler::cedar_build_das( BESDataHandlerInterface &dhi )
     {
 	throw BESResponseException( cedar_error, __FILE__, __LINE__ ) ;
     }
-    BESDEBUG( "returning from building cedar das response:" << endl << *das << endl )
+    BESDEBUG( "cedar", "returning from building cedar das response:" << endl << *das << endl )
     return ret ;
 }
 
