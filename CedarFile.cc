@@ -1,8 +1,8 @@
-// OPeNDAPFile.cc
+// CedarFSFile.cc
 
-#include "OPeNDAPFile.h"
+#include "CedarFSFile.h"
 
-OPeNDAPFile::OPeNDAPFile(const string &fullPath)
+CedarFSFile::CedarFSFile(const string &fullPath)
         : _dirName(""),
         _fileName(""),
         _baseName(""),
@@ -11,7 +11,7 @@ OPeNDAPFile::OPeNDAPFile(const string &fullPath)
     breakApart(fullPath) ;
 }
 
-OPeNDAPFile::OPeNDAPFile(const string &dirName, const string &fileName)
+CedarFSFile::CedarFSFile(const string &dirName, const string &fileName)
         : _dirName(dirName),
         _fileName(fileName),
         _baseName(""),
@@ -20,48 +20,48 @@ OPeNDAPFile::OPeNDAPFile(const string &dirName, const string &fileName)
     breakExtension() ;
 }
 
-OPeNDAPFile::OPeNDAPFile(const OPeNDAPFile &copyFrom)
+CedarFSFile::CedarFSFile(const CedarFSFile &copyFrom)
         : _dirName(copyFrom._dirName),
         _fileName(copyFrom._fileName),
         _baseName(copyFrom._baseName),
         _extension(copyFrom._extension)
 {}
 
-OPeNDAPFile::~OPeNDAPFile()
+CedarFSFile::~CedarFSFile()
 {}
 
 string
-OPeNDAPFile::getDirName()
+CedarFSFile::getDirName()
 {
     return _dirName ;
 }
 
 string
-OPeNDAPFile::getFileName()
+CedarFSFile::getFileName()
 {
     return _fileName ;
 }
 
 string
-OPeNDAPFile::getBaseName()
+CedarFSFile::getBaseName()
 {
     return _baseName ;
 }
 
 string
-OPeNDAPFile::getExtension()
+CedarFSFile::getExtension()
 {
     return _extension ;
 }
 
 string
-OPeNDAPFile::getFullPath()
+CedarFSFile::getFullPath()
 {
     return _dirName + "/" + _fileName ;
 }
 
 void
-OPeNDAPFile::breakApart(const string &fullPath)
+CedarFSFile::breakApart(const string &fullPath)
 {
     string::size_type pos = fullPath.rfind("/") ;
     if (pos != string::npos) {
@@ -77,7 +77,7 @@ OPeNDAPFile::breakApart(const string &fullPath)
 }
 
 void
-OPeNDAPFile::breakExtension()
+CedarFSFile::breakExtension()
 {
     string::size_type pos = _fileName.rfind(".") ;
     if (pos != string::npos) {

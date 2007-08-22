@@ -1,11 +1,11 @@
-// OPeNDAPDir.h
+// CedarFSDir.h
 
 // -*- mode: c++; c-basic-offset:4 -*-
 
-// This file is part of libdap, A C++ implementation of the OPeNDAP Data
+// This file is part of libdap, A C++ implementation of the Cedar Data
 // Access Protocol.
 
-// Copyright (c) 2002,2003 OPeNDAP, Inc.
+// Copyright (c) 2002,2003 Cedar, Inc.
 // Author: Patrick West <pwest@ucar.edu>
 //
 // This library is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
-// You can contact OPeNDAP, Inc. at PO Box 112, Saunderstown, RI. 02874-0112.
+// You can contact Cedar, Inc. at PO Box 112, Saunderstown, RI. 02874-0112.
 
 // (c) COPYRIGHT URI/MIT 1994-1999
 // Please read the full copyright statement in the file COPYRIGHT_URI.
@@ -30,8 +30,8 @@
 // Authors:
 //      pwest       Patrick West <pwest@ucar.edu>
 
-#ifndef I_OPeNDAPDir_h
-#define I_OPeNDAPDir_h
+#ifndef I_CedarFSDir_h
+#define I_CedarFSDir_h
 
 #include <list>
 #include <string>
@@ -39,32 +39,32 @@
 using std::list ;
 using std::string ;
 
-#include "OPeNDAPFile.h"
+#include "CedarFSFile.h"
 
-class OPeNDAPDir
+class CedarFSDir
 {
 private:
     string    _dirName ;
     string    _fileExpr ;
-    list<OPeNDAPFile>   _fileList ;
-    list<OPeNDAPDir>   _dirList ;
+    list<CedarFSFile>   _fileList ;
+    list<CedarFSDir>   _dirList ;
     bool    _dirLoaded ;
 
     void    loadDir() ;
 public:
-    OPeNDAPDir(const string &dirName) ;
-    OPeNDAPDir(const string &dirName,
+    CedarFSDir(const string &dirName) ;
+    CedarFSDir(const string &dirName,
                const string &fileExpr) ;
-    OPeNDAPDir(const OPeNDAPDir &copyFrom) ;
-    virtual    ~OPeNDAPDir() ;
+    CedarFSDir(const CedarFSDir &copyFrom) ;
+    virtual    ~CedarFSDir() ;
 
-    typedef list<OPeNDAPDir>::iterator dirIterator ;
-    virtual OPeNDAPDir::dirIterator beginOfDirList() ;
-    virtual OPeNDAPDir::dirIterator endOfDirList() ;
+    typedef list<CedarFSDir>::iterator dirIterator ;
+    virtual CedarFSDir::dirIterator beginOfDirList() ;
+    virtual CedarFSDir::dirIterator endOfDirList() ;
 
-    typedef list<OPeNDAPFile>::iterator fileIterator ;
-    virtual OPeNDAPDir::fileIterator beginOfFileList() ;
-    virtual OPeNDAPDir::fileIterator endOfFileList() ;
+    typedef list<CedarFSFile>::iterator fileIterator ;
+    virtual CedarFSDir::fileIterator beginOfFileList() ;
+    virtual CedarFSDir::fileIterator endOfFileList() ;
 
     virtual string   getDirName()
     {
@@ -72,5 +72,5 @@ public:
     }
 } ;
 
-#endif // I_OPeNDAPDir_h
+#endif // I_CedarFSDir_h
 

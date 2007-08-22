@@ -1,15 +1,15 @@
-// OPeNDAPFile.h
+// CedarFSFile.h
 
-#ifndef I_OPeNDAPFile_h
-#define I_OPeNDAPFile_h
+#ifndef I_CedarFSFile_h
+#define I_CedarFSFile_h
 
 #include <string>
 
 using std::string ;
 
-#include "OPeNDAPFile.h"
+#include "CedarFSFile.h"
 
-class OPeNDAPFile
+class CedarFSFile
 {
 private:
     string    _dirName ;
@@ -20,11 +20,11 @@ private:
     void    breakApart(const string &fullPath) ;
     void    breakExtension() ;
 public:
-    OPeNDAPFile(const string &fullPath) ;
-    OPeNDAPFile(const string &dirName,
+    CedarFSFile(const string &fullPath) ;
+    CedarFSFile(const string &dirName,
                 const string &fileName) ;
-    OPeNDAPFile(const OPeNDAPFile &copyFrom) ;
-    virtual    ~OPeNDAPFile() ;
+    CedarFSFile(const CedarFSFile &copyFrom) ;
+    virtual    ~CedarFSFile() ;
 
     virtual string   getDirName() ;
     virtual string   getFileName() ;
@@ -33,5 +33,5 @@ public:
     virtual string   getFullPath() ;
 } ;
 
-#endif // I_OPeNDAPDir_h
+#endif // I_CedarDir_h
 

@@ -1,4 +1,4 @@
-// OPeNDAPDir.cc
+// CedarFSDir.cc
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -12,32 +12,32 @@
 using std::cout ;
 using std::endl ;
 
-#include "OPeNDAPDir.h"
+#include "CedarFSDir.h"
 #include "GNURegex.h"
 
-OPeNDAPDir::OPeNDAPDir(const string &dirName)
+CedarFSDir::CedarFSDir(const string &dirName)
         : _dirName(dirName),
         _fileExpr(""),
         _dirLoaded(false)
 {}
 
-OPeNDAPDir::OPeNDAPDir(const string &dirName, const string &fileExpr)
+CedarFSDir::CedarFSDir(const string &dirName, const string &fileExpr)
         : _dirName(dirName),
         _fileExpr(fileExpr),
         _dirLoaded(false)
 {}
 
-OPeNDAPDir::OPeNDAPDir(const OPeNDAPDir &copyFrom)
+CedarFSDir::CedarFSDir(const CedarFSDir &copyFrom)
         : _dirName(copyFrom._dirName),
         _fileExpr(copyFrom._fileExpr),
         _dirLoaded(false)
 {}
 
-OPeNDAPDir::~OPeNDAPDir()
+CedarFSDir::~CedarFSDir()
 {}
 
-OPeNDAPDir::dirIterator
-OPeNDAPDir::beginOfDirList()
+CedarFSDir::dirIterator
+CedarFSDir::beginOfDirList()
 {
     if (_dirLoaded == false) {
         loadDir() ;
@@ -46,8 +46,8 @@ OPeNDAPDir::beginOfDirList()
     return _dirList.begin() ;
 }
 
-OPeNDAPDir::dirIterator
-OPeNDAPDir::endOfDirList()
+CedarFSDir::dirIterator
+CedarFSDir::endOfDirList()
 {
     if (_dirLoaded == false) {
         loadDir() ;
@@ -56,8 +56,8 @@ OPeNDAPDir::endOfDirList()
     return _dirList.end() ;
 }
 
-OPeNDAPDir::fileIterator
-OPeNDAPDir::beginOfFileList()
+CedarFSDir::fileIterator
+CedarFSDir::beginOfFileList()
 {
     if (_dirLoaded == false) {
         loadDir() ;
@@ -66,8 +66,8 @@ OPeNDAPDir::beginOfFileList()
     return _fileList.begin() ;
 }
 
-OPeNDAPDir::fileIterator
-OPeNDAPDir::endOfFileList()
+CedarFSDir::fileIterator
+CedarFSDir::endOfFileList()
 {
     if (_dirLoaded == false) {
         loadDir() ;
@@ -77,7 +77,7 @@ OPeNDAPDir::endOfFileList()
 }
 
 void
-OPeNDAPDir::loadDir()
+CedarFSDir::loadDir()
 {
     DIR * dip;
     struct dirent *dit;
@@ -101,18 +101,18 @@ OPeNDAPDir::loadDir()
                 // look at the mode and determine if this is a filename
                 // or a directory name
                 if (S_ISDIR(buf.st_mode)) {
-                    _dirList.push_back(OPeNDAPDir(fullPath)) ;
+                    _dirList.push_back(CedarFSDir(fullPath)) ;
                 }
                 else {
                     if (_fileExpr != "") {
                         Regex reg_expr(_fileExpr.c_str()) ;
                         if (reg_expr.match(dirEntry.c_str(),
                                            dirEntry.length()) != -1) {
-                            _fileList.push_back(OPeNDAPFile(_dirName, dirEntry));
+                            _fileList.push_back(CedarFSFile(_dirName, dirEntry));
                         }
                     }
                     else {
-                        _fileList.push_back(OPeNDAPFile(_dirName, dirEntry)) ;
+                        _fileList.push_back(CedarFSFile(_dirName, dirEntry)) ;
                     }
                 }
             }
