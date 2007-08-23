@@ -108,28 +108,28 @@ void send_flat_data(CedarFlat &cf, CedarDataRecord &dr,CedarConstraintEvaluator 
 	print_blocked(oss, "NROWS");
 
 	unsigned int jpar_value=dr.get_jpar();
-	short int *pJparVars =new short int[jpar_value];
-	if( !pJparVars )
+	auto_ptr<vector<short int> > pJparVars( new vector<short int>(jpar_value) ) ;
+	if( !pJparVars.get() )
 	{
 	    throw bad_alloc() ;
 	}
-	dr.load_JPAR_vars(pJparVars);
+	dr.load_JPAR_vars(*pJparVars);
 
 	for (w=0; w<jpar_value; w++)
 	{ 
 	    string JparVarName="";
 	    string the_var="";
-	    if (qa.validate_parameter(pJparVars[w]))
+	    if (qa.validate_parameter((*pJparVars)[w]))
 	    {
 		int val;
-		if (pJparVars[w]<0)
+		if ((*pJparVars)[w]<0)
 		{
-		    val=pJparVars[w]*-1;
+		    val=(*pJparVars)[w]*-1;
 		    the_var+="e_";
 		}
 		else
 		{
-		    val=pJparVars[w];
+		    val=(*pJparVars)[w];
 		}
 		get_name_for_parameter(JparVarName,val);
 		the_var+=JparVarName;
@@ -138,26 +138,26 @@ void send_flat_data(CedarFlat &cf, CedarDataRecord &dr,CedarConstraintEvaluator 
 	}
 
 	int mpar_value=dr.get_mpar();
-	short int *pMparVars=0;
+	auto_ptr<vector<short int> > pMparVars ;
 	if (mpar_value > 0 )
 	{
-	    pMparVars=new short int [mpar_value];
-	    dr.load_MPAR_vars(pMparVars);
+	    pMparVars.reset( new vector<short int>(mpar_value) ) ;
+	    dr.load_MPAR_vars(*pMparVars);
 	    for (y=0; y<mpar_value;y++)
 	    {
 		string MparVarName="";
 		string the_var="";
-		if (qa.validate_parameter(pMparVars[y]))
+		if (qa.validate_parameter((*pMparVars)[y]))
 		{
 		    int val;
-		    if (pMparVars[y]<0)
+		    if ((*pMparVars)[y]<0)
 		    {
-			val=pMparVars[y]*-1;
+			val=(*pMparVars)[y]*-1;
 			the_var+="e_";
 		    }
 		    else
 		    {
-			val=pMparVars[y];
+			val=(*pMparVars)[y];
 		    }
 		    get_name_for_parameter(MparVarName,val);
 		    the_var+=MparVarName;
@@ -186,19 +186,19 @@ void send_flat_data(CedarFlat &cf, CedarDataRecord &dr,CedarConstraintEvaluator 
 
 	for (w=0; w<jpar_value; w++)
 	{ 
-	    if (qa.validate_parameter(abs(pJparVars[w])))
+	    if (qa.validate_parameter(abs((*pJparVars)[w])))
 	    {
 		CedarReadParcods afx;
-		string element = (string)afx.get_PCSFCT(pJparVars[w]);// + string(" ") + (string) afx.get_PCULBL(pJparVars[w]);
+		string element = (string)afx.get_PCSFCT((*pJparVars)[w]);// + string(" ") + (string) afx.get_PCULBL(pJparVars[w]);
 		print_blocked(oss, element);
 	    }
 	}
 	for (y=0; y<mpar_value; y++)
 	{ 
-	    if (qa.validate_parameter(pMparVars[y]))
+	    if (qa.validate_parameter((*pMparVars)[y]))
 	    {
 		CedarReadParcods afx;
-		string element = (string)afx.get_PCSFCT(abs(pMparVars[y]));// + string(" ") + (string) afx.get_PCULBL(pMparVars[y]);
+		string element = (string)afx.get_PCSFCT(abs((*pMparVars)[y]));// + string(" ") + (string) afx.get_PCULBL(pMparVars[y]);
 		print_blocked(oss, element);
 	    }
 	}
@@ -218,19 +218,19 @@ void send_flat_data(CedarFlat &cf, CedarDataRecord &dr,CedarConstraintEvaluator 
 
 	for (w=0; w<jpar_value; w++)
 	{ 
-	    if (qa.validate_parameter(pJparVars[w]))
+	    if (qa.validate_parameter((*pJparVars)[w]))
 	    {
 		CedarReadParcods afx;
-		string element = (string) afx.get_PCULBL(abs(pJparVars[w]));
+		string element = (string) afx.get_PCULBL(abs((*pJparVars)[w]));
 		print_blocked(oss, element);
 	    }
 	}
 	for (y=0; y<mpar_value; y++)
 	{ 
-	    if (qa.validate_parameter(pMparVars[y]))
+	    if (qa.validate_parameter((*pMparVars)[y]))
 	    {
 		CedarReadParcods afx;
-		string element = (string) afx.get_PCULBL(abs(pMparVars[y]));
+		string element = (string) afx.get_PCULBL(abs((*pMparVars)[y]));
 		print_blocked(oss, element);
 	    }
 	}
@@ -249,30 +249,30 @@ void send_flat_data(CedarFlat &cf, CedarDataRecord &dr,CedarConstraintEvaluator 
 	print_blocked(oss, dr.get_nrows());
 	for (w=0; w<jpar_value; w++)
 	{ 
-	    if (qa.validate_parameter(pJparVars[w]))
-		print_blocked(oss, pJparVars[w]);
+	    if (qa.validate_parameter((*pJparVars)[w]))
+		print_blocked(oss, (*pJparVars)[w]);
 	}
 	for (y=0; y<mpar_value;y++)
 	{
-	    if (qa.validate_parameter(pMparVars[y]))
-		print_blocked(oss, pMparVars[y]);
+	    if (qa.validate_parameter((*pMparVars)[y]))
+		print_blocked(oss, (*pMparVars)[y]);
 	}
 	oss<<endl;
 
 	int nrow_value=dr.get_nrows();
 
-	short int *pJparData =new short int[jpar_value];
-	if (!pJparData)
+	auto_ptr<vector<short int> > pJparData( new vector<short int>(jpar_value) ) ;
+	if (!pJparData.get())
 	{
 	    throw bad_alloc();
 	}
-	dr.load_JPAR_data(pJparData);
-	short int *pMparData=new short int[nrow_value*mpar_value];
-	if (!pMparData)
+	dr.load_JPAR_data(*pJparData);
+	auto_ptr<vector<short int> > pMparData( new vector<short int>(nrow_value*mpar_value) ) ;
+	if (!pMparData.get())
 	{
 	    throw bad_alloc();
 	}
-	dr.load_MPAR_data(pMparData);
+	dr.load_MPAR_data(*pMparData);
 
 	CedarParameter pp ;
 	for (int o=0; o<nrow_value; o++)
@@ -282,10 +282,10 @@ void send_flat_data(CedarFlat &cf, CedarDataRecord &dr,CedarConstraintEvaluator 
 	    {
 		for( z = 0; z < mpar_value; z++ )
 		{
-		    if( qa.validate_parameter( pMparVars[z] ) )
+		    if( qa.validate_parameter( (*pMparVars)[z] ) )
 		    {
-			pp = qa.get_parameter( pMparVars[z] ) ;
-			if( !pp.validateValue( pMparData[z+(o*mpar_value)] ) )
+			pp = qa.get_parameter( (*pMparVars)[z] ) ;
+			if( !pp.validateValue( (*pMparData)[z+(o*mpar_value)] ) )
 			{
 			    print_row = false ;
 			}
@@ -307,22 +307,18 @@ void send_flat_data(CedarFlat &cf, CedarDataRecord &dr,CedarConstraintEvaluator 
 		print_blocked(oss, dr.get_nrows());
 		for (w=0; w<jpar_value; w++)
 		{ 
-		    if (qa.validate_parameter(pJparVars[w]))
-			print_blocked(oss, pJparData[w]);
+		    if (qa.validate_parameter((*pJparVars)[w]))
+			print_blocked(oss, (*pJparData)[w]);
 		}
 		for (y=0; y<mpar_value;y++)
 		{
-		    if (qa.validate_parameter(pMparVars[y]))
-			print_blocked(oss, pMparData[y+(o*mpar_value)]);
+		    if (qa.validate_parameter((*pMparVars)[y]))
+			print_blocked(oss, (*pMparData)[y+(o*mpar_value)]);
 		}
 		oss<<endl;
 	    }
 	}
 
-	delete [] pJparVars;
-	delete [] pMparVars;
-	delete [] pJparData;
-	delete [] pMparData;
 	oss<<'\n'<<endl;
 
 	oss<<'\0';

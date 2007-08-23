@@ -10,7 +10,10 @@ AUTOMAKE_OPTIONS = foreign check-news
 ACLOCAL_AMFLAGS = -I conf
 
 bin_PROGRAMS = dap_cedar_handler encode
-lib_LTLIBRARIES = libcedar_handler.la libcedar_module.la
+lib_LTLIBRARIES = libcedar_handler.la
+
+lib_besdir=$(libdir)/bes
+lib_bes_LTLIBRARIES = libcedar_module.la
 
 CEDAR_SRCS:=cedar_read_attributes.cc cedar_read_descriptors.cc \
 	cedar_read_tab.cc cedar_read_tab_support.cc cedar_read_info.cc \
@@ -21,7 +24,7 @@ CEDAR_SRCS:=cedar_read_attributes.cc cedar_read_descriptors.cc \
 	CedarReporter.cc InfoResponseHandler.cc \
 	CedarAuthenticate.cc CedarAuthenticateException.cc \
 	DODSMySQLChannel.cc DODSMySQLConnect.cc DODSMySQLQuery.cc \
-	DODSMySQLResult.cc DODSEncode.cc
+	DODSMySQLResult.cc DODSEncode.cc CedarFSDir.cc CedarFSFile.cc
 
 CEDAR_HDRS:=CedarFilter.h CedarFlat.h CedarRequestHandler.h \
 	CedarResponseNames.h CedarTab.h CedarInfo.h FlatResponseHandler.h \
@@ -33,7 +36,7 @@ CEDAR_HDRS:=CedarFilter.h CedarFlat.h CedarRequestHandler.h \
 	DODSMySQLChannel.h DODSMySQLConnect.h DODSMySQLQuery.h \
 	DODSMySQLResult.h DODSEncode.h \
 	DODSMySQLQueryException.h DODSMySQLConnectException.h \
-	config_cedar.h
+	config_cedar.h CedarFSDir.h CedarFSFile.h
 
 BES_HANDLER_SRC = cedar_handler.cc CedarHandlerApp.cc cedar_module.cc cedar_commands.cc CedarHandlerApp.h
 

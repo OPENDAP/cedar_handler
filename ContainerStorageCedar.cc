@@ -42,8 +42,8 @@ using std::ifstream ;
 #include "TheBESKeys.h"
 #include "BESContainerStorageException.h"
 #include "BESInfo.h"
-#include "OPeNDAPDir.h"
-#include "OPeNDAPFile.h"
+#include "CedarFSDir.h"
+#include "CedarFSFile.h"
 #include "CedarResponseNames.h"
 
 ContainerStorageCedar::ContainerStorageCedar( const string &n )
@@ -106,8 +106,8 @@ ContainerStorageCedar::show_containers( BESInfo &info )
     // need to get every file name in the directory and display
     try
     {
-	OPeNDAPDir d( _cedar_base, ".*\\.cbf$" ) ;
-	OPeNDAPDir::fileIterator i ;
+	CedarFSDir d( _cedar_base, ".*\\.cbf$" ) ;
+	CedarFSDir::fileIterator i ;
 	for( i = d.beginOfFileList(); i != d.endOfFileList(); i++ )
 	{
 	    string sym = (*i).getBaseName() ;

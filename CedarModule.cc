@@ -42,7 +42,6 @@ using std::endl ;
 #include "TabResponseHandler.h"
 #include "StreamResponseHandler.h"
 #include "InfoResponseHandler.h"
-#include "BESLog.h"
 #include "BESResponseNames.h"
 #include "CedarResponseNames.h"
 #include "BESReporterList.h"
@@ -55,88 +54,115 @@ using std::endl ;
 #include "BESContainerStorageList.h"
 #include "BESCommand.h"
 
+#include "BESDebug.h"
+
 void
 CedarModule::initialize( const string &modname )
 {
-    if( BESLog::TheLog()->is_verbose() )
-	(*BESLog::TheLog()) << "Initializing Cedar:" << endl ;
+    BESDEBUG( "cedar", "Initializing Cedar module " << modname << endl )
 
-    if( BESLog::TheLog()->is_verbose() )
-	(*BESLog::TheLog()) << "    adding " << modname << " request handler" << endl ;
+    BESDEBUG( "cedar", "    adding " << modname << " request handler" << endl )
     BESRequestHandlerList::TheList()->add_handler( modname, new CedarRequestHandler( modname ) ) ;
 
-    if( BESLog::TheLog()->is_verbose() )
-	(*BESLog::TheLog()) << "    adding " << FLAT_RESPONSE << " response handler" << endl ;
+    BESDEBUG( "cedar", "    adding " << FLAT_RESPONSE << " response handler" << endl )
     BESResponseHandlerList::TheList()->add_handler( FLAT_RESPONSE, FlatResponseHandler::FlatResponseBuilder ) ;
 
-    if( BESLog::TheLog()->is_verbose() )
-	(*BESLog::TheLog()) << "    adding " << TAB_RESPONSE << " response handler" << endl ;
+    BESDEBUG( "cear", "    adding " << TAB_RESPONSE << " response handler" << endl )
     BESResponseHandlerList::TheList()->add_handler( TAB_RESPONSE, TabResponseHandler::TabResponseBuilder ) ;
 
-    if( BESLog::TheLog()->is_verbose() )
-	(*BESLog::TheLog()) << "    adding " << STREAM_RESPONSE << " response handler" << endl ;
+    BESDEBUG( "cedar", "    adding " << STREAM_RESPONSE << " response handler" << endl )
     BESResponseHandlerList::TheList()->add_handler( STREAM_RESPONSE, StreamResponseHandler::StreamResponseBuilder ) ;
 
-    if( BESLog::TheLog()->is_verbose() )
-	(*BESLog::TheLog()) << "    adding " << INFO_RESPONSE << " response handler" << endl ;
+    BESDEBUG( "cear", "    adding " << INFO_RESPONSE << " response handler" << endl )
     BESResponseHandlerList::TheList()->add_handler( INFO_RESPONSE, InfoResponseHandler::InfoResponseBuilder ) ;
 
-    if( BESLog::TheLog()->is_verbose() )
-	(*BESLog::TheLog()) << "    adding Cedar reporter" << endl ;
+    BESDEBUG( "cedar", "    adding Cedar reporter" << endl )
     BESReporterList::TheList()->add_reporter( modname, new CedarReporter ) ;
 
-    if( BESLog::TheLog()->is_verbose() )
-	(*BESLog::TheLog()) << "    adding Cedar authenticate to init callbacks" << endl ;
+    BESDEBUG( "cedar", "    adding Cedar authenticate to init callbacks" << endl )
     BESInterface::add_init_callback( CedarAuthenticate::authenticate ) ;
 
-    if( BESLog::TheLog()->is_verbose() )
-	(*BESLog::TheLog()) << "    adding Cedar authenticate exception callback" << endl ;
+    BESDEBUG( "cedar", "    adding Cedar authenticate exception callback" << endl )
     BESExceptionManager::TheEHM()->add_ehm_callback( CedarAuthenticateException::handleAuthException ) ;
 
-    if( BESLog::TheLog()->is_verbose() )
-	(*BESLog::TheLog()) << "Adding Cedar Persistence" << endl;
+    BESDEBUG( "cedar", "    adding Cedar Persistence" << endl )
     ContainerStorageCedar *cpf = new ContainerStorageCedar( "Cedar" ) ;
     BESContainerStorageList::TheList()->add_persistence( cpf ) ;
 
-    if( BESLog::TheLog()->is_verbose() )
-	(*BESLog::TheLog()) << "Initializing Cedar Commands:" << endl ;
-
     string cmd_name = string( GET_RESPONSE ) + "." + FLAT_RESPONSE ;
-    if( BESLog::TheLog()->is_verbose() )
-	(*BESLog::TheLog()) << "    adding " << cmd_name << " command" << endl;
+    BESDEBUG( "cedar", "    adding " << cmd_name << " command" << endl )
     BESCommand::add_command( cmd_name, BESCommand::TermCommand ) ;
 
     cmd_name = string( GET_RESPONSE ) + "." + TAB_RESPONSE ;
-    if( BESLog::TheLog()->is_verbose() )
-	(*BESLog::TheLog()) << "    adding " << cmd_name << " command" << endl;
+    BESDEBUG( "cedar", "    adding " << cmd_name << " command" << endl )
     BESCommand::add_command( cmd_name, BESCommand::TermCommand ) ;
 
     cmd_name = string( GET_RESPONSE ) + "." + STREAM_RESPONSE ;
-    if( BESLog::TheLog()->is_verbose() )
-	(*BESLog::TheLog()) << "    adding " << cmd_name << " command" << endl;
+    BESDEBUG( "cedar", "    adding " << cmd_name << " command" << endl )
     BESCommand::add_command( cmd_name, BESCommand::TermCommand ) ;
 
     cmd_name = string( GET_RESPONSE ) + "." + INFO_RESPONSE ;
-    if( BESLog::TheLog()->is_verbose() )
-	(*BESLog::TheLog()) << "    adding " << cmd_name << " command" << endl;
+    BESDEBUG( "cedar", "    adding " << cmd_name << " command" << endl )
     BESCommand::add_command( cmd_name, BESCommand::TermCommand ) ;
+
+    BESDEBUG( "cedar", "    adding cedar debug context" << endl )
+    BESDebug::Register( "cedar" ) ;
+
+    BESDEBUG( "cedar", "Done Initializing Cedar module " << modname << endl )
 }
 
 void
 CedarModule::terminate( const string &modname )
 {
-    if( BESLog::TheLog()->is_verbose() )
-	(*BESLog::TheLog()) << "Removing Cedar Handlers" << endl;
+    BESDEBUG( "cedar", "Cleaning NC module " << modname << endl )
+
+    BESDEBUG( "cedar", "    removing Cedar handler" << modname << endl )
     BESRequestHandler *rh = BESRequestHandlerList::TheList()->remove_handler( modname ) ;
     if( rh ) delete rh ;
+
+    BESDEBUG( "cedar", "    removing " << FLAT_RESPONSE << " response handler" << endl )
     BESResponseHandlerList::TheList()->remove_handler( FLAT_RESPONSE ) ;
+    BESDEBUG( "cedar", "    removing " << TAB_RESPONSE << " response handler" << endl )
     BESResponseHandlerList::TheList()->remove_handler( TAB_RESPONSE ) ;
+    BESDEBUG( "cedar", "    removing " << STREAM_RESPONSE << " response handler" << endl )
     BESResponseHandlerList::TheList()->remove_handler( STREAM_RESPONSE ) ;
+    BESDEBUG( "cedar", "    removing " << INFO_RESPONSE << " response handler" << endl )
     BESResponseHandlerList::TheList()->remove_handler( INFO_RESPONSE ) ;
 
-    if( BESLog::TheLog()->is_verbose() )
-	(*BESLog::TheLog()) << "Removing Cedar Persistence" << endl;
+    BESDEBUG( "cedar", "    removing Cedar reporter" << endl )
+    BESReporter *r = BESReporterList::TheList()->remove_reporter( modname ) ;
+    if( r ) delete r ;
+
+    /* no way to remove this
+    BESDEBUG( "cedar", "    removing Cedar authenticate to init callbacks" << endl )
+    BESInterface::add_init_callback( CedarAuthenticate::authenticate ) ;
+    */
+
+    /* no way to remove this
+    BESDEBUG( "cedar", "    adding Cedar authenticate exception callback" << endl )
+    BESExceptionManager::TheEHM()->add_ehm_callback( CedarAuthenticateException::handleAuthException ) ;
+    */
+
+    BESDEBUG( "cedar", "    adding Cedar Persistence" << endl )
     BESContainerStorageList::TheList()->del_persistence( "Cedar" ) ;
+
+    string cmd_name = string( GET_RESPONSE ) + "." + FLAT_RESPONSE ;
+    BESDEBUG( "cedar", "    removing " << cmd_name << " command" << endl )
+    BESCommand::del_command( cmd_name ) ;
+
+    cmd_name = string( GET_RESPONSE ) + "." + TAB_RESPONSE ;
+    BESDEBUG( "cedar", "    removing " << cmd_name << " command" << endl )
+    BESCommand::del_command( cmd_name ) ;
+
+    cmd_name = string( GET_RESPONSE ) + "." + STREAM_RESPONSE ;
+    BESDEBUG( "cedar", "    removing " << cmd_name << " command" << endl )
+    BESCommand::del_command( cmd_name ) ;
+
+    cmd_name = string( GET_RESPONSE ) + "." + INFO_RESPONSE ;
+    BESDEBUG( "cedar", "    removing " << cmd_name << " command" << endl )
+    BESCommand::del_command( cmd_name ) ;
+
+    BESDEBUG( "cedar", "Done Cleaning NC module " << modname << endl )
 }
 
 /** @brief dumps information about this object

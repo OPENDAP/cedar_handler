@@ -38,14 +38,14 @@
 #include "CedarFile.h"
 #include "CedarDataRecord.h"
 
-class PassiveStructure ;
+class Structure ;
 class CedarConstraintEvaluator ;
 
 bool cedar_read_descriptors( DDS &dds, const string &filename,
                              const string &name, const string &query,
 			     string &cedar_error ) ;
 
-void load_dds( PassiveStructure &, CedarDataRecord *my_data_record,
+void load_dds( Structure &, CedarDataRecord *my_data_record,
 	       CedarConstraintEvaluator &qa, int &index ) ;
 
 void get_name_for_parameter( string &str, int par ) ;

@@ -122,10 +122,10 @@ void load_das(DAS &das,CedarDataRecord *dr)
 	name+=tmp;
 	t1->append_attr(name, type, info);
 	int njpar=dr->get_jpar();
-	short int *jparvars= new short int[njpar];
-	if (jparvars)
+	auto_ptr<vector<short int> > jparvars( new vector<short int>(njpar));
+	if (jparvars.get())
 	{
-	    dr->load_JPAR_vars(jparvars);
+	    dr->load_JPAR_vars(*jparvars);
 	    for (int i=0; i<njpar; i++)
 	    {
 		int val;
@@ -133,15 +133,15 @@ void load_das(DAS &das,CedarDataRecord *dr)
 		CedarStringConversions::ltoa(i,tmp,10);
 		nm+=tmp;
 		t1=at->append_container(nm);
-		if (jparvars[i]<0)
+		if ((*jparvars.get())[i]<0)
 		{
-		    val=jparvars[i]*-1;
+		    val=(*jparvars.get())[i]*-1;
 		    info="\"Error in ";
 		    name="ERROR_IN_PARAMETER_CODE_";
 		}
 		else
 		{
-		    val=jparvars[i];
+		    val=(*jparvars.get())[i];
 		    info="\"";
 		    name="PARAMETER_CODE_";
 		}
@@ -156,12 +156,11 @@ void load_das(DAS &das,CedarDataRecord *dr)
 		t1->append_attr(name, type,info);
 	    }
 	}
-	delete [] jparvars;
 	int nmpar=dr->get_mpar();
-	short int *mparvars= new short int[nmpar];
-	if (mparvars)
+	auto_ptr<vector<short int> > mparvars( new vector<short int>(nmpar) );
+	if (mparvars.get())
 	{
-	    dr->load_MPAR_vars(mparvars);
+	    dr->load_MPAR_vars(*mparvars);
 	    for (int i=0; i<nmpar; i++)
 	    {
 		int val;
@@ -169,15 +168,15 @@ void load_das(DAS &das,CedarDataRecord *dr)
 		CedarStringConversions::ltoa(i,tmp,10);
 		nm+=tmp;
 		t1=at->append_container(nm);
-		if (mparvars[i]<0)
+		if ((*mparvars.get())[i]<0)
 		{
-		    val=mparvars[i]*-1;
+		    val=(*mparvars.get())[i]*-1;
 		    info="\"Error in ";
 		    name="ERROR_IN_PARAMETER_CODE_";
 		}
 		else
 		{
-		    val=mparvars[i];
+		    val=(*mparvars.get())[i];
 		    info="\"";
 		    name="PARAMETER_CODE_";
 		}
@@ -192,7 +191,6 @@ void load_das(DAS &das,CedarDataRecord *dr)
 		t1->append_attr(name, type,info);
 	    }
 	}
-	delete [] mparvars;
 	das.add_table(str, at);
     }
 }

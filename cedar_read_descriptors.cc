@@ -30,17 +30,22 @@
 //      pwest       Patrick West <pwest@ucar.edu>
 //      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
+#include <memory>
+#include <vector>
+
+using std::auto_ptr ;
+using std::vector ;
+
 #include "CedarReadParcods.h"
 #include "CedarConstraintEvaluator.h"
-#include "PassiveArray.h"
-#include "PassiveStructure.h"
-#include "PassiveInt16.h"
-#include "PassiveUInt16.h"
+#include "Array.h"
+#include "Structure.h"
+#include "Int16.h"
+#include "UInt16.h"
 
 #include "cedar_read_descriptors.h"
 
 #include "CedarException.h"
-#include "BESAutoPtr.cc"
 #include "TheBESKeys.h"
 #include "cgi_util.h"
 
@@ -50,7 +55,7 @@ bool cedar_read_descriptors( DDS &dds, const string &filename,
 {
     int i=0;
     CedarConstraintEvaluator qa;
-    BESAutoPtr <PassiveStructure> container( new PassiveStructure( name ) ) ;
+    auto_ptr<Structure> container( new Structure( name ) ) ;
 
     try
     {
@@ -71,7 +76,7 @@ bool cedar_read_descriptors( DDS &dds, const string &filename,
 	{
 	    if( lr->get_type() == 1 )
 	    {
-		load_dds( *container, (CedarDataRecord*)lr, qa, i ) ;
+		load_dds( *(container.get()), (CedarDataRecord*)lr, qa, i ) ;
 	    }
 	    while (!file.end_dataset())
 	    {
@@ -80,7 +85,7 @@ bool cedar_read_descriptors( DDS &dds, const string &filename,
 		{
 		    if( lr->get_type() == 1 )
 		    {
-			load_dds( *container, (CedarDataRecord*)lr, qa, i ) ;
+			load_dds( *(container.get()), (CedarDataRecord*)lr, qa, i ) ;
 		    }
 		}
 	    }
@@ -164,7 +169,7 @@ void get_name_for_parameter(string &str, int par)
     str+=madnam;
 }
   
-void load_dds( PassiveStructure &container, CedarDataRecord *my_data_record,
+void load_dds( Structure &container, CedarDataRecord *my_data_record,
 	       CedarConstraintEvaluator &qa, int &i )
 {
     if( qa.validate_record( my_data_record ) )
@@ -176,30 +181,30 @@ void load_dds( PassiveStructure &container, CedarDataRecord *my_data_record,
 	record_name+=stuyo;
 
 	// BEGIN HERE LOADING PROLOGUE
-	BESAutoPtr <PassiveInt16> pKINST (new PassiveInt16("KINST"));
+	auto_ptr<Int16> pKINST (new Int16("KINST"));
 	pKINST->set_value(my_data_record->get_record_kind_instrument());
-	BESAutoPtr <PassiveInt16> pKINDAT(new PassiveInt16("KINDAT"));
+	auto_ptr<Int16> pKINDAT(new Int16("KINDAT"));
 	pKINDAT->set_value(my_data_record->get_record_kind_data());
 	CedarDate bdate,edate;
 	my_data_record->get_record_begin_date(bdate);
 	my_data_record->get_record_end_date(edate);
-	BESAutoPtr<PassiveUInt16> pIBYRT(new PassiveUInt16 ("IBYRT"));
+	auto_ptr<UInt16> pIBYRT(new UInt16 ("IBYRT"));
 	pIBYRT->set_value(bdate.get_year());
-	BESAutoPtr<PassiveUInt16> pIBDTT (new PassiveUInt16 ("IBDTT")); 
+	auto_ptr<UInt16> pIBDTT (new UInt16 ("IBDTT")); 
 	pIBDTT->set_value(bdate.get_month_day());
-	BESAutoPtr<PassiveUInt16> pIBHMT (new PassiveUInt16 ("IBHMT")); 
+	auto_ptr<UInt16> pIBHMT (new UInt16 ("IBHMT")); 
 	pIBHMT->set_value(bdate.get_hour_min());
-	BESAutoPtr<PassiveUInt16> pIBCST (new PassiveUInt16 ("IBCST"));
+	auto_ptr<UInt16> pIBCST (new UInt16 ("IBCST"));
 	pIBCST->set_value(bdate.get_second_centisecond());
-	BESAutoPtr<PassiveUInt16> pIEYRT (new PassiveUInt16 ("IEYRT"));
+	auto_ptr<UInt16> pIEYRT (new UInt16 ("IEYRT"));
 	pIEYRT->set_value(edate.get_year());
-	BESAutoPtr<PassiveUInt16> pIEDTT (new PassiveUInt16 ("IEDTT"));
+	auto_ptr<UInt16> pIEDTT (new UInt16 ("IEDTT"));
 	pIEDTT->set_value(edate.get_month_day());
-	BESAutoPtr<PassiveUInt16> pIEHMT (new PassiveUInt16 ("IEHMT"));
+	auto_ptr<UInt16> pIEHMT (new UInt16 ("IEHMT"));
 	pIEHMT->set_value(edate.get_hour_min());
-	BESAutoPtr<PassiveUInt16> pIECST (new PassiveUInt16 ("IECST"));
+	auto_ptr<UInt16> pIECST (new UInt16 ("IECST"));
 	pIECST->set_value(edate.get_second_centisecond());
-	BESAutoPtr<PassiveStructure> pPROLOGUEstructure (new PassiveStructure ("prologue"));
+	auto_ptr<Structure> pPROLOGUEstructure (new Structure ("prologue"));
 	pPROLOGUEstructure -> add_var (pKINST.get());
 	pPROLOGUEstructure -> add_var (pKINDAT.get());
 	pPROLOGUEstructure -> add_var (pIBYRT.get());
@@ -214,61 +219,61 @@ void load_dds( PassiveStructure &container, CedarDataRecord *my_data_record,
 
 	// BEGIN HERE LOADING JPAR SECTION
 	unsigned int jpar_value=my_data_record->get_jpar();
-	BESAutoPtr <dods_int16> pJparData (new dods_int16[jpar_value],true);
-	my_data_record->load_JPAR_data(pJparData.get());
-	BESAutoPtr <dods_int16> pJparVars (new dods_int16[jpar_value],true);
-	my_data_record->load_JPAR_vars(pJparVars.get());
-	BESAutoPtr <PassiveStructure>  pJPARstructure (new PassiveStructure ("JPAR"));
+	auto_ptr<vector<dods_int16> > pJparData(new vector<dods_int16>(jpar_value));
+	my_data_record->load_JPAR_data(*pJparData);
+	auto_ptr<vector<dods_int16> > pJparVars(new vector<dods_int16>(jpar_value));
+	my_data_record->load_JPAR_vars(*pJparVars);
+	auto_ptr<Structure>  pJPARstructure (new Structure ("JPAR"));
 	string JparVarName;
 	int is_JPAR_empty=1;
 	for (unsigned int w=0; w<jpar_value; w++)
 	{ 
-	    if (qa.validate_parameter(pJparVars.get()[w]))
+	    if (qa.validate_parameter((*pJparVars.get())[w]))
 	    {
 		is_JPAR_empty=0;
-		get_name_for_parameter(JparVarName,pJparVars.get()[w]);
-		BESAutoPtr <PassiveInt16> pjpardata (new PassiveInt16 (JparVarName));
-		pjpardata->set_value(pJparData.get()[w]);
+		get_name_for_parameter(JparVarName,(*pJparVars.get())[w]);
+		auto_ptr<Int16> pjpardata (new Int16 (JparVarName));
+		pjpardata->set_value((*pJparData.get())[w]);
 		pJPARstructure->add_var(pjpardata.get());
 	    }
 	}
 	// END HERE LOADING JPAR SECTION
 
 	// BEGIN HERE LOADING MPAR SECTION
-	BESAutoPtr <PassiveStructure> pMPARstructure (new PassiveStructure("MPAR"));
+	auto_ptr<Structure> pMPARstructure (new Structure("MPAR"));
 	int mpar_value=my_data_record->get_mpar();
 	int nrow_value=my_data_record->get_nrows();
 	int is_MPAR_empty=1;
 	if ((mpar_value>0) && (nrow_value>0))
 	{
-	    BESAutoPtr <dods_int16> pMparVars (new dods_int16[mpar_value],true);
-	    my_data_record->load_MPAR_vars(pMparVars.get());
-	    BESAutoPtr <dods_int16> pMparData (new dods_int16[nrow_value*mpar_value],true);
-	    BESAutoPtr <dods_int16> pPartialMparData (new dods_int16[nrow_value],true);
-	    my_data_record->load_MPAR_data(pMparData.get());
+	    auto_ptr<vector<dods_int16> > pMparVars (new vector<dods_int16>(mpar_value));
+	    my_data_record->load_MPAR_vars(*pMparVars);
+	    auto_ptr<vector<dods_int16> > pMparData (new vector<dods_int16>(nrow_value*mpar_value));
+	    auto_ptr<vector<dods_int16> > pPartialMparData (new vector<dods_int16>(nrow_value));
+	    my_data_record->load_MPAR_data(*pMparData);
 	    string MparVarName;
 	    for (int j=0; j<mpar_value;j++)
 	    {
-		if (qa.validate_parameter(pMparVars.get()[j]))
+		if (qa.validate_parameter((*pMparVars.get())[j]))
 		{
 		    is_MPAR_empty=0;
-		    get_name_for_parameter(MparVarName,pMparVars.get()[j]);
-		    BaseType *pMparvar = new PassiveInt16( MparVarName ); 
-		    BESAutoPtr<PassiveArray> pmpararray( new PassiveArray( MparVarName, pMparvar ) ) ;
+		    get_name_for_parameter(MparVarName,(*pMparVars.get())[j]);
+		    BaseType *pMparvar = new Int16( MparVarName ); 
+		    auto_ptr<Array> pmpararray( new Array( MparVarName, pMparvar ) ) ;
 		    delete pMparvar ; pMparvar = 0 ;
 		    pmpararray->append_dim(nrow_value);
 		    for (int w=0; w<nrow_value;w++)
 		    {
-			pPartialMparData.get()[w]=pMparData.get()[j+(w*mpar_value)];
+			(*pPartialMparData)[w]=(*pMparData)[j+(w*mpar_value)];
 		    }
-		    pmpararray->set_value(pPartialMparData.get(),nrow_value);
+		    pmpararray->set_value(*pPartialMparData,nrow_value);
 		    pMPARstructure -> add_var(pmpararray.get());
 		}
 	    }
 	}
 	// END HERE LOADING MPAR SECTION
 
-	BESAutoPtr <PassiveStructure> precord (new PassiveStructure(record_name));
+	auto_ptr<Structure> precord (new Structure(record_name));
 	precord -> add_var (pPROLOGUEstructure.get());
 	if (!is_JPAR_empty)
 	    precord->add_var(pJPARstructure.get());

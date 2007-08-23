@@ -80,35 +80,35 @@ void send_tab_data(CedarTab &tab_object, CedarDataRecord &dr, CedarConstraintEva
 	oss<<dr.get_nrows()<<endl;
 
 	unsigned int jpar_value=dr.get_jpar();
-	short int *pJparData =new short int[jpar_value];
-	if (!pJparData)
+	auto_ptr<vector<short int> > pJparData( new vector<short int>(jpar_value) );
+	if (!pJparData.get())
 	{
 	    throw bad_alloc();
 	}
-	dr.load_JPAR_data(pJparData);
+	dr.load_JPAR_data(*pJparData);
 
-	short int *pJparVars = new short int[jpar_value];
-	if (!pJparVars)
+	auto_ptr<vector<short int> > pJparVars( new vector<short int>(jpar_value) );
+	if (!pJparVars.get())
 	{
 	    throw bad_alloc();
 	}
-	dr.load_JPAR_vars(pJparVars);
+	dr.load_JPAR_vars(*pJparVars);
 
 	for (w=0; w<jpar_value; w++)
 	{ 
 	    string JparVarName="";
 	    string the_var="";
-	    if (qa.validate_parameter(pJparVars[w]))
+	    if (qa.validate_parameter((*pJparVars)[w]))
 	    {
 		int val;
-		if (pJparVars[w]<0)
+		if ((*pJparVars)[w]<0)
 		{
-		    val=pJparVars[w]*-1;
+		    val=(*pJparVars)[w]*-1;
 		    the_var+="e_";
 		}
 		else
 		{
-		    val=pJparVars[w];
+		    val=(*pJparVars)[w];
 		}
 		get_name_for_parameter(JparVarName,val);
 		the_var+=JparVarName;
@@ -123,9 +123,9 @@ void send_tab_data(CedarTab &tab_object, CedarDataRecord &dr, CedarConstraintEva
 
 	for (w=0; w<jpar_value; w++)
 	{ 
-	    if (qa.validate_parameter(pJparVars[w]))
+	    if (qa.validate_parameter((*pJparVars)[w]))
 	    {
-		oss<<pJparVars[w];
+		oss<<(*pJparVars)[w];
 		if(w<(jpar_value-1))
 		{
 		    oss<<'\t';
@@ -135,9 +135,9 @@ void send_tab_data(CedarTab &tab_object, CedarDataRecord &dr, CedarConstraintEva
 	oss<<endl;
 	for (w=0; w<jpar_value; w++)
 	{ 
-	    if (qa.validate_parameter(pJparVars[w]))
+	    if (qa.validate_parameter((*pJparVars)[w]))
 	    {
-		oss<<pJparData[w];
+		oss<<(*pJparData)[w];
 		if(w<(jpar_value-1))
 		{
 		    oss<<'\t';
@@ -145,42 +145,40 @@ void send_tab_data(CedarTab &tab_object, CedarDataRecord &dr, CedarConstraintEva
 	    }
 	}
 	oss<<endl;
-	delete [] pJparData;
-	delete [] pJparVars;
 
 	int mpar_value=dr.get_mpar();
 	int nrow_value=dr.get_nrows();
 	if ((mpar_value>0) && (nrow_value>0))
 	{
-	    short int *pMparVars=new short int[mpar_value];
-	    if (!pMparVars)
+	    auto_ptr<vector<short int> > pMparVars( new vector<short int>(mpar_value) );
+	    if (!pMparVars.get())
 	    {
 		throw bad_alloc();
 	    }
-	    dr.load_MPAR_vars(pMparVars);
+	    dr.load_MPAR_vars(*pMparVars);
 
-	    short int *pMparData=new short int[nrow_value*mpar_value];
-	    if (!pMparData)
+	    auto_ptr<vector<short int> > pMparData( new vector<short int>(nrow_value*mpar_value) );
+	    if (!pMparData.get())
 	    {
 		throw bad_alloc();
 	    }
-	    dr.load_MPAR_data(pMparData);
+	    dr.load_MPAR_data(*pMparData);
 
 	    for (y=0; y<mpar_value;y++)
 	    {
 		string MparVarName="";
 		string the_var="";
-		if (qa.validate_parameter(pMparVars[y]))
+		if (qa.validate_parameter((*pMparVars)[y]))
 		{
 		    int val;
-		    if (pMparVars[y]<0)
+		    if ((*pMparVars)[y]<0)
 		    {
-			val=pMparVars[y]*-1;
+			val=(*pMparVars)[y]*-1;
 			the_var+="e_";
 		    }
 		    else
 		    {
-			val=pMparVars[y];
+			val=(*pMparVars)[y];
 		    }
 		    get_name_for_parameter(MparVarName,val);
 		    the_var+=MparVarName;
@@ -204,16 +202,16 @@ void send_tab_data(CedarTab &tab_object, CedarDataRecord &dr, CedarConstraintEva
 
 	    for (y=0; y<mpar_value;y++)
 	    {
-		if (qa.validate_parameter(pMparVars[y]))
+		if (qa.validate_parameter((*pMparVars)[y]))
 		{
 		    number_of_valid_variables++;
-		    oss<<pMparVars[y];
+		    oss<<(*pMparVars)[y];
 		    if(y<(mpar_value-1))
 		    {
 			oss<<'\t';
 		    }
 		    valid_printable_parameters[y].is_valid=1;
-		    valid_printable_parameters[y].par_value=pMparVars[y];
+		    valid_printable_parameters[y].par_value=(*pMparVars)[y];
 		}
 	    }
 	    oss<<endl;
@@ -238,7 +236,7 @@ void send_tab_data(CedarTab &tab_object, CedarDataRecord &dr, CedarConstraintEva
 			if(valid_printable_parameters[z].is_valid)
 			{
 			    pp=qa.get_parameter(valid_printable_parameters[z].par_value);
-			    if(pp.validateValue(pMparData[z+(y*mpar_value)]))
+			    if(pp.validateValue((*pMparData)[z+(y*mpar_value)]))
 			    {
 				number_of_printable_items++;
 			    }
@@ -257,7 +255,7 @@ void send_tab_data(CedarTab &tab_object, CedarDataRecord &dr, CedarConstraintEva
 		    {
 			if(valid_printable_parameters[z].is_valid)
 			{
-			    oss<<pMparData[z+(y*mpar_value)];
+			    oss<<(*pMparData)[z+(y*mpar_value)];
 
 			    if(z<(mpar_value-1))
 			    {
@@ -268,9 +266,6 @@ void send_tab_data(CedarTab &tab_object, CedarDataRecord &dr, CedarConstraintEva
 		    oss<<endl;
 		}
 	    }
-
-	    delete [] pMparVars;
-	    delete [] pMparData;
 
 	    oss<<endl;
 	}
