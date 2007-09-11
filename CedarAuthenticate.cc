@@ -62,7 +62,7 @@ using std::bad_alloc ;
  * Cedar.Authenticate.MySQL.mode=&lt;on|off&gt;
  *
  * Then authenticates the user specified in the BESDataHandlerInterface
- * using a MySQL database. The table tbl_session in the MySQL database is
+ * using a MySQL database. The table cedar_session in the MySQL database is
  * used to authenticate the user. The session information must be created
  * prior to this method being called.
  *
@@ -239,7 +239,7 @@ CedarAuthenticate::authenticate( BESDataHandlerInterface &dhi )
 	}
 
 	// get the current date and time
-	string query_str = "select USER_NAME from tbl_sessions " ;
+	string query_str = "select USER_NAME from cedar_sessions " ;
 	query_str += "where USER_NAME=\"" + dhi.data[USER_NAME] + "\"" ;
 	if( dhi.data[USER_TOKEN] != "" )
 	{

@@ -30,6 +30,10 @@
 //      pwest       Patrick West <pwest@ucar.edu>
 //      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
+#include <iostream>
+
+using std::cout ;
+
 #ifdef __GNUG__
 #pragma implementation
 #endif
@@ -37,7 +41,7 @@
 #include "CedarInfo.h"
 
 CedarInfo::CedarInfo( bool is_http )
-    : BESTextInfo( "Cedar.Info.Buffered", is_http )
+    : BESTextInfo( "Cedar.Info.Buffered", &cout, false, is_http )
 {
 }
 
