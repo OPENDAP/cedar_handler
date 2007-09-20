@@ -167,6 +167,7 @@ CedarInit(int, char**)
 
     if( BESLog::TheLog()->is_verbose() )
 	(*BESLog::TheLog()) << "    adding " << STREAM_RESPONSE << " response handler" << endl ;
+    BESResponseHandlerList::TheList()->remove_handler( STREAM_RESPONSE ) ;
     BESResponseHandlerList::TheList()->add_handler( STREAM_RESPONSE, StreamResponseHandler::StreamResponseBuilder ) ;
 
     if( BESLog::TheLog()->is_verbose() )

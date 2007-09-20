@@ -321,7 +321,7 @@ void send_flat_data(CedarFlat &cf, CedarDataRecord &dr,CedarConstraintEvaluator 
 
 	oss<<'\n'<<endl;
 
-	oss<<'\0';
+	//oss<<'\0'<<"kaka";
 	cf.add_data(oss.str());
     }
 }

@@ -62,7 +62,7 @@ route_buffer( const CedarLogicalRecord *pLogRec, BESInfo &info )
 	    pLogRec->save_data_buffer( oss->rdbuf() ) ;
 	    break ;
     }
-    (*oss) << '\0' ;
+    //(*oss) << '\0' ;
     info.add_data( oss->str() ) ;
     delete oss ;
 }

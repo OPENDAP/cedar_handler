@@ -269,7 +269,7 @@ void send_tab_data(CedarTab &tab_object, CedarDataRecord &dr, CedarConstraintEva
 
 	    oss<<endl;
 	}
-	oss<<'\0';
+	//oss<<'\0';
 	tab_object.add_data( oss.str() ) ;
     }
 }
