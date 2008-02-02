@@ -15,6 +15,8 @@ using std::endl ;
 #include "CedarFSDir.h"
 #include "GNURegex.h"
 
+using namespace libdap ;
+
 CedarFSDir::CedarFSDir(const string &dirName)
         : _dirName(dirName),
         _fileExpr(""),

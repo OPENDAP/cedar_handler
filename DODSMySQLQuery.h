@@ -34,7 +34,7 @@
 #define DODSMySQLQuery_h_ 1
 
 #include "DODSMySQLResult.h"
-#include "DODSMySQLQueryException.h"
+#include "BESInternalError.h"
 
 class DODSMySQLConnect ;
 
@@ -47,7 +47,7 @@ private:
     void empty_query()
     {
 	string s = "No results loaded for this query" ;
-	throw DODSMySQLQueryException( s, __FILE__, __LINE__ ) ;
+	throw BESInternalError( s, __FILE__, __LINE__ ) ;
     }
 public:
     DODSMySQLQuery( const string &server, const string &user,

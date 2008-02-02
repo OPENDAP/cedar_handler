@@ -40,7 +40,8 @@ using std::ifstream ;
 #include "ContainerStorageCedar.h"
 #include "BESFileContainer.h"
 #include "TheBESKeys.h"
-#include "BESContainerStorageException.h"
+#include "BESInternalError.h"
+#include "BESForbiddenError.h"
 #include "BESInfo.h"
 #include "CedarFSDir.h"
 #include "CedarFSFile.h"
@@ -56,7 +57,7 @@ ContainerStorageCedar::ContainerStorageCedar( const string &n )
     {
 	string s = key + " not defined in bes configuration file"
 	           + ", unable to determine Cedar base directory" ;
-	throw BESContainerStorageException( s, __FILE__, __LINE__ ) ;
+	throw BESInternalError( s, __FILE__, __LINE__ ) ;
     }
 }
 
@@ -78,14 +79,14 @@ ContainerStorageCedar::add_container( const string &s_name,
 				      const string &type )
 {
     string s = "Unable to add a container to Cedar Persistence"  ;
-    throw BESContainerStorageException( s, __FILE__, __LINE__ ) ;
+    throw BESForbiddenError( s, __FILE__, __LINE__ ) ;
 }
 
 bool
 ContainerStorageCedar::del_container( const string &s_name )
 {
     string s = "Unable to remove a container from Cedar Persistence"  ;
-    throw BESContainerStorageException( s, __FILE__, __LINE__ ) ;
+    throw BESForbiddenError( s, __FILE__, __LINE__ ) ;
     return false ;
 }
 
@@ -93,7 +94,7 @@ bool
 ContainerStorageCedar::del_containers( )
 {
     string s = "Unable to remove a containers from Cedar Persistence" ;
-    throw BESContainerStorageException( s, __FILE__, __LINE__ ) ;
+    throw BESForbiddenError( s, __FILE__, __LINE__ ) ;
     return false ;
 }
 

@@ -42,9 +42,9 @@ using std::bad_alloc ;
 
 #include "CedarAuthenticate.h"
 #include "DODSMySQLQuery.h"
-#include "BESMemoryException.h"
 #include "TheBESKeys.h"
 #include "CedarAuthenticateException.h"
+#include "BESInternalFatalError.h"
 #include "BESDataNames.h"
 #include "BESLog.h"
 
@@ -69,14 +69,11 @@ using std::bad_alloc ;
  * @param dhi contains the user name of the user to be authenticated
  * @throws CedarAuthenticateException if unable to read information from
  * initialization file or if unable to authenticate the user.
- * @throws DODSMySQLConnectException if unable to connect to the MySQL
- * database.
- * @throws DODSMySQLQueryException if unable to query the MySQL database.
+ * @throws BESInternalError if unable to connect to the MySQL database.
  * @see _BESDataHandlerInterface
  * @see DODSMySQLQuery
  * @see CedarAuthenticateException
- * @see DODSMySQLConnectException
- * @see DODSMySQLQueryException
+ * @see BESInternalError
  * @see BESKeys
  */
 bool
@@ -226,9 +223,9 @@ CedarAuthenticate::authenticate( BESDataHandlerInterface &dhi )
 	catch( bad_alloc::bad_alloc )
 	{
 	    string s = "Can not get memory for MySQL Query object" ;
-	    throw BESMemoryException( s, __FILE__, __LINE__ ) ;
+	    throw BESInternalFatalError( s, __FILE__, __LINE__ ) ;
 	}
-	catch( BESException &e )
+	catch( BESError &e )
 	{
 	    if( BESLog::TheLog()->is_verbose() )
 	    {

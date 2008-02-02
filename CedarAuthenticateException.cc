@@ -32,7 +32,6 @@
 
 #include "CedarAuthenticateException.h"
 #include "BESDataNames.h"
-#include "BESStatusReturn.h"
 #include "BESInfo.h"
 #include "BESInfoList.h"
 #include "TheBESKeys.h"
@@ -42,7 +41,7 @@
 #define DEFAULT_ADMINISTRATOR "cedar_db@hao.ucar.edu"
 
 int
-CedarAuthenticateException::handleAuthException( BESException &e,
+CedarAuthenticateException::handleAuthException( BESError &e,
 						 BESDataHandlerInterface &dhi )
 {
     CedarAuthenticateException *ae =
@@ -76,7 +75,7 @@ CedarAuthenticateException::handleAuthException( BESException &e,
 	}
 	return CEDAR_AUTHENTICATE_EXCEPTION ;
     }
-    return BES_EXECUTED_OK ;
+    return 0 ;
 
     /*
     if( ae )

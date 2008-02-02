@@ -33,14 +33,14 @@
 #ifndef CedarAuthenticateException_h_
 #define CedarAuthenticateException_h_ 1
 
-#include "BESException.h"
+#include "BESError.h"
 #include "BESDataHandlerInterface.h"
 
 #define CEDAR_AUTHENTICATE_EXCEPTION 13
 
 /** @brief exception thrown if authentication fails
  */
-class CedarAuthenticateException: public BESException
+class CedarAuthenticateException: public BESError
 {
 protected:
       			CedarAuthenticateException() {}
@@ -48,10 +48,10 @@ public:
       			CedarAuthenticateException( const string &msg,
 			                            const string &file,
 						    int line )
-			    : BESException( msg, file, line ) {}
+			    : BESError( msg, BES_INTERNAL_ERROR, file, line ) {}
       virtual		~CedarAuthenticateException() {}
 
-      static int	handleAuthException( BESException &e,
+      static int	handleAuthException( BESError &e,
 					     BESDataHandlerInterface &dhi ) ;
 };
 

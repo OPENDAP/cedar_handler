@@ -33,7 +33,9 @@
 #include "BESBaseApp.h"
 #include "BESDataHandlerInterface.h"
 
-class DODSFilter ;
+#include "DODSFilter.h"
+
+using namespace libdap ;
 
 class CedarHandlerApp : public BESBaseApp
 {

@@ -49,8 +49,9 @@ using std::endl ;
 #include "CedarReporter.h"
 #include "BESInterface.h"
 #include "CedarAuthenticate.h"
-#include "BESExceptionManager.h"
+#include "BESInternalError.h"
 #include "CedarAuthenticateException.h"
+#include "BESExceptionManager.h"
 #include "ContainerStorageCedar.h"
 #include "BESContainerStorageList.h"
 
@@ -214,7 +215,7 @@ CedarInit(int, char**)
     {
 	string err = (string)"Unable to initialize basic transmitter "
 	             + "with dap transmit functions" ;
-	throw BESException( err, __FILE__, __LINE__ ) ;
+	throw BESInternalError( err, __FILE__, __LINE__ ) ;
     }
 
     t = BESReturnManager::TheManager()->find_transmitter( HTTP_TRANSMITTER ) ;
@@ -240,7 +241,7 @@ CedarInit(int, char**)
     {
 	string err = (string)"Unable to initialize http transmitter "
 	             + "with dap transmit functions" ;
-	throw BESException( err, __FILE__, __LINE__ ) ;
+	throw BESInternalError( err, __FILE__, __LINE__ ) ;
     }
 
     return true ;

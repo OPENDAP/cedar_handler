@@ -35,7 +35,6 @@ CEDAR_HDRS:=CedarFilter.h CedarFlat.h CedarRequestHandler.h \
 	CedarAuthenticate.h CedarAuthenticateException.h \
 	DODSMySQLChannel.h DODSMySQLConnect.h DODSMySQLQuery.h \
 	DODSMySQLResult.h DODSEncode.h \
-	DODSMySQLQueryException.h DODSMySQLConnectException.h \
 	config_cedar.h CedarFSDir.h CedarFSFile.h
 
 BES_HANDLER_SRC = cedar_handler.cc CedarHandlerApp.cc cedar_module.cc cedar_commands.cc CedarHandlerApp.h

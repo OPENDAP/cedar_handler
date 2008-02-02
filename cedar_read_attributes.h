@@ -38,6 +38,7 @@
 #include "cgi_util.h"
 #include "CedarDataRecord.h"
 
+using namespace libdap ;
 
 /**
   Reads the attribute data from a cbf file and loads it into a DAS object.

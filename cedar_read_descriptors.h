@@ -38,7 +38,9 @@
 #include "CedarFile.h"
 #include "CedarDataRecord.h"
 
-class Structure ;
+using namespace libdap ;
+
+class libdap::Structure ;
 class CedarConstraintEvaluator ;
 
 bool cedar_read_descriptors( DDS &dds, const string &filename,

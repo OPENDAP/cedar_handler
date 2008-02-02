@@ -32,7 +32,9 @@
 
 #include "CedarRequestHandler.h"
 #include "BESResponseHandler.h"
-#include "BESResponseException.h"
+#include "BESInternalError.h"
+#include "BESInternalFatalError.h"
+#include "BESDapError.h"
 #include "BESResponseNames.h"
 #include "CedarResponseNames.h"
 #include "BESDataNames.h"
@@ -92,17 +94,42 @@ bool
 CedarRequestHandler::cedar_build_das( BESDataHandlerInterface &dhi )
 {
     BESDEBUG( "cedar", "building cedar das response:" << endl )
+
     bool ret = true ;
     BESDASResponse *bdas =
 	dynamic_cast<BESDASResponse *>(dhi.response_handler->get_response_object());
     DAS *das = bdas->get_das() ;
 
-    string cedar_error ;
-    if( !cedar_read_attributes( *das, dhi.container->access(), cedar_error ) )
+    try
     {
-	throw BESResponseException( cedar_error, __FILE__, __LINE__ ) ;
+	string cedar_error ;
+	string container = dhi.container->access() ;
+	if( !cedar_read_attributes( *das, container, cedar_error ) )
+	{
+	    throw BESInternalError( cedar_error, __FILE__, __LINE__ ) ;
+	}
     }
+    catch( BESError &e ) {
+	throw e ;
+    }
+    catch(InternalErr & e) {
+        BESDapError ex( e.get_error_message(), true, e.get_error_code(),
+	                __FILE__, __LINE__ ) ;
+        throw ex;
+    }
+    catch(Error & e) {
+        BESDapError ex( e.get_error_message(), false, e.get_error_code(),
+	                __FILE__, __LINE__ ) ;
+        throw ex;
+    }
+    catch(...) {
+        string s = "unknown exception caught building DAS";
+        BESInternalFatalError ex(s, __FILE__, __LINE__);
+        throw ex;
+    }
+
     BESDEBUG( "cedar", "returning from building cedar das response:" << endl << *das << endl )
+
     return ret ;
 }
 
@@ -114,15 +141,37 @@ CedarRequestHandler::cedar_build_dds( BESDataHandlerInterface &dhi )
 	dynamic_cast<BESDDSResponse *>(dhi.response_handler->get_response_object());
     DDS *dds = bdds->get_dds() ;
 
-    string cedar_error ;
-    if( !cedar_read_descriptors( *dds, dhi.container->access(),
-				 dhi.container->get_symbolic_name(),
-				 dhi.container->get_constraint(),
-				 cedar_error ) )
+    try
     {
-	throw BESResponseException( cedar_error, __FILE__, __LINE__ ) ;
+	string cedar_error ;
+	string container = dhi.container->access() ;
+	if( !cedar_read_descriptors( *dds, container,
+				     dhi.container->get_symbolic_name(),
+				     dhi.container->get_constraint(),
+				     cedar_error ) )
+	{
+	    throw BESInternalError( cedar_error, __FILE__, __LINE__ ) ;
+	}
+	dhi.data[POST_CONSTRAINT] = "" ;
     }
-    dhi.data[POST_CONSTRAINT] = "" ;
+    catch( BESError &e ) {
+	throw e ;
+    }
+    catch(InternalErr & e) {
+        BESDapError ex( e.get_error_message(), true, e.get_error_code(),
+	                __FILE__, __LINE__ ) ;
+        throw ex;
+    }
+    catch(Error & e) {
+        BESDapError ex( e.get_error_message(), false, e.get_error_code(),
+	                __FILE__, __LINE__ ) ;
+        throw ex;
+    }
+    catch(...) {
+        string s = "unknown exception caught building DDS";
+        BESInternalFatalError ex(s, __FILE__, __LINE__);
+        throw ex;
+    }
     return ret ;
 }
 
@@ -133,15 +182,36 @@ CedarRequestHandler::cedar_build_data( BESDataHandlerInterface &dhi )
 	dynamic_cast<BESDataDDSResponse *>(dhi.response_handler->get_response_object());
     DataDDS *dds = bdds->get_dds() ;
 
-    string cedar_error ;
-    if( !cedar_read_descriptors( *dds, dhi.container->access(),
-				 dhi.container->get_symbolic_name(),
-				 dhi.container->get_constraint(),
-				 cedar_error ) )
+    try
     {
-	throw BESResponseException( cedar_error, __FILE__, __LINE__ ) ;
+	string cedar_error ;
+	if( !cedar_read_descriptors( *dds, dhi.container->access(),
+				     dhi.container->get_symbolic_name(),
+				     dhi.container->get_constraint(),
+				     cedar_error ) )
+	{
+	    throw BESInternalError( cedar_error, __FILE__, __LINE__ ) ;
+	}
+	dhi.data[POST_CONSTRAINT] = "" ;
     }
-    dhi.data[POST_CONSTRAINT] = "" ;
+    catch( BESError &e ) {
+	throw e ;
+    }
+    catch(InternalErr & e) {
+        BESDapError ex( e.get_error_message(), true, e.get_error_code(),
+	                __FILE__, __LINE__ ) ;
+        throw ex;
+    }
+    catch(Error & e) {
+        BESDapError ex( e.get_error_message(), false, e.get_error_code(),
+	                __FILE__, __LINE__ ) ;
+        throw ex;
+    }
+    catch(...) {
+        string s = "unknown exception caught building DataDDS";
+        BESInternalFatalError ex(s, __FILE__, __LINE__);
+        throw ex;
+    }
     return true ;
 }
 
@@ -150,11 +220,12 @@ CedarRequestHandler::cedar_build_flat( BESDataHandlerInterface &dhi )
 {
     bool ret = true ;
     CedarFlat *flat = dynamic_cast<CedarFlat *>(dhi.response_handler->get_response_object()) ;
+
     string cedar_error ;
     if( !cedar_read_flat( *flat, dhi.container->access(),
 			  dhi.container->get_constraint(), cedar_error ) )
     {
-	throw BESResponseException( cedar_error, __FILE__, __LINE__ ) ;
+	throw BESInternalError( cedar_error, __FILE__, __LINE__ ) ;
     }
     return ret ;
 }
@@ -167,7 +238,7 @@ CedarRequestHandler::cedar_build_stream( BESDataHandlerInterface &dhi )
     if( !cedar_read_stream( dhi.container->access(),
 			    dhi.container->get_constraint(), cedar_error ) )
     {
-	throw BESResponseException( cedar_error, __FILE__, __LINE__ ) ;
+	throw BESInternalError( cedar_error, __FILE__, __LINE__ ) ;
     }
     return ret ;
 }
@@ -181,7 +252,7 @@ CedarRequestHandler::cedar_build_tab( BESDataHandlerInterface &dhi )
     if( !cedar_read_tab( *dtab, dhi.container->access(),
 			 dhi.container->get_constraint(), cedar_error ) )
     {
-	throw BESResponseException( cedar_error, __FILE__, __LINE__ ) ;
+	throw BESInternalError( cedar_error, __FILE__, __LINE__ ) ;
     }
     return ret ;
 }
@@ -197,7 +268,7 @@ CedarRequestHandler::cedar_build_info( BESDataHandlerInterface &dhi )
 			  dhi.container->get_constraint(),
 			  cedar_error ) )
     {
-	throw BESResponseException( cedar_error, __FILE__, __LINE__ ) ;
+	throw BESInternalError( cedar_error, __FILE__, __LINE__ ) ;
     }
     return ret ;
 }

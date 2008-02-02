@@ -44,6 +44,8 @@
 class CedarTab ;
 class CedarFlat ;
 
+using namespace libdap ;
+
 class CedarFilter : public DODSFilter {
 public:
     /** Types of responses DODSFilter know about. */

@@ -32,7 +32,7 @@
 
 #include "CedarReporter.h"
 #include "TheBESKeys.h"
-#include "BESLogException.h"
+#include "BESInternalError.h"
 #include "BESDataNames.h"
 
 CedarReporter::CedarReporter()
@@ -43,15 +43,17 @@ CedarReporter::CedarReporter()
     _log_name = TheBESKeys::TheKeys()->get_key( "Cedar.LogName", found );
     if( _log_name == "" )
     {
-	throw BESLogException( "can not determine Cedar log name", __FILE__, __LINE__ ) ;
+	string err = (string)"Could not determine Cedar log name, "
+	             + "not found in configuration file" ;
+	throw BESInternalError( err, __FILE__, __LINE__ ) ;
     }
     else
     {
 	_file_buffer = new ofstream( _log_name.c_str(), ios::out | ios::app ) ;
 	if( !(*_file_buffer) )
 	{
-	    string s = "can not open Cedar log file " + _log_name ;;
-	    throw BESLogException( s, __FILE__, __LINE__ ) ;
+	    string s = "Unable to open Cedar log file " + _log_name ;;
+	    throw BESInternalError( s, __FILE__, __LINE__ ) ;
 	} 
     }
 }

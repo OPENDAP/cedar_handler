@@ -35,7 +35,7 @@
 using std::endl ;
 
 #include "DODSMySQLConnect.h"
-#include "DODSMySQLConnectException.h"
+#include "BESInternalError.h"
 #include "BESLog.h"
 #include "DODSEncode.h"
 
@@ -88,7 +88,7 @@ DODSMySQLConnect::open( const string &server, const string &user,
 	    string serr = "can not get connected to MySQL engine." ;
 	    string mysql_error = get_error() ;
 	    serr += "\n" + mysql_error ;
-	    throw DODSMySQLConnectException( serr, __FILE__, __LINE__ ) ;
+	    throw BESInternalError( serr, __FILE__, __LINE__ ) ;
 	}
 	else
 	{

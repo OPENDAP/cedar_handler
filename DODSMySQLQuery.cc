@@ -35,9 +35,9 @@
 using std::bad_alloc ;
 
 #include "DODSMySQLQuery.h"
-#include "BESMemoryException.h"
+#include "BESInternalFatalError.h"
 #include "DODSMySQLConnect.h"
-#include "DODSMySQLConnectException.h"
+#include "BESInternalError.h"
 #include "DODSMySQLChannel.h"
 
 DODSMySQLQuery::DODSMySQLQuery(const string &server, const string &user,
@@ -54,7 +54,7 @@ DODSMySQLQuery::DODSMySQLQuery(const string &server, const string &user,
     catch( bad_alloc::bad_alloc )
     {
 	string s = "Could not allocate memory for MySQL Connect object" ;
-	throw BESMemoryException( s, __FILE__, __LINE__ ) ;
+	throw BESInternalFatalError( s, __FILE__, __LINE__ ) ;
     }
 
     try
@@ -62,7 +62,7 @@ DODSMySQLQuery::DODSMySQLQuery(const string &server, const string &user,
 	_my_connection->open( server, user, password, database,
 			      mysql_port, mysql_sock ) ;
     }
-    catch( DODSMySQLConnectException &ce )
+    catch( BESError &ce )
     {
 	if( _my_connection ) delete _my_connection ;
 	_my_connection = 0 ;
@@ -88,7 +88,7 @@ DODSMySQLQuery::run_query(const string &query)
     MYSQL *sql_channel = _my_connection->get_channel() ;
     if( mysql_query( sql_channel, query.c_str() ) )
     {
-	throw DODSMySQLQueryException( _my_connection->get_error(), __FILE__, __LINE__ ) ;
+	throw BESInternalError( _my_connection->get_error(), __FILE__, __LINE__ ) ;
     }
     else
     {
@@ -106,7 +106,7 @@ DODSMySQLQuery::run_query(const string &query)
 	catch(bad_alloc::bad_alloc)
 	{
 	    string s = "Could not allocate memory for MySQL result object" ;
-	    throw BESMemoryException( s, __FILE__, __LINE__ ) ;
+	    throw BESInternalFatalError( s, __FILE__, __LINE__ ) ;
 	}
 	_results->first_row() ;
 	while( (row=mysql_fetch_row( result )) != NULL )

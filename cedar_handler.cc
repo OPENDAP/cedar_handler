@@ -40,9 +40,11 @@ using std::ofstream ;
 #include "config_cedar.h"
 
 #include "CedarHandlerApp.h"
-#include "BESException.h"
+#include "BESError.h"
 #include "Error.h"
 #include "BESDebug.h"
+
+using namespace libdap ;
 
 int 
 main(int argc, char *argv[])
@@ -56,7 +58,7 @@ main(int argc, char *argv[])
 	CedarHandlerApp app ;
 	return app.main( argc, argv ) ;
     }
-    catch( BESException &e )
+    catch( BESError &e )
     {
 	cout << "HTTP/1.0 200 OK" << endl ;
 	cout << "XDODS-Server: 3.5.2" << endl ;
