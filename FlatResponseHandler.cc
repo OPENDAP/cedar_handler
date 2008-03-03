@@ -47,7 +47,8 @@ FlatResponseHandler::~FlatResponseHandler( )
 void
 FlatResponseHandler::execute( BESDataHandlerInterface &dhi )
 {
-    _response = new CedarFlat( dhi.transmit_protocol == "HTTP" ) ;
+    _response = new CedarFlat( dhi.transmit_protocol == "HTTP",
+			       &(dhi.get_output_stream()) ) ;
     BESRequestHandlerList::TheList()->execute_each( dhi ) ;
 }
 

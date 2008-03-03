@@ -35,7 +35,7 @@
 using std::cout ;
 using std::endl ;
 
-#include "DODSEncode.h"
+#include "CedarEncode.h"
 
 int
 main( int argc, char **argv )
@@ -45,7 +45,7 @@ main( int argc, char **argv )
 	cout << "USAGE: " << argv[0] << " <password>" << endl ;
 	return 1 ;
     }
-    string code = DODSEncode::encode( (const char *)argv[1], (const char *)"disp_key" ) ;
+    string code = CedarEncode::encode( (const char *)argv[1], (const char *)"disp_key" ) ;
     cout << "code = " << code << endl ;
     return 0 ;
 }

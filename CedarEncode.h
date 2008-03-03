@@ -1,4 +1,4 @@
-// DODSMySQLResult.h
+// CedarEncode.h
 
 // This file is part of the OPeNDAP Cedar data handler, providing data
 // access views for CedarWEB data
@@ -30,42 +30,39 @@
 //      pwest       Patrick West <pwest@ucar.edu>
 //      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
-#ifndef DODSMySQLResult_h_
-#define DODSMySQLResult_h_ 1
+#ifndef I_CedarEncode_h
+#define I_CedarEncode_h 1
 
 #include <string>
-#include <vector>
 
-using std::vector ;
 using std::string ;
 
-class DODSMySQLResult
+class CedarEncode
 {
 private:
-    typedef vector<string> row;
-    typedef vector<row> matrix;
+    static char sap_bit(unsigned char val, int pos) ;
+    static void encode( const char * text, const char *key,
+		        char *encoded_text ) ;
+    static void my_encode( const char * text, const char *key,
+                           char *encoded_text ) ;
+    static void decode( const char * encoded_text, const char *key,
+		        char *decoded_text ) ;
+    static void my_decode( const char * encoded_text, const char *key,
+                           char *decoded_text ) ;
 
-    matrix *		_matrix;
-    int			_nrows;
-    int			_nfields;
-    int			_row_position;
-    int			_field_position;
-
-    			DODSMySQLResult( const DODSMySQLResult& ) {}
 public:
-    			DODSMySQLResult( const int &n_rows,
-					 const int &n_fields ) ; 
-    			~DODSMySQLResult();
+    // text MUST be buffer of 8 bytes, key MUST be buffer with 8 bytes,
+    // encoded_text MUST be buffer with 64 bytes
+    // not buffer overflow check is done!
+    static string encode( const string &text, const string &key ) ;
 
-    int			get_nrows() { return _nrows ; }
-    int			get_nfields() { return _nfields ; }
-    void		set_field( const char *s ) ;
-    string		get_field() ;
-    bool		first_field() ;
-    bool		next_field() ;
-    bool		next_row() ;
-    bool		first_row() ;
+    // text MUST be buffer of 64 bytes, key MUST be buffer with 8 bytes, 
+    // decoded_text MUST be buffer with 8 bytes
+    // no buffer overflow check is done!
+    // encoded_text MUST have only 0s and 1s, otherwise behavior is not 
+    // predicted.
+    static string decode( const string &encoded_text, const string &key ) ;
 } ;
 
-#endif //DODSMySQLResult_h_
+#endif // I_CedarEncode_h
 

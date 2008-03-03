@@ -84,6 +84,8 @@ using std::endl ;
 #include "BESReturnManager.h"
 #include "BESTransmitterNames.h"
 
+#include "CedarMySQLDB.h"
+
 static bool
 CedarInit(int, char**)
 {
@@ -244,6 +246,10 @@ CedarInit(int, char**)
 	throw BESInternalError( err, __FILE__, __LINE__ ) ;
     }
 
+    if( BESLog::TheLog()->is_verbose() )
+	(*BESLog::TheLog()) << "    adding mysql database" << endl ;
+    CedarDB::Add_DB_Builder( "mysql", CedarMySQLDB::BuildMySQLDB ) ;
+
     return true ;
 }
 
@@ -279,6 +285,8 @@ CedarTerm(void)
 
     BESContainerStorageList::TheList()->del_persistence( PERSISTENCE_VOLATILE ) ;
     BESDefinitionStorageList::TheList()->del_persistence( PERSISTENCE_VOLATILE ) ;
+
+    CedarDB::Close() ;
 
     return true ;
 }

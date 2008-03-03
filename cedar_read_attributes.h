@@ -62,7 +62,7 @@ bool cedar_read_attributes( DAS &das, const string &filename,
   loads a single data record into a DAS object.
  
   By calling member methods of CedarDataRecord class in the Cedar api core
-  and methods from the DODS core, a Data Attribute object (DAS) is built.
+  and methods from the libdap core, a Data Attribute object (DAS) is built.
   Here lays the algorithm in which a data record parameters information is
   mapped to Attributes Tables. Even thought you may think this is the same
   as read_descriptors and load_dds (in fact we tried to keep the function

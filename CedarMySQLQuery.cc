@@ -1,4 +1,4 @@
-// DODSMySQLQuery.cc
+// CedarMySQLQuery.cc
 
 // This file is part of the OPeNDAP Cedar data handler, providing data
 // access views for CedarWEB data
@@ -34,13 +34,12 @@
 
 using std::bad_alloc ;
 
-#include "DODSMySQLQuery.h"
+#include "CedarMySQLQuery.h"
 #include "BESInternalFatalError.h"
-#include "DODSMySQLConnect.h"
+#include "CedarMySQLConnect.h"
 #include "BESInternalError.h"
-#include "DODSMySQLChannel.h"
 
-DODSMySQLQuery::DODSMySQLQuery(const string &server, const string &user,
+CedarMySQLQuery::CedarMySQLQuery(const string &server, const string &user,
 			       const string &password, const string &database,
 			       int mysql_port, const string &mysql_sock )
 {
@@ -49,7 +48,7 @@ DODSMySQLQuery::DODSMySQLQuery(const string &server, const string &user,
 
     try
     {
-	_my_connection = new DODSMySQLConnect ;
+	_my_connection = new CedarMySQLConnect ;
     }
     catch( bad_alloc::bad_alloc )
     {
@@ -70,7 +69,7 @@ DODSMySQLQuery::DODSMySQLQuery(const string &server, const string &user,
     }
 }
 
-DODSMySQLQuery::~DODSMySQLQuery()
+CedarMySQLQuery::~CedarMySQLQuery()
 {
     if( _results ) 
     {
@@ -83,7 +82,7 @@ DODSMySQLQuery::~DODSMySQLQuery()
 }
 
 void
-DODSMySQLQuery::run_query(const string &query)
+CedarMySQLQuery::run_query(const string &query)
 {
     MYSQL *sql_channel = _my_connection->get_channel() ;
     if( mysql_query( sql_channel, query.c_str() ) )
@@ -101,7 +100,7 @@ DODSMySQLQuery::run_query(const string &query)
 	int n_fields = mysql_num_fields( result ) ;
 	try
 	{
-	    _results = new DODSMySQLResult( n_rows, n_fields ) ;
+	    _results = new CedarMySQLResult( n_rows, n_fields ) ;
 	}
 	catch(bad_alloc::bad_alloc)
 	{

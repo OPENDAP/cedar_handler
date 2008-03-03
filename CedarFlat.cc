@@ -40,8 +40,8 @@ using std::cout ;
 
 #include "CedarFlat.h"
 
-CedarFlat::CedarFlat( bool is_http )
-    : BESTextInfo( "Cedar.Flat.Buffered", &cout, false, is_http )
+CedarFlat::CedarFlat( bool is_http, ostream *strm )
+    : BESTextInfo( "Cedar.Flat.Buffered", strm, false, is_http )
 {
 }
 

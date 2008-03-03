@@ -80,7 +80,7 @@ CedarHandlerApp::initialize( int argc, char **argv )
 int
 CedarHandlerApp::run()
 {
-    string my_key = "Cedar.Authenticate.MySQL.mode" ;
+    string my_key = "Cedar.Authenticate.Mode" ;
     TheBESKeys::TheKeys()->set_key( my_key, "off" ) ;
     BESCgiInterface d( CEDAR_NAME, *_df ) ;
     d.execute_request( "cedar" ) ;

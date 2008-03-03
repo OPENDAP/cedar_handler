@@ -47,7 +47,8 @@ InfoResponseHandler::~InfoResponseHandler( )
 void
 InfoResponseHandler::execute( BESDataHandlerInterface &dhi )
 {
-    _response = new CedarInfo( dhi.transmit_protocol == "HTTP" ) ;
+    _response = new CedarInfo( dhi.transmit_protocol == "HTTP",
+			       &(dhi.get_output_stream()) ) ;
     BESRequestHandlerList::TheList()->execute_each( dhi ) ;
 }
 

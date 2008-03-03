@@ -37,7 +37,7 @@
 
 class CedarTab : public BESTextInfo {
 public:
-  			CedarTab( bool ishttp ) ;
+  			CedarTab( bool ishttp, ostream *strm ) ;
     virtual 		~CedarTab() ;
 
     virtual void	dump( ostream &strm ) const ;

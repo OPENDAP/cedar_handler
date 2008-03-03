@@ -1,4 +1,4 @@
-// DODSMySQLQuery.h
+// CedarMySQLQuery.h
 
 // This file is part of the OPeNDAP Cedar data handler, providing data
 // access views for CedarWEB data
@@ -30,30 +30,30 @@
 //      pwest       Patrick West <pwest@ucar.edu>
 //      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
-#ifndef DODSMySQLQuery_h_
-#define DODSMySQLQuery_h_ 1
+#ifndef CedarMySQLQuery_h_
+#define CedarMySQLQuery_h_ 1
 
-#include "DODSMySQLResult.h"
+#include "CedarMySQLResult.h"
 #include "BESInternalError.h"
 
-class DODSMySQLConnect ;
+class CedarMySQLConnect ;
 
-class DODSMySQLQuery
+class CedarMySQLQuery
 {
 private:
-    DODSMySQLConnect *_my_connection;
-    DODSMySQLResult *_results;
-    DODSMySQLQuery(const DODSMySQLQuery &){}   //disable copy constructor
+    CedarMySQLConnect *_my_connection;
+    CedarMySQLResult *_results;
+    CedarMySQLQuery(const CedarMySQLQuery &){}   //disable copy constructor
     void empty_query()
     {
 	string s = "No results loaded for this query" ;
 	throw BESInternalError( s, __FILE__, __LINE__ ) ;
     }
 public:
-    DODSMySQLQuery( const string &server, const string &user,
+    CedarMySQLQuery( const string &server, const string &user,
 		    const string &password, const string &database,
 		    int mysql_port, const string &mysql_sock );
-    ~DODSMySQLQuery();
+    ~CedarMySQLQuery();
 
     void run_query(const string &query);
     string get_field()
@@ -108,5 +108,5 @@ public:
     }
 };
 
-#endif //   DODSMySQLQuery_h_
+#endif //   CedarMySQLQuery_h_
 

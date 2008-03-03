@@ -101,8 +101,6 @@ void load_das(DAS &das,CedarDataRecord *dr)
 {
     if (!logged(dr->get_record_kind_data()))
     { 
-	CedarReadKinst kin;
-	CedarReadParcods afx;
 	char tmp[100];
 	string info="";
 	string type="String";
@@ -116,7 +114,7 @@ void load_das(DAS &das,CedarDataRecord *dr)
 	AttrTable *t1;
 	t1=at->append_container("KINST"); 
 	info+="\"";
-	info+=kin.get_info(dr->get_record_kind_instrument());
+	info+=CedarReadKinst::Get_Instrument(dr->get_record_kind_instrument());
 	info+="\"";
 	string name="INST_";
 	name+=tmp;
@@ -145,11 +143,11 @@ void load_das(DAS &das,CedarDataRecord *dr)
 		    info="\"";
 		    name="PARAMETER_CODE_";
 		}
-		info+=afx.get_PCLNAM(val);
+		info+=CedarReadParcods::Get_Longname(val);
 		info+=" ";
-		info+=afx.get_PCSFCT(val);
+		info+=CedarReadParcods::Get_Scale(val);
 		info+=" ";
-		info+=afx.get_PCULBL(val);
+		info+=CedarReadParcods::Get_Unit_Label(val);
 		info+="\"";
 		CedarStringConversions::ltoa(val,tmp,10);
 		name+=tmp;
@@ -180,11 +178,11 @@ void load_das(DAS &das,CedarDataRecord *dr)
 		    info="\"";
 		    name="PARAMETER_CODE_";
 		}
-		info+=afx.get_PCLNAM(val);
+		info+=CedarReadParcods::Get_Longname(val);
 		info+=" ";
-		info+=afx.get_PCSFCT(val);
+		info+=CedarReadParcods::Get_Scale(val);
 		info+=" ";
-		info+=afx.get_PCULBL(val);
+		info+=CedarReadParcods::Get_Unit_Label(val);
 		info+="\"";
 		CedarStringConversions::ltoa(val,tmp,10);
 		name+=tmp;

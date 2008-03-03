@@ -188,8 +188,8 @@ void send_flat_data(CedarFlat &cf, CedarDataRecord &dr,CedarConstraintEvaluator 
 	{ 
 	    if (qa.validate_parameter(abs((*pJparVars)[w])))
 	    {
-		CedarReadParcods afx;
-		string element = (string)afx.get_PCSFCT((*pJparVars)[w]);// + string(" ") + (string) afx.get_PCULBL(pJparVars[w]);
+		string element =
+		(string)CedarReadParcods::Get_Scale((*pJparVars)[w]);// + string(" ") + (string) CedarReadParcods::Get_Unit_Label(pJparVars[w]);
 		print_blocked(oss, element);
 	    }
 	}
@@ -197,8 +197,8 @@ void send_flat_data(CedarFlat &cf, CedarDataRecord &dr,CedarConstraintEvaluator 
 	{ 
 	    if (qa.validate_parameter((*pMparVars)[y]))
 	    {
-		CedarReadParcods afx;
-		string element = (string)afx.get_PCSFCT(abs((*pMparVars)[y]));// + string(" ") + (string) afx.get_PCULBL(pMparVars[y]);
+		string element =
+		(string)CedarReadParcods::Get_Scale(abs((*pMparVars)[y]));// + string(" ") + (string) CedarReadParcods::Get_Unit_Label(pMparVars[y]);
 		print_blocked(oss, element);
 	    }
 	}
@@ -220,8 +220,7 @@ void send_flat_data(CedarFlat &cf, CedarDataRecord &dr,CedarConstraintEvaluator 
 	{ 
 	    if (qa.validate_parameter((*pJparVars)[w]))
 	    {
-		CedarReadParcods afx;
-		string element = (string) afx.get_PCULBL(abs((*pJparVars)[w]));
+		string element = (string) CedarReadParcods::Get_Unit_Label(abs((*pJparVars)[w]));
 		print_blocked(oss, element);
 	    }
 	}
@@ -229,8 +228,7 @@ void send_flat_data(CedarFlat &cf, CedarDataRecord &dr,CedarConstraintEvaluator 
 	{ 
 	    if (qa.validate_parameter((*pMparVars)[y]))
 	    {
-		CedarReadParcods afx;
-		string element = (string) afx.get_PCULBL(abs((*pMparVars)[y]));
+		string element = (string) CedarReadParcods::Get_Unit_Label(abs((*pMparVars)[y]));
 		print_blocked(oss, element);
 	    }
 	}

@@ -1,4 +1,4 @@
-// DODSMySQLResult.cc
+// CedarMySQLConnect.h
 
 // This file is part of the OPeNDAP Cedar data handler, providing data
 // access views for CedarWEB data
@@ -30,73 +30,43 @@
 //      pwest       Patrick West <pwest@ucar.edu>
 //      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
-#include "DODSMySQLResult.h"
+#ifndef CedarMySQLConnect_h_
+#define CedarMySQLConnect_h_ 1
 
-DODSMySQLResult::DODSMySQLResult( const int &n, const int &f )
-    : _nrows( n ),
-      _nfields( f )
-{
-    _matrix=new matrix ;
-    _matrix->reserve( _nrows ) ;
-    row r ;
-    r.reserve( _nfields ) ;
-    for( register int j=0; j<_nrows; j++ )
-	_matrix->push_back( r ) ;
-}
+#include <string>
 
-DODSMySQLResult::~DODSMySQLResult()
-{
-    delete _matrix;
-}
+using std::string ;
 
-void
-DODSMySQLResult::set_field( const char *s )
-{
-    string st = s ;
-    (*_matrix)[_row_position].push_back( st ) ;
-}
+#include <mysql.h>
 
-string
-DODSMySQLResult::get_field()
-{
-    return (*_matrix)[_row_position][_field_position];
-}
+class CedarMySQLQuery ;
 
-bool
-DODSMySQLResult::first_field()
+class CedarMySQLConnect
 {
-    if( _nfields > 0 )
-    {
-	_field_position = 0 ;
-	return true ;
-    }
-    return false ;
-}
+private:
+    string		_server, _user, _database, _mysql_sock ;
+    int			_mysql_port ;
+    string		_error ;
+    bool		_channel_open ;
+    bool		_has_log ;
+    MYSQL *		_the_channel ;
+    MYSQL		_mysql ;
+    int			_count ;
 
-bool
-DODSMySQLResult::next_field()
-{
-    if( ++_field_position < _nfields )
-	return true ;
-    return false ;
-}
+public:
+    			CedarMySQLConnect() ;
+			~CedarMySQLConnect() ;
+    void		open(const string &server, const string &user,
+			     const string &password, const string &database,
+			     int mysql_port, const string &mysql_sock ) ;
+    void		close ();
+    int			is_channel_open() const { return _channel_open ; }
+    string		get_error();
+    MYSQL *		get_channel() { return _the_channel ; }
+    string		get_server() { return _server ; }
+    string		get_user() { return _user ; }
+    string		get_database() { return _database ; }
+};
 
-bool
-DODSMySQLResult::next_row()
-{
-    if( ++_row_position < _nrows )
-	return true ;
-    return false ;
-}
-
-bool
-DODSMySQLResult::first_row()
-{
-    if( _nrows > 0 )
-    {
-	_row_position = 0 ;
-	return true ;
-    }
-    return false ;
-}
+#endif // CedarMySQLConnect_h_
 

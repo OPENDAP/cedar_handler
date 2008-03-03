@@ -1,4 +1,4 @@
-// DODSMySQLChannel.h
+// CedarDBResult.h
 
 // This file is part of the OPeNDAP Cedar data handler, providing data
 // access views for CedarWEB data
@@ -30,36 +30,43 @@
 //      pwest       Patrick West <pwest@ucar.edu>
 //      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
-#ifndef DODSMySQLChannel_h_ 
-#define DODSMySQLChannel_h_ 1
+#ifndef CedarDBResult_h_
+#define CedarDBResult_h_ 1
 
 #include <string>
-#include <mysql.h>
+#include <iostream>
 
 using std::string ;
+using std::ostream ;
 
+#include "BESObj.h"
 
-class DODSMySQLChannel
+class CedarDBResult : public BESObj
 {
 private:
-    string		_server, _user, _database ;
-    string		_error;
-    bool		_channel_open;
-    bool		_has_log;
-    MYSQL *		_the_channel;
-    MYSQL		_mysql;
-
+    				CedarDBResult( const CedarDBResult& )
+				    : _nrows( 0 ),
+				      _nfields( 0 ) {}
+protected:
+    int				_nrows ;
+    int				_nfields ;
+				CedarDBResult()
+				    : _nrows( 0 ),
+				      _nfields( 0 ) {}
+    				CedarDBResult( const int &n, const int &f )
+				    : _nrows( n ),
+				      _nfields( f ) {}
 public:
-    			DODSMySQLChannel();
-    			~DODSMySQLChannel();
+    				~CedarDBResult() {} ;
 
-    bool		open( const char* server, const char* user,
-			      const char* password, const char* database ) ;
-    void		close();
-    int			is_channel_open() const { return _channel_open ; }
-    string		get_error();
-    MYSQL *		get_channel() { return _the_channel ; }
-};
+    virtual bool		first_row() = 0 ;
+    virtual bool		next_row() = 0 ;
+    virtual bool		is_empty_set() { return _nrows == 0 ; }
+    virtual int			get_num_rows() { return _nrows ; }
+    virtual int			get_num_fields() { return _nfields ; }
+    virtual string		operator[]( const string &field ) = 0 ;
+    virtual void		dump( ostream &strm ) const = 0 ;
+} ;
 
-#endif // DODSMySQLChannel_h_
+#endif //CedarDBResult_h_
 

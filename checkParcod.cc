@@ -1,4 +1,4 @@
-// DODSMySQLConnect.h
+// checkParcod.cc
 
 // This file is part of the OPeNDAP Cedar data handler, providing data
 // access views for CedarWEB data
@@ -30,43 +30,48 @@
 //      pwest       Patrick West <pwest@ucar.edu>
 //      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
-#ifndef DODSMySQLConnect_h_
-#define DODSMySQLConnect_h_ 1
+#include <iostream>
 
-#include <string>
+using std::cout ;
+using std::endl ;
+using std::cerr ;
 
-using std::string ;
+#include "CedarReadParcods.h"
+#include "CedarMySQLDB.h"
+#include "BESError.h"
 
-#include <mysql.h>
-
-class DODSMySQLQuery ;
-
-class DODSMySQLConnect
+int
+main (int argc, char *argv[])
 {
-private:
-    string		_server, _user, _database, _mysql_sock ;
-    int			_mysql_port ;
-    string		_error ;
-    bool		_channel_open ;
-    bool		_has_log ;
-    MYSQL *		_the_channel ;
-    MYSQL		_mysql ;
-    int			_count ;
+    if( argv[1] == NULL )
+    {
+	cerr << "You must provide a number as a parameter id." << endl ;
+	return 1 ;
+    }
 
-public:
-    			DODSMySQLConnect() ;
-			~DODSMySQLConnect() ;
-    void		open(const string &server, const string &user,
-			     const string &password, const string &database,
-			     int mysql_port, const string &mysql_sock ) ;
-    void		close ();
-    int			is_channel_open() const { return _channel_open ; }
-    string		get_error();
-    MYSQL *		get_channel() { return _the_channel ; }
-    string		get_server() { return _server ; }
-    string		get_user() { return _user ; }
-    string		get_database() { return _database ; }
-};
+    try
+    {
+	CedarDB::Add_DB_Builder( "mysql", CedarMySQLDB::BuildMySQLDB ) ;
 
-#endif // DODSMySQLConnect_h_
+	int param_id = atoi( argv[1] ) ;
+	cout << "Input parameter code: " << param_id << endl ;
+	string long_name = CedarReadParcods::Get_Longname( param_id ) ;
+	cout << "Long Name: " << long_name << endl ;
+	string short_name = CedarReadParcods::Get_Shortname( param_id ) ;
+	cout << "Short Name: " << short_name << endl ;
+	string madrigal_name = CedarReadParcods::Get_Madrigalname( param_id ) ;
+	cout << "Madrigal Name: " << madrigal_name << endl ;
+	string scale = CedarReadParcods::Get_Scale( param_id ) ;
+	cout << "Multiplier: " << scale << endl ;
+	string unit = CedarReadParcods::Get_Unit_Label( param_id ) ;
+	cout << "Unit Label: " << unit << endl ;
+    }
+    catch( BESError &e )
+    {
+	cerr << e << endl ;
+	return 1 ;
+    }
+
+    return 0 ;
+}
 

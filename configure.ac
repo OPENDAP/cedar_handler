@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT([cedar-handler], [2.2.0], [dods-tech@unidata.ucar.edu])
+AC_INIT(cedar_handler, 2.2.0, dods-tech@unidata.ucar.edu)
 AC_CONFIG_AUX_DIR([conf])
 
 AM_INIT_AUTOMAKE
@@ -209,5 +209,5 @@ AC_DEFINE_UNQUOTED([HTTPS_PORT], [$HTTPS_PORT_VAL], [Define port cedar login is 
 
 OPENDAP_DEBUG_OPTION
 
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile unit-tests/Makefile testsuite/Makefile])
 AC_OUTPUT

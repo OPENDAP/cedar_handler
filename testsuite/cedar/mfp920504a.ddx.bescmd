@@ -1,0 +1,2 @@
+define d1 as mfp920504a;
+get ddx for d1;

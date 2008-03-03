@@ -40,8 +40,8 @@ using std::cout ;
 
 #include "CedarTab.h"
 
-CedarTab::CedarTab( bool ishttp )
-    : BESTextInfo( "Cedar.Tab.Buffered", &cout, false, ishttp )
+CedarTab::CedarTab( bool ishttp, ostream *strm )
+    : BESTextInfo( "Cedar.Tab.Buffered", strm, false, ishttp )
 {
 }
 

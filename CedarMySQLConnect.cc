@@ -1,4 +1,4 @@
-// DODSMySQLConnect.cc
+// CedarMySQLConnect.cc
 
 // This file is part of the OPeNDAP Cedar data handler, providing data
 // access views for CedarWEB data
@@ -34,12 +34,12 @@
 
 using std::endl ;
 
-#include "DODSMySQLConnect.h"
+#include "CedarMySQLConnect.h"
 #include "BESInternalError.h"
 #include "BESLog.h"
-#include "DODSEncode.h"
+#include "CedarEncode.h"
 
-DODSMySQLConnect::DODSMySQLConnect()
+CedarMySQLConnect::CedarMySQLConnect()
 {
     _count = 0 ;
     _channel_open = false ;
@@ -48,7 +48,7 @@ DODSMySQLConnect::DODSMySQLConnect()
     mysql_init( &_mysql ) ;
 }
 
-DODSMySQLConnect::~DODSMySQLConnect()
+CedarMySQLConnect::~CedarMySQLConnect()
 {
     if( _channel_open )
     {
@@ -66,7 +66,7 @@ DODSMySQLConnect::~DODSMySQLConnect()
 }
 
 void
-DODSMySQLConnect::open( const string &server, const string &user,
+CedarMySQLConnect::open( const string &server, const string &user,
 		        const string &password, const string &database,
 			int mysql_port, const string &mysql_sock )
 {
@@ -78,7 +78,7 @@ DODSMySQLConnect::open( const string &server, const string &user,
 	_database = database ;
 	_mysql_port = mysql_port ;
 	_mysql_sock = mysql_sock ;
-	string dp = DODSEncode::decode( password.c_str(), "disp_key" ) ;
+	string dp = CedarEncode::decode( password.c_str(), "disp_key" ) ;
 	_the_channel = mysql_real_connect( &_mysql, server.c_str(),
 					   user.c_str(), dp.c_str(),
 					   database.c_str(),
@@ -107,7 +107,7 @@ DODSMySQLConnect::open( const string &server, const string &user,
 }
 
 void
-DODSMySQLConnect::close()
+CedarMySQLConnect::close()
 {
     _count-- ;
     if( _count == 0 && _channel_open )
@@ -124,7 +124,7 @@ DODSMySQLConnect::close()
 }
 
 string
-DODSMySQLConnect::get_error()
+CedarMySQLConnect::get_error()
 {
     if( _channel_open )
 	_error = mysql_error( _the_channel ) ;      

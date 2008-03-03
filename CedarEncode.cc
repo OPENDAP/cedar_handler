@@ -1,4 +1,4 @@
-// DODSEncode.cc
+// CedarEncode.cc
 
 // This file is part of the OPeNDAP Cedar data handler, providing data
 // access views for CedarWEB data
@@ -39,10 +39,10 @@ using std::cerr ;
 using std::cout ;
 using std::endl ;
 
-#include "DODSEncode.h"
+#include "CedarEncode.h"
 
 char
-DODSEncode::sap_bit( unsigned char val, int pos )
+CedarEncode::sap_bit( unsigned char val, int pos )
 {
     int result ;
     if( ( pos > 7 ) ||( pos < 0 ) ) 
@@ -97,15 +97,15 @@ DODSEncode::sap_bit( unsigned char val, int pos )
 }
 
 void
-DODSEncode::my_encode( const char * text, const char *key, char *encoded_text )
+CedarEncode::my_encode( const char * text, const char *key, char *encoded_text )
 {
     char bit_control[64] ;
     char key_control[64] ;
     int j = 0 ;
     for( int i = 0 ; i<64 ; i++ )
     {
-	bit_control[i] = DODSEncode::sap_bit( text[i/8], j ) ;
-	key_control[i] = DODSEncode::sap_bit( key [i/8], j ) ;
+	bit_control[i] = CedarEncode::sap_bit( text[i/8], j ) ;
+	key_control[i] = CedarEncode::sap_bit( key [i/8], j ) ;
 	if( ++j == 8 ) j = 0 ;
     }
     setkey( key_control ) ;
@@ -118,7 +118,7 @@ DODSEncode::my_encode( const char * text, const char *key, char *encoded_text )
 }
 
 void
-DODSEncode::my_decode( const char * encoded_text, const char *key,
+CedarEncode::my_decode( const char * encoded_text, const char *key,
                        char *decoded_text )
 {
     char bit_control[64] ;
@@ -126,7 +126,7 @@ DODSEncode::my_decode( const char * encoded_text, const char *key,
     int j = 0 ;
     for( int i = 0 ; i<64 ; i++ )
     {
-	key_control[i] = DODSEncode::sap_bit( key[i/8], j ) ;
+	key_control[i] = CedarEncode::sap_bit( key[i/8], j ) ;
 	if( ++j == 8 ) j = 0 ;
 	if( encoded_text[i] == '0' ) bit_control[i] = '\0' ;
 	else if( encoded_text[i] == '1' ) bit_control[i] = '\1' ;
@@ -162,7 +162,7 @@ DODSEncode::my_decode( const char * encoded_text, const char *key,
 }
 
 void
-DODSEncode::encode( const char *text, const char *key, char *encoded_text )
+CedarEncode::encode( const char *text, const char *key, char *encoded_text )
 {
     // take the text and break it up into bits of 8
     // if size is less than 8 then pad with spaces
@@ -183,26 +183,26 @@ DODSEncode::encode( const char *text, const char *key, char *encoded_text )
 	    new_text[i] = ' ' ;
 	}
 	new_text[i] = '\0' ;
-	DODSEncode::my_encode( new_text, key, encoded_text ) ;
+	CedarEncode::my_encode( new_text, key, encoded_text ) ;
 	encoded_text[64] = '\0' ;
     }
     else if( strlen( text ) > 8 )
     {
-	DODSEncode::encode( text+8, key, encoded_text+64 ) ;
+	CedarEncode::encode( text+8, key, encoded_text+64 ) ;
 	char new_t[8] ;
 	strncpy( new_t, text, 8 ) ;
 	new_t[8] = '\0' ;
-	DODSEncode::my_encode( new_t, key, encoded_text ) ;
+	CedarEncode::my_encode( new_t, key, encoded_text ) ;
     }
     else
     {
-	DODSEncode::my_encode( text, key, encoded_text ) ;
+	CedarEncode::my_encode( text, key, encoded_text ) ;
 	encoded_text[64] = '\0' ;
     }
 }
 
 void
-DODSEncode::decode( const char * encoded_text, const char *key,
+CedarEncode::decode( const char * encoded_text, const char *key,
 		    char *decoded_text )
 {
     // take encoded_text. take 64 chars at a time and call my_decode with
@@ -210,11 +210,11 @@ DODSEncode::decode( const char * encoded_text, const char *key,
     string ets = encoded_text ;
     if( strlen( encoded_text ) > 64 )
     {
-	DODSEncode::decode( encoded_text+64, key, decoded_text+8 ) ;
+	CedarEncode::decode( encoded_text+64, key, decoded_text+8 ) ;
 	char new_et[64] ;
 	strncpy( new_et, encoded_text, 64 ) ;
 	new_et[64] = '\0' ;
-	DODSEncode::my_decode( new_et, key, decoded_text ) ;
+	CedarEncode::my_decode( new_et, key, decoded_text ) ;
     }
     else if( strlen( encoded_text ) < 64 )
     {
@@ -223,7 +223,7 @@ DODSEncode::decode( const char * encoded_text, const char *key,
     }
     else
     {
-	DODSEncode::my_decode( encoded_text, key, decoded_text ) ;
+	CedarEncode::my_decode( encoded_text, key, decoded_text ) ;
 	decoded_text[8] = '\0' ;
 	int i = 7 ;
 	while( decoded_text[i] == ' ' )
@@ -235,18 +235,18 @@ DODSEncode::decode( const char * encoded_text, const char *key,
 }
 
 string
-DODSEncode::encode( const string &text, const string &key )
+CedarEncode::encode( const string &text, const string &key )
 {
     char b1[2048] ;
-    DODSEncode::encode( text.c_str(), key.c_str(), b1 ) ;
+    CedarEncode::encode( text.c_str(), key.c_str(), b1 ) ;
     return b1 ;
 }
 
 string
-DODSEncode::decode( const string &encoded_text, const string &key )
+CedarEncode::decode( const string &encoded_text, const string &key )
 {
     char b2[2048] ;
-    DODSEncode::decode( encoded_text.c_str(), key.c_str(), b2 ) ;
+    CedarEncode::decode( encoded_text.c_str(), key.c_str(), b2 ) ;
     return b2 ;
 }
 

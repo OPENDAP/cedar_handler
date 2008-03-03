@@ -151,14 +151,13 @@ bool cedar_read_descriptors( DDS &dds, const string &filename,
 
 void get_name_for_parameter(string &str, int par)
 {
-    CedarReadParcods afx;
     str="";
     if (par<0)
     {
 	par=par*-1;
 	str="e_";
     }
-    string madnam=afx.get_MADNAM(par);
+    string madnam=CedarReadParcods::Get_Madrigalname(par);
     if (madnam=="")
     {
 	madnam="var_";

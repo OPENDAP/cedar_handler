@@ -1,0 +1,100 @@
+#!/bin/sh
+#
+# Run this after 'install' completes to edit the bes.conf scrip so that it
+# will be correctly configured for the handler and the sample data.
+#
+# Usage: bes-cedar-data.sh [<bes.conf file to modify> [<bes modules dir>]]
+
+bes_conf=${1:-"@sysconfdir@/bes/bes.conf"}
+bes_modules_dir=${2:-"@libdir@/bes"}
+
+# This script should take care to not add multiple entries for a handler.
+# For now, I'm going to hack it so that a comment is written at the start
+# of the file. This could be replaced by a better scheme, but probably not
+# without rewrinting this in Perl or ...
+
+if grep '^# Modified by bes-cedar-data\..*' $bes_conf >/dev/null 2>&1
+then
+	echo
+	echo "The bes-cedar-data script has already been run, not modifying"
+	echo "$bes_conf"
+	echo
+	exit
+else
+	echo "# Modified by bes-cedar-data.sh on `date`" >> $bes_conf
+fi
+
+# Add the handler name(s) to BES.modules
+handler=cedar
+
+sed "s%^\(BES.modules=.*\)%\1,$handler%" < $bes_conf > tmp.conf
+mv tmp.conf $bes_conf
+
+# Add the handler module line (e.g., BES.module.ff) to the conf file
+module="BES.module.cedar=$bes_modules_dir/libcedar_module.so"
+
+awk "BEGIN {bes_module_found=0}
+	 /^BES\.module\./ {bes_module_found=1}
+	 /^$/ && bes_module_found == 1 {print \"$module\"; bes_module_found=0}
+	 {print}" \
+	 < $bes_conf > tmp.conf
+mv tmp.conf $bes_conf
+
+# Set/append any handler-specific params.
+comment_01="# Cedar Handler specific parameters"
+comment_02="# Cedar.LogName - file to store cedar access information"
+comment_03="# Cedar.BaseDir - base directory where the cedar data resides"
+comment_04="# Cedar.LoginScreen.XML - file that contains the html page to"
+comment_05="#   display if login is needed"
+comment_06="# Cedar.Authenticate.Mode=on|off - should the server authenticate"
+comment_07="# Cedar.DB.Authenticate.Type=mysql - type of database to use"
+comment_08="# Cedar.DB.Authenticate.Server= - MySQL server (i.e. localhost)"
+comment_09="# Cedar.DB.Authenticate.User= - MySQL user name to connect to db"
+comment_10="# Cedar.DB.Authenticate.Password= - MySQL password for user to connect"
+comment_11="# Cedar.DB.Authenticate.Database= - MySQL database with session table"
+comment_12="# Cedar.DB.Authenticate.Socket= - MySQL unix socket used to connect"
+comment_13="# Cedar.DB.Authenticate.Port= - MySQL TCP Port used to connect, socket typically used"
+logname="Cedar.LogName=./cedar.log"
+basedir="Cedar.BaseDir=@datadir@/hyrax/data/cedar"
+screenxml="Cedar.LoginScreen.XML=./screen.xml"
+auth="Cedar.Authenticate.Mode=on"
+dbtype="Cedar.DB.Authenticate.Type=mysql"
+dbserver="Cedar.DB.Authenticate.Server=localhost"
+dbuser="Cedar.DB.Authenticate.User=root"
+dbpwd="Cedar.DB.Authenticate.Password="
+dbdb="Cedar.DB.Authenticate.Database="
+dbsocket="Cedar.DB.Authenticate.Socket=/tmp/mysql.sock"
+dbport="Cedar.DB.Authenticate.Port="
+
+
+awk "BEGIN {cedar_found=0}
+	/# Data Handler Specific/ {cedar_found=1}
+	/^$/ && cedar_found == 1 {print}
+	/^$/ && cedar_found == 1 {print \"$comment_01\"}
+	/^$/ && cedar_found == 1 {print \"$comment_02\"}
+	/^$/ && cedar_found == 1 {print \"$comment_03\"}
+	/^$/ && cedar_found == 1 {print \"$comment_04\"}
+	/^$/ && cedar_found == 1 {print \"$comment_05\"}
+	/^$/ && cedar_found == 1 {print \"$comment_06\"}
+	/^$/ && cedar_found == 1 {print \"$comment_07\"}
+	/^$/ && cedar_found == 1 {print \"$comment_08\"}
+	/^$/ && cedar_found == 1 {print \"$comment_09\"}
+	/^$/ && cedar_found == 1 {print \"$comment_10\"}
+	/^$/ && cedar_found == 1 {print \"$comment_11\"}
+	/^$/ && cedar_found == 1 {print \"$comment_12\"}
+	/^$/ && cedar_found == 1 {print \"$comment_13\"}
+	/^$/ && cedar_found == 1 {print \"$logname\"}
+	/^$/ && cedar_found == 1 {print \"$basedir\"}
+	/^$/ && cedar_found == 1 {print \"$screenxml\"}
+	/^$/ && cedar_found == 1 {print \"$auth\"}
+	/^$/ && cedar_found == 1 {print \"$dbtype\"}
+	/^$/ && cedar_found == 1 {print \"$dbserver\"}
+	/^$/ && cedar_found == 1 {print \"$dbuser\"}
+	/^$/ && cedar_found == 1 {print \"$dbpwd\"}
+	/^$/ && cedar_found == 1 {print \"$dbdb\"auth}
+	/^$/ && cedar_found == 1 {print \"$dbsocket\"}
+	/^$/ && cedar_found == 1 {print \"$dbport\"; cedar_found=0}
+	{print}" \
+	< $bes_conf > tmp.conf
+mv tmp.conf $bes_conf
+

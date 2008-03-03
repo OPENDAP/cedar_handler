@@ -1,0 +1,132 @@
+Attributes {
+    Data_Descriptor_for_KINDAT_7001_KINST_5340 {
+        KINST {
+            String INST_5340 "Millstone Hill Fabry-Perot             42.619       100          0.146    MFP";
+        }
+        JPAR_0 {
+            String PARAMETER_CODE_153 "Reference geod latitude (N hemi=pos) 1.E-02 deg";
+        }
+        JPAR_1 {
+            String PARAMETER_CODE_156 "Reference geodetic longitude 1.E-02 deg";
+        }
+        JPAR_2 {
+            String PARAMETER_CODE_2400 "Wavelength 1.E-01 nm";
+        }
+        JPAR_3 {
+            String PARAMETER_CODE_1010 "Geographic unit vector rotation angle 1.E-02 deg";
+        }
+        MPAR_0 {
+            String PARAMETER_CODE_10 "Year (universal time) 1. yr";
+        }
+        MPAR_1 {
+            String PARAMETER_CODE_21 "Day number of year (universal time) 1. day";
+        }
+        MPAR_2 {
+            String PARAMETER_CODE_34 "Time past 0000 UT 1.E-03 hour";
+        }
+        MPAR_3 {
+            String PARAMETER_CODE_130 "Mean azimuth angle (0=geog N,90=east) 1.E-02 deg";
+        }
+        MPAR_4 {
+            String PARAMETER_CODE_140 "Elevation angle (0=horizontal,90=vert) 1.E-02 deg";
+        }
+        MPAR_5 {
+            String PARAMETER_CODE_800 "Line of sight neutral vel (pos = away) 1. m/s";
+        }
+        MPAR_6 {
+            String ERROR_IN_PARAMETER_CODE_800 "Error in Line of sight neutral vel (pos = away) 1. m/s";
+        }
+        MPAR_7 {
+            String PARAMETER_CODE_810 "Neutral temperature 1. K";
+        }
+        MPAR_8 {
+            String ERROR_IN_PARAMETER_CODE_810 "Error in Neutral temperature 1. K";
+        }
+        MPAR_9 {
+            String PARAMETER_CODE_415 "No smpls in time avg; or 414 incremnt 1. ";
+        }
+        MPAR_10 {
+            String PARAMETER_CODE_2506 "log10 (Relative line/band brightness) 1.E-03 lg";
+        }
+        MPAR_11 {
+            String PARAMETER_CODE_421 "Reduced-chi square of fit 1.E-01 ";
+        }
+        MPAR_12 {
+            String PARAMETER_CODE_1420 "Direction 2 Neutral wind (northward) 1. m/s";
+        }
+        MPAR_13 {
+            String ERROR_IN_PARAMETER_CODE_1420 "Error in Direction 2 Neutral wind (northward) 1. m/s";
+        }
+        MPAR_14 {
+            String PARAMETER_CODE_1410 "Direction 1 Neutral wind (eastward) 1. m/s";
+        }
+        MPAR_15 {
+            String ERROR_IN_PARAMETER_CODE_1410 "Error in Direction 1 Neutral wind (eastward) 1. m/s";
+        }
+    }
+    Data_Descriptor_for_KINDAT_17001_KINST_5340 {
+        KINST {
+            String INST_5340 "Millstone Hill Fabry-Perot             42.619       100          0.146    MFP";
+        }
+        JPAR_0 {
+            String PARAMETER_CODE_153 "Reference geod latitude (N hemi=pos) 1.E-02 deg";
+        }
+        JPAR_1 {
+            String PARAMETER_CODE_156 "Reference geodetic longitude 1.E-02 deg";
+        }
+        JPAR_2 {
+            String PARAMETER_CODE_2400 "Wavelength 1.E-01 nm";
+        }
+        JPAR_3 {
+            String PARAMETER_CODE_1010 "Geographic unit vector rotation angle 1.E-02 deg";
+        }
+        JPAR_4 {
+            String PARAMETER_CODE_1020 "Magnetic unit vector rotation angle 1.E-02 deg";
+        }
+        JPAR_5 {
+            String PARAMETER_CODE_213 "Geomagnetic field east declination 1.E-02 deg";
+        }
+        MPAR_0 {
+            String PARAMETER_CODE_10 "Year (universal time) 1. yr";
+        }
+        MPAR_1 {
+            String PARAMETER_CODE_21 "Day number of year (universal time) 1. day";
+        }
+        MPAR_2 {
+            String PARAMETER_CODE_34 "Time past 0000 UT 1.E-03 hour";
+        }
+        MPAR_3 {
+            String PARAMETER_CODE_132 "Beginning azimuth (0=geog N,90=east) 1.E-02 deg";
+        }
+        MPAR_4 {
+            String PARAMETER_CODE_133 "Ending azimuth (0=geog N,90=east) 1.E-02 deg";
+        }
+        MPAR_5 {
+            String PARAMETER_CODE_140 "Elevation angle (0=horizontal,90=vert) 1.E-02 deg";
+        }
+        MPAR_6 {
+            String PARAMETER_CODE_1420 "Direction 2 Neutral wind (northward) 1. m/s";
+        }
+        MPAR_7 {
+            String ERROR_IN_PARAMETER_CODE_1420 "Error in Direction 2 Neutral wind (northward) 1. m/s";
+        }
+        MPAR_8 {
+            String PARAMETER_CODE_1410 "Direction 1 Neutral wind (eastward) 1. m/s";
+        }
+        MPAR_9 {
+            String ERROR_IN_PARAMETER_CODE_1410 "Error in Direction 1 Neutral wind (eastward) 1. m/s";
+        }
+        MPAR_10 {
+            String PARAMETER_CODE_1455 "Direction 5 Neutral wind horizontl comp 1. m/s";
+        }
+        MPAR_11 {
+            String ERROR_IN_PARAMETER_CODE_1455 "Error in Direction 5 Neutral wind horizontl comp 1. m/s";
+        }
+        MPAR_12 {
+            String PARAMETER_CODE_1440 "Direction 4 Neutral wind (perp east) 1. m/s";
+        }
+        MPAR_13 {
+            String ERROR_IN_PARAMETER_CODE_1440 "Error in Direction 4 Neutral wind (perp east) 1. m/s";
+        }
+    }
+}

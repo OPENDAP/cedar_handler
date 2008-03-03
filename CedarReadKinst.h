@@ -1,4 +1,4 @@
-// DODSEncode.h
+// CedarReadKinst.h
 
 // This file is part of the OPeNDAP Cedar data handler, providing data
 // access views for CedarWEB data
@@ -30,39 +30,41 @@
 //      pwest       Patrick West <pwest@ucar.edu>
 //      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
-#ifndef I_DODSEncode_h
-#define I_DODSEncode_h 1
+#ifndef CedarReadKinst_h_
+#define CedarReadKinst_h_ 1
 
+#include <map>
 #include <string>
 
+using std::map ;
 using std::string ;
 
-class DODSEncode
+class CedarReadKinst
 {
 private:
-    static char sap_bit(unsigned char val, int pos) ;
-    static void encode( const char * text, const char *key,
-		        char *encoded_text ) ;
-    static void my_encode( const char * text, const char *key,
-                           char *encoded_text ) ;
-    static void decode( const char * encoded_text, const char *key,
-		        char *decoded_text ) ;
-    static void my_decode( const char * encoded_text, const char *key,
-                           char *decoded_text ) ;
+    typedef struct _cedar_instrument
+    {
+	int kinst ;
+	string name ;
+	string prefix ;
+	double latitude ;
+	double longitude ;
+	double altitude ;
+    } CedarInstrument ;
 
+    static map<int,CedarReadKinst::CedarInstrument> stored_list ;
+
+				CedarReadKinst() {}
+    static void			Load_Instrument( int kinst ) ;
 public:
-    // text MUST be buffer of 8 bytes, key MUST be buffer with 8 bytes,
-    // encoded_text MUST be buffer with 64 bytes
-    // not buffer overflow check is done!
-    static string encode( const string &text, const string &key ) ;
+  /// Returns all the information for an instrument given its numeric id.
+    static string		Get_Instrument( int kinst ) ;
+    static string		Get_Name( int kinst ) ;
+    static string		Get_Prefix( int kinst ) ;
+    static double		Get_Longitude( int kinst ) ;
+    static double		Get_Latitude( int kinst ) ;
+    static double		Get_Altitude( int kinst ) ;
+};
 
-    // text MUST be buffer of 64 bytes, key MUST be buffer with 8 bytes, 
-    // decoded_text MUST be buffer with 8 bytes
-    // no buffer overflow check is done!
-    // encoded_text MUST have only 0s and 1s, otherwise behavior is not 
-    // predicted.
-    static string decode( const string &encoded_text, const string &key ) ;
-} ;
-
-#endif // I_DODSEncode_h
+#endif // CedarReadKinst_h_
 
