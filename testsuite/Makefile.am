@@ -19,7 +19,7 @@ noinst_DATA = bes.conf
 
 CLEANFILES = *.log *.sum site.exp
 
-EXTRA_DIST = wcs besstandalone.cedar common_tests.exp bes.conf.in
+EXTRA_DIST = cedar besstandalone.cedar common_tests.exp bes.conf.in
 
 DISTCLEANFILES = bes.conf
 

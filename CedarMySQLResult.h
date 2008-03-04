@@ -60,8 +60,8 @@ private:
 				    : _matrix( 0 ),
 				      _row_position( 0 ) {}
 public:
-    				CedarMySQLResult( const int &n_rows,
-					          const int &n_fields,
+    				CedarMySQLResult( const int n_rows,
+					          const int n_fields,
 					          const vector<string> &fields); 
     				~CedarMySQLResult() ;
 

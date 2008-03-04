@@ -53,7 +53,7 @@ protected:
 				CedarDBResult()
 				    : _nrows( 0 ),
 				      _nfields( 0 ) {}
-    				CedarDBResult( const int &n, const int &f )
+    				CedarDBResult( const int n, const int f )
 				    : _nrows( n ),
 				      _nfields( f ) {}
 public:

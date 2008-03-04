@@ -38,15 +38,17 @@ using std::endl ;
 
 #include "CedarMySQLResult.h"
 #include "BESInternalError.h"
+#include "BESDebug.h"
 
-CedarMySQLResult::CedarMySQLResult( const int &n, const int &f,
+CedarMySQLResult::CedarMySQLResult( const int n, const int f,
 				    const vector<string> &fields )
     : CedarDBResult( n, f ),
       _matrix( 0 ),
-      _fields( fields )
+      _fields( fields ),
+      _row_position( 0 )
 {
     _matrix = new matrix ;
-    _matrix->reserve( _nrows ) ;
+    _matrix->resize( _nrows ) ;
 }
 
 CedarMySQLResult::~CedarMySQLResult()

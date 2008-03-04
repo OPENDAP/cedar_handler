@@ -27,8 +27,6 @@ public:
 
     void setUp()
     {
-	string bes_conf = (string)"BES_CONF=" + TEST_SRC_DIR + "/bes.conf" ;
-	putenv( (char *)bes_conf.c_str() ) ;
     } 
 
     void tearDown()
@@ -43,6 +41,9 @@ public:
 
     void do_conversion()
     {
+	string bes_conf = (string)"BES_CONF=" + TEST_SRC_DIR + "/bes.conf" ;
+	putenv( (char *)bes_conf.c_str() ) ;
+
 	BESDebug::SetUp( "cerr,cedar" ) ;
 	try
 	{
