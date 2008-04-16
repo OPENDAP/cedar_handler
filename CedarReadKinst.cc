@@ -56,8 +56,10 @@ map<int,CedarReadKinst::CedarInstrument> CedarReadKinst::stored_list ;
  * information already exists, then just return the stored information, else
  * go get the information from the Catalog database.
  *
- * columns of the table needed are KINST, INST_NAME, PREFIX, LATITUDE,
- * LONGITUDE and ALT
+ * columns of the table needed are KINST, INST_NAME, PREFIX
+ *
+ * FIXME: With the re-work of the CEDARCATALOG, LATITUDE, LONGITUDE, and
+ * ALTITUDE are no win the tbl_site table, which is not yet populated
  *
  * @param kinst instrument id to look up
  */
@@ -78,7 +80,7 @@ CedarReadKinst::Load_Instrument( int kinst )
 	}
 
 	ostringstream query ;
-	query << "SELECT KINST, INST_NAME, PREFIX, LATITUDE, LONGITUDE, ALT from tbl_instrument where KINST = " << kinst ;
+	query << "SELECT KINST, INST_NAME, PREFIX from tbl_instrument where KINST = " << kinst ;
 	CedarDBResult *result = db->run_query( query.str() ) ;
 	if( !result )
 	{
@@ -108,9 +110,13 @@ CedarReadKinst::Load_Instrument( int kinst )
 	instrument.kinst = atoi( (*result)["KINST"].c_str() ) ;
 	instrument.name = (*result)["INST_NAME"] ;
 	instrument.prefix = (*result)["PREFIX"] ;
-	instrument.latitude = atof( (*result)["LATITUDE"].c_str() ) ;
-	instrument.longitude = atof( (*result)["LONGITUDE"].c_str() ) ;
-	instrument.altitude = atof( (*result)["ALT"].c_str() ) ;
+	// FIXME: When tbl_site filled in get the information from there
+	instrument.latitude = 0.0 ;
+	instrument.longitude = 0.0 ;
+	instrument.altitude = 0.0 ;
+	//instrument.latitude = atof( (*result)["LATITUDE"].c_str() ) ;
+	//instrument.longitude = atof( (*result)["LONGITUDE"].c_str() ) ;
+	//instrument.altitude = atof( (*result)["ALT"].c_str() ) ;
 	CedarReadKinst::stored_list[kinst] = instrument ;
 
 	db->close() ;
