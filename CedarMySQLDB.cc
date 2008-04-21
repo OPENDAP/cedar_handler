@@ -163,7 +163,10 @@ CedarMySQLDB::run_query( const string &query )
 	vector<string> result_row ;
 	for( int i=0; i<n_fields; i++ )
 	{
-	    result_row.push_back( row[i] ) ;
+	    if( row[i] )
+		result_row.push_back( row[i] ) ;
+	    else
+		result_row.push_back( "" ) ;
 	}
 	ret_result->set_row( result_row ) ;
 	ret_result->next_row() ;
