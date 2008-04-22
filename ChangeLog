@@ -1,3 +1,33 @@
+2008-04-22  Patrick West <pwest@ucar.edu>
+
+	If unable to access database to read instrument and parameter data,
+	exception was thrown of type BESError, but was being caught as an
+	unknown exception in the cedar_read_* functioons. Now catching
+	BESError.
+	M    configure.ac
+	M    cedar_read_info.cc
+	M    cedar_read_tab.cc
+	M    testsuite/bes.conf.in
+	M    testsuite/cedar/mfp920504a.das.bescmd.baseline
+	M    cedar_read_attributes.cc
+	M    unit-tests/bes.conf
+	M    cedar_read_flat.cc
+	M    cedar_read_descriptors.cc
+
+2008-04-21  Patrick West <pwest@ucar.edu>
+
+	If null value returned from database add an empty string.
+	M    COPYRIGHT
+	M    NEWS
+	M    ChangeLog
+	A    INSTALL
+	M    unit-tests/kinstT.cc
+	A    README
+	M    CedarMySQLDB.cc
+
+;; Local Variables:
+;; coding: utf-8
+;; End:
 2008-04-16  Patrick West <pwest@ucar.edu>
 
 	LATITUDE, LONGITUDE, and ALT no longer exist in the tbl_instrument

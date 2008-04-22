@@ -288,6 +288,7 @@ BES.DefaultResponseMethod=POST
 Cedar.LogName=./cedar.log
 Cedar.BaseDir=@datadir@/hyrax/data/cedar
 Cedar.LoginScreen.XML=
+
 Cedar.Authenticate.Mode=off
 Cedar.DB.Authenticate.Type=
 Cedar.DB.Authenticate.Server=
@@ -301,6 +302,6 @@ Cedar.DB.Catalog.Type=mysql
 Cedar.DB.Catalog.Server=
 Cedar.DB.Catalog.User=
 Cedar.DB.Catalog.Password=
-Cedar.DB.Catalog.Database=CEDARCATALOG
+Cedar.DB.Catalog.Database=
 Cedar.DB.Catalog.Socket=
 
