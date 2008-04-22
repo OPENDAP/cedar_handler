@@ -89,7 +89,7 @@ uninstall-local:
 	  rm -f "$(DESTDIR)$(pkglibdir)/$$f"; \
 	done
 
-EXTRA_DIST = COPYRIGHT COPYING $(MODOBJS) bes-cedar-data.sh.in data
+EXTRA_DIST = COPYRIGHT COPYING bes-cedar-data.sh.in cedar/cedar_help.html cedar/cedar_help.txt cedar/cedar_login.html data
 
 CLEANFILES = *~ $(MODOBJS) bes-cedar-data.sh
 

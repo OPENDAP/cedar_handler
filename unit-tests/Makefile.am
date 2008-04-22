@@ -18,14 +18,23 @@ noinst_HEADERS = test_config.h
 # This determines what gets run by 'make check.'
 TESTS = dbT authT kinstT parcodsT
 
-EXTRA_DIST = bes.conf test_config.h.in
+noinst_DATA = bes.conf
 
-DISTCLEANFILES = test_config.h
+EXTRA_DIST = bes.conf.in test_config.h.in
+
+DISTCLEANFILES = test_config.h bes.conf
 
 CLEANFILES = *.log *.sum real*
 
 test_config.h: test_config.h.in Makefile
 	sed -e "s%[@]srcdir[@]%${srcdir}%" $< > test_config.h
+
+bes.conf: bes.conf.in ../config.status
+	sed -e "s%[@]pkgdatadir[@]%${pkgdatadir}%" \
+		-e "s%[@]sysconfdir[@]%${sysconfdir}%" \
+		-e "s%[@]libdir[@]%${libdir}%" \
+		-e "s%[@]datadir[@]%${datadir}%" \
+		-e "s%[@]bindir[@]%${bindir}%" $< > bes.conf
 
 ############################################################################
 
