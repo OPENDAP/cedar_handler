@@ -46,6 +46,7 @@ using std::vector ;
 #include "cedar_read_descriptors.h"
 
 #include "CedarException.h"
+#include "BESError.h"
 #include "TheBESKeys.h"
 #include "cgi_util.h"
 
@@ -100,47 +101,27 @@ bool cedar_read_descriptors( DDS &dds, const string &filename,
     }
     catch (CedarException &cedarex)
     {
-	error = "The requested dataset is either corrupted or is not a cbf file\n" ;
-	error += "The following message is reported from the Cedar API:\n" ;
-	error += cedarex.get_description() ;
+	error = "The requested dataset produced the following exception: " ;
+	error += cedarex.get_description() + (string)"\n" ;
 	return false;
     }
-    catch(bad_alloc &)
+    catch( BESError &beserr )
     {
-	string max;
-	try
-	{
-	    bool found = false ;
-	    max = TheBESKeys::TheKeys()->get_key( "BES.Memory.GlobalArea.MaximunHeapSize", found ) ;
-	    if(max == "" )
-		max = "[can not determine at this time]" ;
-	}
-	catch(...)
-	{
-	    max = "[can not determine at this time]" ;
-	}
-	error = (string)"There has been a memory allocation problem "
-	      + "(bad_alloc).\n"
-	      + "Please contact the server administrator "
-	      + "with the following information:\n"
-	      + "The dataset " + filename
-	      + " is too large for the current server to handle.\n"
-	      + "This server is set to have a maximun heap size of "
-	      + max + "\n"
-	      + "The server administrator may either increase the maximun "
-	      + "heap size for the server or it may split the container "
-	      + "you are requesting in smaller blocks\n";
-	return false;
+	error = "The requested dataset produced the following exception: " ;
+	error += beserr.get_message() + (string)"\n" ;
+	return false ;
     }
-    catch(...)
+    catch (bad_alloc::bad_alloc)
     {
-	error = (string)"Undefined exception on server.\n"
-	      + "Please contact the server administrator with the "
-	      + "following information:\n"
-	      + "The dataset " + filename + " causes an undefined "
-	      + "exception on the server.\n" ;
-	return false;
+	error = "There has been a memory allocation error.\n" ;
+	return false ;
     }
+    catch (...)
+    {
+	error = "The requested dataset produces an unknown exception\n" ;
+	return false ;
+    }
+
 
     BaseType *bt = container.get() ;
     dds.add_var( bt ) ;

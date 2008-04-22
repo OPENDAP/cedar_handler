@@ -44,6 +44,7 @@ using std::ostringstream ;
 #include "cedar_read_descriptors.h"
 #include "CedarParameter.h"
 #include "CedarReadParcods.h"
+#include "BESError.h"
 
 // This is the size to right format string and pad them with blanks up to seven chars.
 #define PRINTING_BLOCK_SIZE 9 
@@ -373,9 +374,15 @@ int cedar_read_flat( CedarFlat &cf, const string &filename,
     }
     catch (CedarException &cedarex)
     {
-	error="The requested dataset produces the following exception ";
+	error="The requested dataset produces the following exception: ";
 	error+=cedarex.get_description() + (string)"\n";
 	return 0;
+    }
+    catch( BESError &beserr )
+    {
+	error = "The requested dataset produces the following exception: " ;
+	error += beserr.get_message() + (string)"\n" ;
+	return false ;
     }
     catch (bad_alloc::bad_alloc)
     {
@@ -384,7 +391,7 @@ int cedar_read_flat( CedarFlat &cf, const string &filename,
     }
     catch (...)
     {
-	error="There has been an undefined exception while executing the request.\n";
+	error="The requested dataset produces an unknown exception\n";
 	return 0;
     }
 

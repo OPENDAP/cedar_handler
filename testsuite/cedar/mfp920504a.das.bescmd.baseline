@@ -1,7 +1,7 @@
 Attributes {
     Data_Descriptor_for_KINDAT_7001_KINST_5340 {
         KINST {
-            String INST_5340 "Millstone Hill Fabry-Perot             42.619       100          0.146    MFP";
+            String INST_5340 "Millstone Hill Fabry-Perot             0            0            0        MFP";
         }
         JPAR_0 {
             String PARAMETER_CODE_153 "Reference geod latitude (N hemi=pos) 1.E-02 deg";
@@ -66,7 +66,7 @@ Attributes {
     }
     Data_Descriptor_for_KINDAT_17001_KINST_5340 {
         KINST {
-            String INST_5340 "Millstone Hill Fabry-Perot             42.619       100          0.146    MFP";
+            String INST_5340 "Millstone Hill Fabry-Perot             0            0            0        MFP";
         }
         JPAR_0 {
             String PARAMETER_CODE_153 "Reference geod latitude (N hemi=pos) 1.E-02 deg";

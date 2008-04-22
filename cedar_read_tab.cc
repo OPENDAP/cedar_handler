@@ -45,6 +45,7 @@ using std::ostringstream ;
 #include "cedar_read_tab_support.h"
 #include "CedarParameter.h"
 #include "CedarConstraintEvaluator.h"
+#include "BESError.h"
 
 struct _printable_parameter
 {
@@ -326,6 +327,12 @@ int cedar_read_tab( CedarTab &dt, const string &filename,
 	error+=cedarex.get_description() + (string)"\n";
 	return 0;
     }
+    catch( BESError &beserr )
+    {
+	error = "The requested dataset produces the following exception: " ;
+	error += beserr.get_message() + (string)"\n" ;
+	return 0 ;
+    }
     catch (bad_alloc::bad_alloc)
     {
 	error="There has been a memory allocation error.\n";
@@ -333,7 +340,7 @@ int cedar_read_tab( CedarTab &dt, const string &filename,
     }
     catch (...)
     {
-	error="There has been an undefined exception while executing the request.\n";
+	error="The requested dataset produces an unknown exception.\n";
 	return 0;
     }
 

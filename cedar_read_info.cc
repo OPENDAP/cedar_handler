@@ -33,7 +33,9 @@
 #include <string>
 #include <sstream>
 
+using std::string ;
 using std::ostringstream ;
+using std::bad_alloc ;
 
 #include "CedarBlock.h"
 #include "CedarFile.h"
@@ -42,6 +44,7 @@ using std::ostringstream ;
 #include "cedar_read_info.h"
 #include "CedarException.h"
 #include "CedarConstraintEvaluator.h"
+#include "BESError.h"
 
 void
 route_buffer( const CedarLogicalRecord *pLogRec, BESInfo &info )
@@ -133,8 +136,25 @@ cedar_read_info( BESInfo &info, const string &filename,
     }
     catch( CedarException &ex )
     {
-	error = ex.get_description() ;
+	error = "The requested dataset produces the following exception: " ;
+	error += ex.get_description() + (string)"\n" ;
 	return false ;
+    }
+    catch( BESError &beserr )
+    {
+	error = "The requested dataset produces the following exception: " ;
+	error += beserr.get_message() + (string)"\n" ;
+	return false ;
+    }
+    catch (bad_alloc::bad_alloc)
+    {
+	error="There has been a memory allocation error.\n";
+	return false;
+    }
+    catch (...)
+    {
+	error="The requested dataset produces an unknown exception\n";
+	return false;
     }
 
     return true ;

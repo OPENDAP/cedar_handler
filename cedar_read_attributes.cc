@@ -30,10 +30,10 @@
 //      pwest       Patrick West <pwest@ucar.edu>
 //      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <assert.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cctype>
+#include <cassert>
 #include <string>
 
 using std::string ;
@@ -43,6 +43,7 @@ using std::string ;
 #include "cedar_read_attributes.h"
 #include "CedarException.h"
 #include "CedarFile.h"
+#include "BESError.h"
 
 static const char STRING[]="String";
 static const char BYTE[]="Byte";
@@ -77,10 +78,27 @@ bool cedar_read_attributes( DAS &das, const string &filename, string &error )
     }
     catch (CedarException &cedarex)
     {
-	error="The requested dataset is either corrupted or is not a cbf file\n";
-	error+="Cedar API reports: " + (string)cedarex.get_description() + (string)"\n";
+	error = "The requested dataset produces the following exception: ";
+	error += cedarex.get_description() + (string)"\n" ;
 	return false;
     }
+    catch( BESError &beserr )
+    {
+	error = "The requested dataset produces the following exception: " ;
+	error += beserr.get_message() + (string)"\n" ;
+	return false ;
+    }
+    catch (bad_alloc::bad_alloc)
+    {
+	error="There has been a memory allocation error.\n";
+	return 0;
+    }
+    catch (...)
+    {
+	error="The requested dataset produces an unknown exception\n";
+	return 0;
+    }
+
 }
 
 int logged(int dat)
