@@ -1,7 +1,7 @@
 
 $Id: NEWS 14029 2006-06-29 18:10:44Z pwest $
 
-Version 2.2.0
+Version 2.3.0
 
 Kinst and parameter information is now retrieved from the database tables
 tbl_instrument and tbl_parameter_code.
