@@ -276,12 +276,6 @@ BES.DefaultResponseMethod=POST
 #                                                                       #
 #-----------------------------------------------------------------------#
 
-# HDF4 handler specific parameters
-# CacheDir: Cache directory used by the HDF4 data handler.
-# Suggestion: Consider making this '/tmp/bes'; see the comment at 
-# BES.CacheDir above.
-HDF4.CacheDir=/tmp
-
 # Cedar
 Cedar.DB.Authenticate.Type=mysql
 Cedar.DB.Authenticate.Server=
@@ -303,5 +297,3 @@ Cedar.BaseDir=/Users/pwest/opendap/data/cedar
 Cedar.LoginScreen.XML=./screen.xml
 
 # Modified by bes-dap-data.sh on Fri Feb 15 18:35:58 MST 2008
-# Modified by bes-nc-data.sh on Fri Feb 15 18:35:59 MST 2008
-# Modified by bes-hdf4-data.sh on Tue Feb 19 12:53:02 MST 2008

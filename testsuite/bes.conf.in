@@ -299,9 +299,9 @@ Cedar.DB.Authenticate.Socket=
 Cedar.DB.Authenticate.Port=
 
 Cedar.DB.Catalog.Type=mysql
-Cedar.DB.Catalog.Server=
+Cedar.DB.Catalog.Server=localhost
 Cedar.DB.Catalog.User=
 Cedar.DB.Catalog.Password=
-Cedar.DB.Catalog.Database=
+Cedar.DB.Catalog.Database=CEDARCATALOG
 Cedar.DB.Catalog.Socket=
 
