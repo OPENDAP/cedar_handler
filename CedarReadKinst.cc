@@ -123,13 +123,6 @@ CedarReadKinst::Load_Instrument( int kinst )
 		(string)"Query " + squery.str() + " failed to return results";
 	    throw BESInternalError( err, __FILE__, __LINE__ ) ;
 	}
-	if( result->is_empty_set() )
-	{
-	    db->close() ;
-	    string err =
-		(string)"Query " + squery.str() + " returned the empty set";
-	    throw BESInternalError( err, __FILE__, __LINE__ ) ;
-	}
 	if( result->get_num_rows() > 1 )
 	{
 	    db->close() ;

@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-using std::cerr ;
+using std::cout ;
 using std::endl ;
 
 #include "CedarReadKinst.h"
@@ -41,38 +41,104 @@ public:
 
     void do_conversion()
     {
+	cout << endl << "*****************************************" << endl;
+	cout << "Entered kinstT unit test do_conversion" << endl;
 	string bes_conf = (string)"BES_CONF=" + TEST_SRC_DIR + "/bes.conf" ;
 	putenv( (char *)bes_conf.c_str() ) ;
 
-	BESDebug::SetUp( "cerr,cedar" ) ;
+	BESDebug::SetUp( "cout,cedar" ) ;
 	try
 	{
+	    cout << endl << "*****************************************" << endl;
+	    cout << "adding MySQL database" << endl;
 	    CedarDB::Add_DB_Builder( "mysql", CedarMySQLDB::BuildMySQLDB ) ;
+	}
+	catch( BESError &e )
+	{
+	    cout << e << endl ;
+	    CPPUNIT_ASSERT( !"Caught BES exception" ) ;
+	}
 
+	try
+	{
+	    cout << endl << "*****************************************" << endl;
+	    cout << "retrieve instrument 5340 with site" << endl;
 	    string inst = CedarReadKinst::Get_Kinst_as_String( 5340 ) ;
-	    cerr << "instrument = " << inst << endl ;
+	    cout << "instrument = " << inst << endl ;
 	    CPPUNIT_ASSERT( inst == "5340" ) ;
 	    string name = CedarReadKinst::Get_Name( 5340 ) ;
-	    cerr << "name = " << name << endl ;
+	    cout << "name = " << name << endl ;
 	    CPPUNIT_ASSERT( name == "Millstone Hill Fabry-Perot" ) ;
 	    string prefix = CedarReadKinst::Get_Prefix( 5340 ) ;
-	    cerr << "prefix = " << prefix << endl ;
+	    cout << "prefix = " << prefix << endl ;
 	    CPPUNIT_ASSERT( prefix == "MFP" ) ;
 	    string lat = CedarReadKinst::Get_Latitude_as_String( 5340 ) ;
-	    cerr << "lat = " << lat << endl ;
+	    cout << "lat = " << lat << endl ;
 	    CPPUNIT_ASSERT( lat == "42 37'10\\\"" ) ;
 	    string lon = CedarReadKinst::Get_Longitude_as_String( 5340 ) ;
-	    cerr << "lon = " << lon << endl ;
+	    cout << "lon = " << lon << endl ;
 	    CPPUNIT_ASSERT( lon == "-72 30'29\\\"" ) ;
 	    string alt = CedarReadKinst::Get_Altitude_as_String( 5340 ) ;
-	    cerr << "alt = " << alt << endl ;
+	    cout << "alt = " << alt << endl ;
 	    CPPUNIT_ASSERT( alt == "0.146" ) ;
+	}
+	catch( BESError &e )
+	{
+	    cout << e << endl ;
+	    CPPUNIT_ASSERT( !"Caught BES exception" ) ;
+	}
 
+	try
+	{
+	    cout << endl << "*****************************************" << endl;
+	    cout << "retrieve instrument that doesn't exist" << endl;
+	    string inst = CedarReadKinst::Get_Kinst_as_String( 1 ) ;
+	    CPPUNIT_ASSERT( !"found the instrument, shouldn't have" ) ;
+	}
+	catch( BESError &e )
+	{
+	    cout << e << endl ;
+	    CPPUNIT_ASSERT( "Caught BES exception, good" ) ;
+	}
+
+	try
+	{
+	    cout << endl << "*****************************************" << endl;
+	    cout << "retrieve instrument 120 without a site" << endl;
+	    string inst = CedarReadKinst::Get_Kinst_as_String( 120 ) ;
+	    cout << "instrument = " << inst << endl ;
+	    CPPUNIT_ASSERT( inst == "120" ) ;
+	    string name = CedarReadKinst::Get_Name( 120 ) ;
+	    cout << "name = " << name << endl ;
+	    CPPUNIT_ASSERT( name == "Interplanetary Mag Fld and Solar Wind" ) ;
+	    string prefix = CedarReadKinst::Get_Prefix( 120 ) ;
+	    cout << "prefix = " << prefix << endl ;
+	    CPPUNIT_ASSERT( prefix == "IMF" ) ;
+	    string lat = CedarReadKinst::Get_Latitude_as_String( 120 ) ;
+	    cout << "lat = " << lat << endl ;
+	    CPPUNIT_ASSERT( lat == "0 00'00\\\"" ) ;
+	    string lon = CedarReadKinst::Get_Longitude_as_String( 120 ) ;
+	    cout << "lon = " << lon << endl ;
+	    CPPUNIT_ASSERT( lon == "0 00'00\\\"" ) ;
+	    string alt = CedarReadKinst::Get_Altitude_as_String( 120 ) ;
+	    cout << "alt = " << alt << endl ;
+	    CPPUNIT_ASSERT( alt == "0" ) ;
+	}
+	catch( BESError &e )
+	{
+	    cout << e << endl ;
+	    CPPUNIT_ASSERT( !"Caught BES exception" ) ;
+	}
+
+	try
+	{
+	    cout << endl << "*****************************************" << endl;
+	    cout << "Close the database" << endl;
 	    CedarDB::Close() ;
 	}
 	catch( BESError &e )
 	{
-	    cerr << e << endl ;
+	    cout << e << endl ;
 	    CPPUNIT_ASSERT( !"Caught BES exception" ) ;
 	}
     }
