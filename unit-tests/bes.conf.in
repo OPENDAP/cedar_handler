@@ -278,19 +278,19 @@ BES.DefaultResponseMethod=POST
 
 # Cedar
 Cedar.DB.Authenticate.Type=mysql
-Cedar.DB.Authenticate.Server=
-Cedar.DB.Authenticate.User=
-Cedar.DB.Authenticate.Password=
-Cedar.DB.Authenticate.Database=
-Cedar.DB.Authenticate.Socket=
+Cedar.DB.Authenticate.Server=localhost
+Cedar.DB.Authenticate.User=root
+Cedar.DB.Authenticate.Password=1010110110111010100011110111100111000101010100001000100110000100
+Cedar.DB.Authenticate.Database=wikidb
+Cedar.DB.Authenticate.Socket=/project/cedar/src/pwest/packages/mysql/mysql.sock
 Cedar.Authenticate.Mode=on
 
 Cedar.DB.Catalog.Type=mysql
-Cedar.DB.Catalog.Server=
-Cedar.DB.Catalog.User=
-Cedar.DB.Catalog.Password=
-Cedar.DB.Catalog.Database=
-Cedar.DB.Catalog.Socket=
+Cedar.DB.Catalog.Server=localhost
+Cedar.DB.Catalog.User=root
+Cedar.DB.Catalog.Password=1010110110111010100011110111100111000101010100001000100110000100
+Cedar.DB.Catalog.Database=CEDARCATALOG
+Cedar.DB.Catalog.Socket=/project/cedar/src/pwest/packages/mysql/mysql.sock
 
 Cedar.LogName=cedar.log
 Cedar.BaseDir=/Users/pwest/opendap/data/cedar

@@ -47,8 +47,12 @@ private:
 	int kinst ;
 	string name ;
 	string prefix ;
-	double latitude ;
-	double longitude ;
+	int lat_degrees ;
+	int lat_minutes ;
+	int lat_seconds ;
+	int lon_degrees ;
+	int lon_minutes ;
+	int lon_seconds ;
 	double altitude ;
     } CedarInstrument ;
 
@@ -58,12 +62,17 @@ private:
     static void			Load_Instrument( int kinst ) ;
 public:
   /// Returns all the information for an instrument given its numeric id.
-    static string		Get_Instrument( int kinst ) ;
+    static string		Get_Kinst_as_String( int kinst ) ;
     static string		Get_Name( int kinst ) ;
     static string		Get_Prefix( int kinst ) ;
-    static double		Get_Longitude( int kinst ) ;
-    static double		Get_Latitude( int kinst ) ;
+    static void			Get_Longitude( int kinst, int &degrees,
+					       int &minutes, int &seconds ) ;
+    static string		Get_Longitude_as_String( int kinst ) ;
+    static void			Get_Latitude( int kinst, int &degrees,
+					      int &minutes, int &seconds) ;
+    static string		Get_Latitude_as_String( int kinst ) ;
     static double		Get_Altitude( int kinst ) ;
+    static string		Get_Altitude_as_String( int kinst ) ;
 };
 
 #endif // CedarReadKinst_h_

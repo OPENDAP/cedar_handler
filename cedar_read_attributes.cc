@@ -120,9 +120,10 @@ void load_das(DAS &das,CedarDataRecord *dr)
     if (!logged(dr->get_record_kind_data()))
     { 
 	char tmp[100];
-	string info="";
-	string type="String";
-	string str="Data_Descriptor_for_KINDAT_";
+	string name = "" ;
+	string info = "" ;
+	string type = "String" ;
+	string str = "Data_Descriptor_for_KINDAT_" ;
 	CedarStringConversions::ltoa(dr->get_record_kind_data(),tmp,10);
 	str+=tmp;
 	str+="_KINST_";
@@ -131,24 +132,79 @@ void load_das(DAS &das,CedarDataRecord *dr)
 	AttrTable *at=new AttrTable(); 
 	AttrTable *t1;
 	t1=at->append_container("KINST"); 
-	info+="\"";
-	info+=CedarReadKinst::Get_Instrument(dr->get_record_kind_instrument());
-	info+="\"";
-	string name="INST_";
-	name+=tmp;
-	t1->append_attr(name, type, info);
+	// The KINST attribute table will contain the KINST, INST_NAME,
+	// PREFIX, LATITUDE, LONGITUDE, and ALTITUDE.
+
+	// KINST
+	int kinst = dr->get_record_kind_instrument() ;
+	string skinst = CedarReadKinst::Get_Kinst_as_String( kinst ) ;
+	info="\"" + skinst + "\"" ;
+	t1->append_attr( "KINST", type, info ) ;
+
+	// instrument name
+	info = "\"" + CedarReadKinst::Get_Name( kinst ) + "\"" ;
+	t1->append_attr( "NAME", type, info ) ;
+
+	// instrument prefix
+	info = "\"" + CedarReadKinst::Get_Prefix( kinst ) + "\"" ;
+	t1->append_attr( "PREFIX", type, info ) ;
+
+	// latitude
+	info = "\"" + CedarReadKinst::Get_Latitude_as_String( kinst ) + "\"" ;
+	t1->append_attr( "LATITUDE", type, info ) ;
+
+	// longitude
+	info = "\"" + CedarReadKinst::Get_Longitude_as_String( kinst ) + "\"" ;
+	t1->append_attr( "LONGITUDE", type, info ) ;
+
+	// altitude
+	info = "\"" + CedarReadKinst::Get_Altitude_as_String( kinst ) + "\"" ;
+	t1->append_attr( "ALTITUDE", type, info ) ;
+
+	// get jpar attributes
 	int njpar=dr->get_jpar();
 	auto_ptr<vector<short int> > jparvars( new vector<short int>(njpar));
 	if (jparvars.get())
 	{
+	    // For each of the jpar parameters there will be the code,
+	    // longname, scale, and units.
 	    dr->load_JPAR_vars(*jparvars);
 	    for (int i=0; i<njpar; i++)
 	    {
-		int val;
 		string nm="JPAR_";
 		CedarStringConversions::ltoa(i,tmp,10);
 		nm+=tmp;
 		t1=at->append_container(nm);
+
+		int code = (*jparvars.get())[i] ;
+
+		// get the parameter code
+		string scode = CedarReadParcods::Get_Code_as_String( code ) ;
+		info = "\"" + scode + "\"" ;
+		t1->append_attr( "CODE", type, info ) ;
+
+		// short name
+		string sname = CedarReadParcods::Get_Shortname( code ) ;
+		info = "\"" + sname + "\"" ;
+		t1->append_attr( "SHORTNAME", type, info ) ;
+
+		// long name
+		string lname = CedarReadParcods::Get_Longname( code ) ;
+		info = "\"" + lname + "\"" ;
+		t1->append_attr( "LONGNAME", type, info ) ;
+
+		// scale
+		string scale = CedarReadParcods::Get_Scale( code ) ;
+		info = "\"" + scale + "\"" ;
+		t1->append_attr( "SCALE", type, info ) ;
+
+		// units
+		string unit = CedarReadParcods::Get_Unit_Label( code ) ;
+		info = "\"" + unit + "\"" ;
+		t1->append_attr( "UNIT", type, info ) ;
+
+		/*
+		int val;
 		if ((*jparvars.get())[i]<0)
 		{
 		    val=(*jparvars.get())[i]*-1;
@@ -170,8 +226,11 @@ void load_das(DAS &das,CedarDataRecord *dr)
 		CedarStringConversions::ltoa(val,tmp,10);
 		name+=tmp;
 		t1->append_attr(name, type,info);
+		*/
 	    }
 	}
+
+	// mpar parameter attributes
 	int nmpar=dr->get_mpar();
 	auto_ptr<vector<short int> > mparvars( new vector<short int>(nmpar) );
 	if (mparvars.get())
@@ -179,11 +238,40 @@ void load_das(DAS &das,CedarDataRecord *dr)
 	    dr->load_MPAR_vars(*mparvars);
 	    for (int i=0; i<nmpar; i++)
 	    {
-		int val;
 		string nm="MPAR_";
 		CedarStringConversions::ltoa(i,tmp,10);
 		nm+=tmp;
 		t1=at->append_container(nm);
+
+		int code = (*mparvars.get())[i] ;
+
+		// get the parameter code
+		string scode = CedarReadParcods::Get_Code_as_String( code ) ;
+		info = "\"" + scode + "\"" ;
+		t1->append_attr( "CODE", type, info ) ;
+
+		// short name
+		string sname = CedarReadParcods::Get_Shortname( code ) ;
+		info = "\"" + sname + "\"" ;
+		t1->append_attr( "SHORTNAME", type, info ) ;
+
+		// long name
+		string lname = CedarReadParcods::Get_Longname( code ) ;
+		info = "\"" + lname + "\"" ;
+		t1->append_attr( "LONGNAME", type, info ) ;
+
+		// scale
+		string scale = CedarReadParcods::Get_Scale( code ) ;
+		info = "\"" + scale + "\"" ;
+		t1->append_attr( "SCALE", type, info ) ;
+
+		// units
+		string unit = CedarReadParcods::Get_Unit_Label( code ) ;
+		info = "\"" + unit + "\"" ;
+		t1->append_attr( "UNIT", type, info ) ;
+
+		/*
+		int val;
 		if ((*mparvars.get())[i]<0)
 		{
 		    val=(*mparvars.get())[i]*-1;
@@ -205,6 +293,7 @@ void load_das(DAS &das,CedarDataRecord *dr)
 		CedarStringConversions::ltoa(val,tmp,10);
 		name+=tmp;
 		t1->append_attr(name, type,info);
+		*/
 	    }
 	}
 	das.add_table(str, at);

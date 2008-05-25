@@ -111,6 +111,23 @@ CedarReadParcods::Load_Parameter( int param_id )
 }
 
 string
+CedarReadParcods::Get_Code_as_String( int param_id )
+{
+    CedarReadParcods::Load_Parameter( param_id ) ;
+    map<int,CedarReadParcods::CedarParameter>::iterator iter ;
+    iter = CedarReadParcods::stored_list.find( param_id ) ;
+    if( iter == CedarReadParcods::stored_list.end() )
+    {
+	ostringstream err ;
+	err << "Failed to retrieve param code for param " << param_id ;
+	throw BESInternalError( err.str(), __FILE__, __LINE__ ) ;
+    }
+    ostringstream strm ;
+    strm << param_id ;
+    return strm.str() ;
+}
+
+string
 CedarReadParcods::Get_Shortname( int param_id )
 {
     CedarReadParcods::Load_Parameter( param_id ) ;

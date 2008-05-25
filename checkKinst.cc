@@ -54,8 +54,17 @@ main (int argc, char *argv[])
 	CedarDB::Add_DB_Builder( "mysql", CedarMySQLDB::BuildMySQLDB ) ;
 
 	int kinst = atoi( argv[1] ) ;
-	string instrument = CedarReadKinst::Get_Instrument( kinst ) ;
-	cout << instrument << endl ;
+	string name = CedarReadKinst::Get_Name( kinst ) ;
+	string prefix = CedarReadKinst::Get_Prefix( kinst ) ;
+	string latitude = CedarReadKinst::Get_Latitude_as_String( kinst ) ;
+	string longitude = CedarReadKinst::Get_Longitude_as_String( kinst ) ;
+	string altitude = CedarReadKinst::Get_Altitude_as_String( kinst ) ;
+	cout << kinst << endl
+	     << "  name: " << name << endl
+	     << "  prefix: " << prefix << endl
+	     << "  latitude: " << latitude << endl
+	     << "  longitude: " << longitude << endl
+	     << "  altitude: " << altitude << endl ;
     }
     catch( BESError &e )
     {

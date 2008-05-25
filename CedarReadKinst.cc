@@ -40,6 +40,7 @@ using std::setw ;
 using std::setprecision ;
 using std::setfill ;
 using std::left ;
+using std::right ;
 
 #include "CedarReadKinst.h"
 #include "CedarDB.h"
@@ -79,28 +80,28 @@ CedarReadKinst::Load_Instrument( int kinst )
 	    throw BESInternalError( err, __FILE__, __LINE__ ) ;
 	}
 
-	ostringstream query ;
-	query << "SELECT KINST, INST_NAME, PREFIX from tbl_instrument where KINST = " << kinst ;
-	CedarDBResult *result = db->run_query( query.str() ) ;
+	ostringstream iquery ;
+	iquery << "SELECT KINST, INST_NAME, PREFIX from tbl_instrument where KINST = " << kinst ;
+	CedarDBResult *result = db->run_query( iquery.str() ) ;
 	if( !result )
 	{
 	    db->close() ;
 	    string err =
-		(string)"Query " + query.str() + " failed to return results";
+		(string)"Query " + iquery.str() + " failed to return results";
 	    throw BESInternalError( err, __FILE__, __LINE__ ) ;
 	}
 	if( result->is_empty_set() )
 	{
 	    db->close() ;
 	    string err =
-		(string)"Query " + query.str() + " returned the empty set";
+		(string)"Query " + iquery.str() + " returned the empty set";
 	    throw BESInternalError( err, __FILE__, __LINE__ ) ;
 	}
 	if( result->get_num_rows() != 1 )
 	{
 	    db->close() ;
 	    string err =
-		(string)"Query " + query.str() + " returned too many results";
+		(string)"Query " + iquery.str() + " returned too many results";
 	    throw BESInternalError( err, __FILE__, __LINE__ ) ;
 	}
 
@@ -110,13 +111,51 @@ CedarReadKinst::Load_Instrument( int kinst )
 	instrument.kinst = atoi( (*result)["KINST"].c_str() ) ;
 	instrument.name = (*result)["INST_NAME"] ;
 	instrument.prefix = (*result)["PREFIX"] ;
-	// FIXME: When tbl_site filled in get the information from there
-	instrument.latitude = 0.0 ;
-	instrument.longitude = 0.0 ;
+	delete result ;
+
+	ostringstream squery ;
+	squery << "SELECT LAT_DEGREES, LAT_MINUTES, LAT_SECONDS, LON_DEGREES, LON_MINUTES, LON_SECONDS, ALT from tbl_site where KINST = " << kinst ;
+	result = db->run_query( squery.str() ) ;
+	if( !result )
+	{
+	    db->close() ;
+	    string err =
+		(string)"Query " + squery.str() + " failed to return results";
+	    throw BESInternalError( err, __FILE__, __LINE__ ) ;
+	}
+	if( result->is_empty_set() )
+	{
+	    db->close() ;
+	    string err =
+		(string)"Query " + squery.str() + " returned the empty set";
+	    throw BESInternalError( err, __FILE__, __LINE__ ) ;
+	}
+	if( result->get_num_rows() > 1 )
+	{
+	    db->close() ;
+	    string err =
+		(string)"Query " + squery.str() + " returned too many results";
+	    throw BESInternalError( err, __FILE__, __LINE__ ) ;
+	}
+
+	instrument.lat_degrees = 0 ;
+	instrument.lat_minutes = 0 ;
+	instrument.lat_seconds = 0 ;
+	instrument.lon_degrees = 0 ;
+	instrument.lon_minutes = 0 ;
+	instrument.lon_seconds = 0 ;
 	instrument.altitude = 0.0 ;
-	//instrument.latitude = atof( (*result)["LATITUDE"].c_str() ) ;
-	//instrument.longitude = atof( (*result)["LONGITUDE"].c_str() ) ;
-	//instrument.altitude = atof( (*result)["ALT"].c_str() ) ;
+	if( result->get_num_rows() == 1 )
+	{
+	    result->first_row() ;
+	    instrument.lat_degrees = atoi( (*result)["LAT_DEGREES"].c_str() ) ;
+	    instrument.lat_minutes = atoi( (*result)["LAT_MINUTES"].c_str() ) ;
+	    instrument.lat_seconds = atoi( (*result)["LAT_SECONDS"].c_str() ) ;
+	    instrument.lon_degrees = atoi( (*result)["LON_DEGREES"].c_str() ) ;
+	    instrument.lon_minutes = atoi( (*result)["LON_MINUTES"].c_str() ) ;
+	    instrument.lon_seconds = atoi( (*result)["LON_SECONDS"].c_str() ) ;
+	    instrument.altitude = atof( (*result)["ALT"].c_str() ) ;
+	}
 	CedarReadKinst::stored_list[kinst] = instrument ;
 
 	db->close() ;
@@ -124,7 +163,7 @@ CedarReadKinst::Load_Instrument( int kinst )
 }
 
 string
-CedarReadKinst::Get_Instrument( int kinst )
+CedarReadKinst::Get_Kinst_as_String( int kinst )
 {
     CedarReadKinst::Load_Instrument( kinst ) ;
     map<int,CedarReadKinst::CedarInstrument>::iterator iter ;
@@ -132,19 +171,11 @@ CedarReadKinst::Get_Instrument( int kinst )
     if( iter == CedarReadKinst::stored_list.end() )
     {
 	ostringstream err ;
-	err << "Failed to retrieve information for kinst " << kinst ;
+	err << "Failed to retrieve instrument kinst for kinst " << kinst ;
 	throw BESInternalError( err.str(), __FILE__, __LINE__ ) ;
     }
-
     ostringstream strm ;
-    strm << left << setw( 39 ) << setfill( ' ' ) << iter->second.name ;
-    strm << left << setprecision( 5 ) << setw( 13 ) << setfill( ' ' )
-	 << iter->second.latitude ;
-    strm << left << setprecision( 5 ) << setw( 13 ) << setfill( ' ' )
-	 << iter->second.longitude ;
-    strm << left << setprecision( 5 ) << setw( 9 ) << setfill( ' ' )
-	 << iter->second.altitude ;
-    strm << left << setw( 3 ) << setfill( ' ' ) << iter->second.prefix ;
+    strm << kinst ;
     return strm.str() ;
 }
 
@@ -178,8 +209,9 @@ CedarReadKinst::Get_Prefix( int kinst )
     return iter->second.prefix ;
 }
 
-double
-CedarReadKinst::Get_Longitude( int kinst )
+void
+CedarReadKinst::Get_Longitude( int kinst,
+			       int &degrees, int &minutes, int &seconds )
 {
     CedarReadKinst::Load_Instrument( kinst ) ;
     map<int,CedarReadKinst::CedarInstrument>::iterator iter ;
@@ -190,11 +222,28 @@ CedarReadKinst::Get_Longitude( int kinst )
 	err << "Failed to retrieve instrument longitude for kinst " << kinst ;
 	throw BESInternalError( err.str(), __FILE__, __LINE__ ) ;
     }
-    return iter->second.longitude ;
+    degrees = iter->second.lon_degrees ;
+    minutes = iter->second.lon_minutes ;
+    seconds = iter->second.lon_seconds ;
 }
 
-double
-CedarReadKinst::Get_Latitude( int kinst )
+string
+CedarReadKinst::Get_Longitude_as_String( int kinst )
+{
+    // first, get the longitude. If the kinst doesn't exist, then calling
+    // Get_Longitude will throw an exception, no need to check here.
+    int degrees, minutes, seconds = 0 ;
+    CedarReadKinst::Get_Longitude( kinst, degrees, minutes, seconds ) ;
+    ostringstream strm ;
+    strm << degrees << " " ;
+    strm << setw( 2 ) << setfill( '0' ) << minutes << "'" ;
+    strm << setw( 2 ) << setfill( '0' ) << seconds << "\\\"" ;
+    return strm.str() ;
+}
+
+void
+CedarReadKinst::Get_Latitude( int kinst,
+			      int &degrees, int &minutes, int &seconds )
 {
     CedarReadKinst::Load_Instrument( kinst ) ;
     map<int,CedarReadKinst::CedarInstrument>::iterator iter ;
@@ -205,7 +254,23 @@ CedarReadKinst::Get_Latitude( int kinst )
 	err << "Failed to retrieve instrument latitude for kinst " << kinst ;
 	throw BESInternalError( err.str(), __FILE__, __LINE__ ) ;
     }
-    return iter->second.latitude ;
+    degrees = iter->second.lat_degrees ;
+    minutes = iter->second.lat_minutes ;
+    seconds = iter->second.lat_seconds ;
+}
+
+string
+CedarReadKinst::Get_Latitude_as_String( int kinst )
+{
+    // first, get the longitude. If the kinst doesn't exist, then calling
+    // Get_Latitude will throw an exception, no need to check here.
+    int degrees, minutes, seconds = 0 ;
+    CedarReadKinst::Get_Latitude( kinst, degrees, minutes, seconds ) ;
+    ostringstream strm ;
+    strm << degrees << " " ;
+    strm << setw( 2 ) << setfill( '0' ) << minutes << "'" ;
+    strm << setw( 2 ) << setfill( '0' ) << seconds << "\\\"" ;
+    return strm.str() ;
 }
 
 double
@@ -221,5 +286,16 @@ CedarReadKinst::Get_Altitude( int kinst )
 	throw BESInternalError( err.str(), __FILE__, __LINE__ ) ;
     }
     return iter->second.altitude ;
+}
+
+string
+CedarReadKinst::Get_Altitude_as_String( int kinst )
+{
+    // first, get the altitude. If the kinst doesn't exist then calling
+    // Get_Altitude will throw an exception, no need to check here.
+    double alt = CedarReadKinst::Get_Altitude( kinst ) ;
+    ostringstream strm ;
+    strm << setprecision( 5 ) << alt ;
+    return strm.str() ;
 }
 

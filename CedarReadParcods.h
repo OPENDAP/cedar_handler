@@ -57,6 +57,7 @@ private:
 				CedarReadParcods() {}
     static void			Load_Parameter( int param_id ) ;
 public:
+    static string		Get_Code_as_String( int param_id ) ;
     static string		Get_Shortname( int param_id ) ;
     static string		Get_Longname( int param_id ) ;
     static string		Get_Madrigalname( int param_id ) ;
