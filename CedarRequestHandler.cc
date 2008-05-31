@@ -43,6 +43,7 @@
 #include "cedar_read_descriptors.h"
 #include "BESDDSResponse.h"
 #include "BESDataDDSResponse.h"
+#include "Ancillary.h"
 #include "cedar_read_tab.h"
 #include "CedarTab.h"
 #include "cedar_read_flat.h"
@@ -108,6 +109,7 @@ CedarRequestHandler::cedar_build_das( BESDataHandlerInterface &dhi )
 	{
 	    throw BESInternalError( cedar_error, __FILE__, __LINE__ ) ;
 	}
+	Ancillary::read_ancillary_das( *das, container ) ;
     }
     catch( BESError &e ) {
 	throw e ;
@@ -144,14 +146,28 @@ CedarRequestHandler::cedar_build_dds( BESDataHandlerInterface &dhi )
     try
     {
 	string cedar_error ;
-	string container = dhi.container->access() ;
-	if( !cedar_read_descriptors( *dds, container,
+	string accessed = dhi.container->access() ;
+	if( !cedar_read_descriptors( *dds, accessed,
 				     dhi.container->get_symbolic_name(),
 				     dhi.container->get_constraint(),
 				     cedar_error ) )
 	{
 	    throw BESInternalError( cedar_error, __FILE__, __LINE__ ) ;
 	}
+	Ancillary::read_ancillary_dds( *dds, accessed ) ;
+
+	// The dds now includes attribute information. Read the attributes,
+	// including any ancillary attributes
+	DAS das ;
+	if( !cedar_read_attributes( das, accessed, cedar_error ) )
+	{
+	    throw BESInternalError( cedar_error, __FILE__, __LINE__ ) ;
+	}
+	Ancillary::read_ancillary_das( das, accessed ) ;
+
+	// transfer the attributes to the dds.
+	dds->transfer_attributes(&das);
+
 	dhi.data[POST_CONSTRAINT] = "" ;
     }
     catch( BESError &e ) {
@@ -185,13 +201,28 @@ CedarRequestHandler::cedar_build_data( BESDataHandlerInterface &dhi )
     try
     {
 	string cedar_error ;
-	if( !cedar_read_descriptors( *dds, dhi.container->access(),
+	string accessed = dhi.container->access() ;
+	if( !cedar_read_descriptors( *dds, accessed,
 				     dhi.container->get_symbolic_name(),
 				     dhi.container->get_constraint(),
 				     cedar_error ) )
 	{
 	    throw BESInternalError( cedar_error, __FILE__, __LINE__ ) ;
 	}
+	Ancillary::read_ancillary_dds( *dds, accessed ) ;
+
+	// The dds now includes attribute information. Read the attributes,
+	// including any ancillary attributes
+	DAS das ;
+	if( !cedar_read_attributes( das, accessed, cedar_error ) )
+	{
+	    throw BESInternalError( cedar_error, __FILE__, __LINE__ ) ;
+	}
+	Ancillary::read_ancillary_das( das, accessed ) ;
+
+	// transfer the attributes to the dds.
+	dds->transfer_attributes(&das);
+
 	dhi.data[POST_CONSTRAINT] = "" ;
     }
     catch( BESError &e ) {
