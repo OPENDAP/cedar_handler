@@ -34,9 +34,12 @@
 #include "BESInternalError.h"
 #include "BESDataNames.h"
 #include "CedarDB.h"
+#include "TheBESKeys.h"
+#include "BESLog.h"
 
 CedarReporter::CedarReporter()
-    : BESReporter()
+    : BESReporter(),
+      _file_buffer( 0 )
 {
     _db = CedarDB::DB( "Reporter" ) ;
     if( !_db )
@@ -44,21 +47,63 @@ CedarReporter::CedarReporter()
 	string s = "Unable to open Cedar Reporter database" ;
 	throw BESInternalError( s, __FILE__, __LINE__ ) ;
     }
+
+    // If we are unable to log to the cedar reporter database then we will
+    // log to the cedar log file. Not both!
+    bool found = false ;
+    _log_name = TheBESKeys::TheKeys()->get_key( "Cedar.LogName", found );
+    if( _log_name == "" )
+    {
+        string err = (string)"Could not determine Cedar log name, "
+                     + "not found in configuration file" ;
+        throw BESInternalError( err, __FILE__, __LINE__ ) ;
+    }
+    else
+    {
+        _file_buffer = new ofstream( _log_name.c_str(), ios::out | ios::app ) ;
+        if( !(*_file_buffer) )
+        {
+            string s = "Unable to open Cedar log file " + _log_name ;;
+            throw BESInternalError( s, __FILE__, __LINE__ ) ;
+        }
+    }
 }
 
 CedarReporter::~CedarReporter()
 {
     // The database is closed in the CedarModule class
+    if( _file_buffer )
+    {
+        delete _file_buffer ;
+        _file_buffer = 0 ;
+    }
 }
 
+/** @brief reports any data request information to the Cedar Report database
+ *
+ * Reports the username, action (type of data requested), symbolic names of
+ * the containers requested (represents the data files, the first three
+ * character representing the instrument), and any constraint
+ *
+ * @param dhi structure that contains all information pertaining to the data
+ * request
+ */
 void
 CedarReporter::report( BESDataHandlerInterface &dhi )
 {
+    // Only report a data request (get command) for ascii, das, dds, ddx,
+    // datadds, tab, flat, stream, info, etc... The first three characters
+    // of the action should be get.
     if( dhi.action.substr( 0, 3 ) != "get" )
 	return ;
 
+    // The action string is something like get.tab. The data product
+    // requested is the information after the dot, after the first 4
+    // characters.
     string product = dhi.action.substr( 4, dhi.action.length() - 4 ) ;
 
+    // Get the user name from the data element of dhi. If doesn't exist or
+    // is empty then set to USER_UNKNOWN
     string user_name = "" ;
     BESDataHandlerInterface::data_citer citer ;
     citer = dhi.data_c().find( USER_NAME ) ;
@@ -67,6 +112,10 @@ CedarReporter::report( BESDataHandlerInterface &dhi )
     if( user_name == "" )
 	user_name = "USER_UNKNOWN" ;
 
+    // Get the symbolic names of the containers included in this request.
+    // These represent the data files used, and the first three characters
+    // represent the instrument. The constraints are all the same for all the
+    // containers, so just grab the first constraint.
     string requested ;
     string constraint ;
     bool isfirst = true ;
@@ -82,11 +131,8 @@ CedarReporter::report( BESDataHandlerInterface &dhi )
 	dhi.next_container() ;
     }
 
-    string request = "" ;
-    citer = dhi.data_c().find( DATA_REQUEST ) ;
-    if( citer != dhi.data_c().end() )
-	request = (*citer).second ;
-
+    // Build the vector of columns to be inserted. There is only one row
+    // being inserted, so only one vector of that vector.
     vector< vector<CedarDBColumn> > flds ;
     vector<CedarDBColumn> fld_set ;
     fld_set.push_back( CedarDBColumn( "user", user_name ) ) ;
@@ -94,7 +140,62 @@ CedarReporter::report( BESDataHandlerInterface &dhi )
     fld_set.push_back( CedarDBColumn( "product", product ) ) ;
     fld_set.push_back( CedarDBColumn( "constraint_expr", constraint ) ) ;
     flds.push_back( fld_set ) ;
-    _db->insert( "tbl_cedar_report", flds ) ;
+
+    // If there is a problem reporting to the database then report to the
+    // log file.
+    try
+    {
+	_db->insert( "tbl_cedar_report", flds ) ;
+    }
+    catch( BESError &e )
+    {
+	(*BESLog::TheLog()) << "Failed to report to cedar database: "
+			    << e.get_message() << endl ;
+	report_to_log( dhi, user_name, requested, product, constraint ) ;
+    }
+    catch( ... )
+    {
+	(*BESLog::TheLog()) << "Failed to report to cedar database: "
+			    << "Unknown exception caught" << endl ;
+	report_to_log( dhi, user_name, requested, product, constraint ) ;
+    }
+}
+
+/** @brief reports request information to the cedar log if problem inserting
+ * into database.
+ *
+ * The line in the log file will look like:
+ *
+ * [MDT Mon Apr 21 16:14:05 2008] pwest - mfp920504a - tab - date(1992,504,0,0,1992,603,2359,5999);record_type(5340/7001);parameters(21,34,800,810,1410,1420,2506)
+ *
+ * @param dhi structure that contains all information pertaining to the data
+ * request
+ * @param user_name user making the data request
+ * @param requested symbolic names of files requested (basename of files)
+ * @param product data product requested (das, dds, tab, flat, etc...)
+ * @param constraint if any specified, the constraint on the data sets
+ */
+void
+CedarReporter::report_to_log( BESDataHandlerInterface &dhi,
+			      const string &user_name,
+			      const string &requested,
+			      const string &product,
+			      const string &constraint )
+{
+    const time_t sctime = time( NULL ) ;
+    const struct tm *sttime = localtime( &sctime ) ; 
+    char zone_name[10] ;
+    strftime( zone_name, sizeof( zone_name ), "%Z", sttime ) ;
+    char *b = asctime( sttime ) ;
+    *(_file_buffer) << "[" << zone_name << " " ;
+    for(register int j = 0; b[j] != '\n'; j++ )
+        *(_file_buffer) << b[j] ;
+    *(_file_buffer) << "] " ;
+
+    *(_file_buffer) << user_name << " - "
+		    << requested << " - "
+		    << product << " - "
+		    << constraint << endl ;
 }
 
 /** @brief dumps information about this object

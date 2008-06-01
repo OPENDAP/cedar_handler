@@ -33,6 +33,12 @@
 #ifndef A_CedarReporter_h
 #define A_CedarReporter_h 1
 
+#include <fstream>
+
+using std::ofstream ;
+using std::ios ;
+using std::endl ;
+
 #include "BESReporter.h"
 #include "BESDataHandlerInterface.h"
 
@@ -42,6 +48,14 @@ class CedarReporter : public BESReporter
 {
 private:
     CedarDB *		_db ;
+    string		_log_name ;
+    ofstream *		_file_buffer ;
+
+    void		report_to_log( BESDataHandlerInterface &dhi,
+				       const string &user_name,
+				       const string &requested,
+				       const string &product,
+				       const string &constraint ) ;
 public:
 			CedarReporter() ;
     virtual		~CedarReporter() ;
