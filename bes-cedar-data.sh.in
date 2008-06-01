@@ -47,25 +47,56 @@ comment_03="# Cedar.BaseDir - base directory where the cedar data resides"
 comment_04="# Cedar.LoginScreen.XML - file that contains the html page to"
 comment_05="#   display if login is needed"
 comment_06="# Cedar.Authenticate.Mode=on|off - should the server authenticate"
-comment_07="# Cedar.DB.Authenticate.Type=mysql - type of database to use"
+comment_07="# Cedar.DB.Authenticate.Type=mysql - type of database for authentication database"
 comment_08="# Cedar.DB.Authenticate.Server= - MySQL server (i.e. localhost)"
 comment_09="# Cedar.DB.Authenticate.User= - MySQL user name to connect to db"
 comment_10="# Cedar.DB.Authenticate.Password= - MySQL password for user to connect"
 comment_11="# Cedar.DB.Authenticate.Database= - MySQL database with session table"
 comment_12="# Cedar.DB.Authenticate.Socket= - MySQL unix socket used to connect"
 comment_13="# Cedar.DB.Authenticate.Port= - MySQL TCP Port used to connect, socket typically used"
+comment_14="# Cedar.DB.Catalog.Type=mysql - type of database for CEDARCATALOG"
+comment_15="# Cedar.DB.Catalog.Server= - MySQL server (i.e. localhost)"
+comment_16="# Cedar.DB.Catalog.User= - MySQL user name to connect to db"
+comment_17="# Cedar.DB.Catalog.Password= - MySQL password for user to connect"
+comment_18="# Cedar.DB.Catalog.Database= - MySQL database with catalog tables"
+comment_19="# Cedar.DB.Catalog.Socket= - MySQL unix socket used to connect"
+comment_20="# Cedar.DB.Catalog.Port= - MySQL TCP Port used to connect, socket typically used"
+comment_21="# Cedar.DB.Reporter.Type=mysql - type of database to use for CEDARREPORTER"
+comment_22="# Cedar.DB.Reporter.Server= - MySQL server (i.e. localhost)"
+comment_23="# Cedar.DB.Reporter.User= - MySQL user name to connect to db"
+comment_24="# Cedar.DB.Reporter.Password= - MySQL password for user to connect"
+comment_25="# Cedar.DB.Reporter.Database= - MySQL database with reporter table"
+comment_26="# Cedar.DB.Reporter.Socket= - MySQL unix socket used to connect"
+comment_27="# Cedar.DB.Reporter.Port= - MySQL TCP Port used to connect, socket typically used"
+
 logname="Cedar.LogName=./cedar.log"
 basedir="Cedar.BaseDir=@datadir@/hyrax/data/cedar"
 screenxml="Cedar.LoginScreen.XML=./screen.xml"
-auth="Cedar.Authenticate.Mode=on"
-dbtype="Cedar.DB.Authenticate.Type=mysql"
-dbserver="Cedar.DB.Authenticate.Server=localhost"
-dbuser="Cedar.DB.Authenticate.User=root"
-dbpwd="Cedar.DB.Authenticate.Password="
-dbdb="Cedar.DB.Authenticate.Database="
-dbsocket="Cedar.DB.Authenticate.Socket=/tmp/mysql.sock"
-dbport="Cedar.DB.Authenticate.Port="
 
+auth="Cedar.Authenticate.Mode=on"
+auth_dbtype="Cedar.DB.Authenticate.Type=mysql"
+auth_dbserver="Cedar.DB.Authenticate.Server=localhost"
+auth_dbuser="Cedar.DB.Authenticate.User=root"
+auth_dbpwd="Cedar.DB.Authenticate.Password="
+auth_dbdb="Cedar.DB.Authenticate.Database="
+auth_dbsocket="Cedar.DB.Authenticate.Socket=/tmp/mysql.sock"
+auth_dbport="Cedar.DB.Authenticate.Port="
+
+cat_dbtype="Cedar.DB.Catalog.Type=mysql"
+cat_dbserver="Cedar.DB.Catalog.Server=localhost"
+cat_dbuser="Cedar.DB.Catalog.User=root"
+cat_dbpwd="Cedar.DB.Catalog.Password="
+cat_dbdb="Cedar.DB.Catalog.Database="
+cat_dbsocket="Cedar.DB.Catalog.Socket=/tmp/mysql.sock"
+cat_dbport="Cedar.DB.Catalog.Port="
+
+report_dbtype="Cedar.DB.Reporter.Type=mysql"
+report_dbserver="Cedar.DB.Reporter.Server=localhost"
+report_dbuser="Cedar.DB.Reporter.User=root"
+report_dbpwd="Cedar.DB.Reporter.Password="
+report_dbdb="Cedar.DB.Reporter.Database="
+report_dbsocket="Cedar.DB.Reporter.Socket=/tmp/mysql.sock"
+report_dbport="Cedar.DB.Reporter.Port="
 
 awk "BEGIN {cedar_found=0}
 	/# Data Handler Specific/ {cedar_found=1}
@@ -75,6 +106,11 @@ awk "BEGIN {cedar_found=0}
 	/^$/ && cedar_found == 1 {print \"$comment_03\"}
 	/^$/ && cedar_found == 1 {print \"$comment_04\"}
 	/^$/ && cedar_found == 1 {print \"$comment_05\"}
+	/^$/ && cedar_found == 1 {print}
+	/^$/ && cedar_found == 1 {print \"$logname\"}
+	/^$/ && cedar_found == 1 {print \"$basedir\"}
+	/^$/ && cedar_found == 1 {print \"$screenxml\"}
+	/^$/ && cedar_found == 1 {print}
 	/^$/ && cedar_found == 1 {print \"$comment_06\"}
 	/^$/ && cedar_found == 1 {print \"$comment_07\"}
 	/^$/ && cedar_found == 1 {print \"$comment_08\"}
@@ -83,17 +119,47 @@ awk "BEGIN {cedar_found=0}
 	/^$/ && cedar_found == 1 {print \"$comment_11\"}
 	/^$/ && cedar_found == 1 {print \"$comment_12\"}
 	/^$/ && cedar_found == 1 {print \"$comment_13\"}
-	/^$/ && cedar_found == 1 {print \"$logname\"}
-	/^$/ && cedar_found == 1 {print \"$basedir\"}
-	/^$/ && cedar_found == 1 {print \"$screenxml\"}
+	/^$/ && cedar_found == 1 {print}
 	/^$/ && cedar_found == 1 {print \"$auth\"}
-	/^$/ && cedar_found == 1 {print \"$dbtype\"}
-	/^$/ && cedar_found == 1 {print \"$dbserver\"}
-	/^$/ && cedar_found == 1 {print \"$dbuser\"}
-	/^$/ && cedar_found == 1 {print \"$dbpwd\"}
-	/^$/ && cedar_found == 1 {print \"$dbdb\"auth}
-	/^$/ && cedar_found == 1 {print \"$dbsocket\"}
-	/^$/ && cedar_found == 1 {print \"$dbport\"; cedar_found=0}
+	/^$/ && cedar_found == 1 {print \"$auth_dbtype\"}
+	/^$/ && cedar_found == 1 {print \"$auth_dbserver\"}
+	/^$/ && cedar_found == 1 {print \"$auth_dbuser\"}
+	/^$/ && cedar_found == 1 {print \"$auth_dbpwd\"}
+	/^$/ && cedar_found == 1 {print \"$auth_dbdb\"auth}
+	/^$/ && cedar_found == 1 {print \"$auth_dbsocket\"}
+	/^$/ && cedar_found == 1 {print \"$auth_dbport\"}
+	/^$/ && cedar_found == 1 {print}
+	/^$/ && cedar_found == 1 {print \"$comment_14\"}
+	/^$/ && cedar_found == 1 {print \"$comment_15\"}
+	/^$/ && cedar_found == 1 {print \"$comment_16\"}
+	/^$/ && cedar_found == 1 {print \"$comment_17\"}
+	/^$/ && cedar_found == 1 {print \"$comment_18\"}
+	/^$/ && cedar_found == 1 {print \"$comment_19\"}
+	/^$/ && cedar_found == 1 {print \"$comment_20\"}
+	/^$/ && cedar_found == 1 {print}
+	/^$/ && cedar_found == 1 {print \"$cat_dbtype\"}
+	/^$/ && cedar_found == 1 {print \"$cat_dbserver\"}
+	/^$/ && cedar_found == 1 {print \"$cat_dbuser\"}
+	/^$/ && cedar_found == 1 {print \"$cat_dbpwd\"}
+	/^$/ && cedar_found == 1 {print \"$cat_dbdb\"auth}
+	/^$/ && cedar_found == 1 {print \"$cat_dbsocket\"}
+	/^$/ && cedar_found == 1 {print \"$cat_dbport\"}
+	/^$/ && cedar_found == 1 {print}
+	/^$/ && cedar_found == 1 {print \"$comment_21\"}
+	/^$/ && cedar_found == 1 {print \"$comment_22\"}
+	/^$/ && cedar_found == 1 {print \"$comment_23\"}
+	/^$/ && cedar_found == 1 {print \"$comment_24\"}
+	/^$/ && cedar_found == 1 {print \"$comment_25\"}
+	/^$/ && cedar_found == 1 {print \"$comment_26\"}
+	/^$/ && cedar_found == 1 {print \"$comment_27\"}
+	/^$/ && cedar_found == 1 {print}
+	/^$/ && cedar_found == 1 {print \"$report_dbtype\"}
+	/^$/ && cedar_found == 1 {print \"$report_dbserver\"}
+	/^$/ && cedar_found == 1 {print \"$report_dbuser\"}
+	/^$/ && cedar_found == 1 {print \"$report_dbpwd\"}
+	/^$/ && cedar_found == 1 {print \"$report_dbdb\"auth}
+	/^$/ && cedar_found == 1 {print \"$report_dbsocket\"}
+	/^$/ && cedar_found == 1 {print \"$report_dbport\"; cedar_found=0}
 	{print}" \
 	< $bes_conf > tmp.conf
 mv tmp.conf $bes_conf

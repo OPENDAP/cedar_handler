@@ -31,78 +31,70 @@
 //      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
 #include "CedarReporter.h"
-#include "TheBESKeys.h"
 #include "BESInternalError.h"
 #include "BESDataNames.h"
+#include "CedarDB.h"
 
 CedarReporter::CedarReporter()
-    : BESReporter(),
-      _file_buffer( 0 )
+    : BESReporter()
 {
-    bool found = false ;
-    _log_name = TheBESKeys::TheKeys()->get_key( "Cedar.LogName", found );
-    if( _log_name == "" )
+    _db = CedarDB::DB( "Reporter" ) ;
+    if( !_db )
     {
-	string err = (string)"Could not determine Cedar log name, "
-	             + "not found in configuration file" ;
-	throw BESInternalError( err, __FILE__, __LINE__ ) ;
-    }
-    else
-    {
-	_file_buffer = new ofstream( _log_name.c_str(), ios::out | ios::app ) ;
-	if( !(*_file_buffer) )
-	{
-	    string s = "Unable to open Cedar log file " + _log_name ;;
-	    throw BESInternalError( s, __FILE__, __LINE__ ) ;
-	} 
+	string s = "Unable to open Cedar Reporter database" ;
+	throw BESInternalError( s, __FILE__, __LINE__ ) ;
     }
 }
 
 CedarReporter::~CedarReporter()
 {
-    if( _file_buffer )
-    {
-	delete _file_buffer ;
-	_file_buffer = 0 ;
-    }
+    // The database is closed in the CedarModule class
 }
 
 void
-CedarReporter::report( const BESDataHandlerInterface &dhi )
+CedarReporter::report( BESDataHandlerInterface &dhi )
 {
-    const time_t sctime = time( NULL ) ;
-    const struct tm *sttime = localtime( &sctime ) ; 
-    char zone_name[10] ;
-    strftime( zone_name, sizeof( zone_name ), "%Z", sttime ) ;
-    char *b = asctime( sttime ) ;
-    *(_file_buffer) << "[" << zone_name << " " ;
-    for(register int j = 0; b[j] != '\n'; j++ )
-	*(_file_buffer) << b[j] ;
-    *(_file_buffer) << "] " ;
+    if( dhi.action.substr( 0, 3 ) != "get" )
+	return ;
+
+    string product = dhi.action.substr( 4, dhi.action.length() - 4 ) ;
 
     string user_name = "" ;
     BESDataHandlerInterface::data_citer citer ;
     citer = dhi.data_c().find( USER_NAME ) ;
     if( citer != dhi.data_c().end() )
 	user_name = (*citer).second ;
-
     if( user_name == "" )
-	*(_file_buffer) << "USER_UNKNOWN" ;
-    else
-	*(_file_buffer) << user_name ;
+	user_name = "USER_UNKNOWN" ;
+
+    string requested ;
+    string constraint ;
+    bool isfirst = true ;
+    dhi.first_container() ;
+    while( dhi.container )
+    {
+	if( !isfirst )
+	    requested += ", " ;
+	else
+	    constraint = dhi.container->get_constraint() ;
+	isfirst = false ;
+	requested += dhi.container->get_symbolic_name() ;
+	dhi.next_container() ;
+    }
 
     string request = "" ;
     citer = dhi.data_c().find( DATA_REQUEST ) ;
     if( citer != dhi.data_c().end() )
 	request = (*citer).second ;
 
-    string real = "" ;
-    citer = dhi.data_c().find( REAL_NAME_LIST ) ;
-    if( citer != dhi.data_c().end() )
-	real = (*citer).second ;
-
-    *(_file_buffer) << " " << dhi.action << " " << real << " \"" 
-                    << request << "\"" << endl ;
+    vector< vector<CedarDBColumn> > flds ;
+    vector<CedarDBColumn> fld_set ;
+    fld_set.push_back( CedarDBColumn( "user", user_name ) ) ;
+    fld_set.push_back( CedarDBColumn( "requested", requested ) ) ;
+    fld_set.push_back( CedarDBColumn( "product", product ) ) ;
+    fld_set.push_back( CedarDBColumn( "constraint_expr", constraint ) ) ;
+    flds.push_back( fld_set ) ;
+    _db->insert( "tbl_cedar_report", flds ) ;
 }
 
 /** @brief dumps information about this object
@@ -118,7 +110,7 @@ CedarReporter::dump( ostream &strm ) const
     strm << BESIndent::LMarg << "CedarReporter::dump - ("
 			     << (void *)this << ")" << endl ;
     BESIndent::Indent() ;
-    strm << BESIndent::LMarg << "Cedar log name: " << _log_name << endl ;
+    if( _db ) _db->dump( strm ) ;
     BESIndent::UnIndent() ;
 }
 

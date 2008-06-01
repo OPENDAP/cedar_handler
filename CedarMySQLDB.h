@@ -53,9 +53,18 @@ public:
     				CedarMySQLDB( const string &db_name ) ;
     virtual			~CedarMySQLDB() ;
 
-    virtual CedarDBResult *	run_query( const string &query ) ;
     virtual void		open() ;
     virtual void		close() ;
+
+    virtual CedarDBResult *	run_query( const string &query ) ;
+    virtual unsigned int	insert( const string &table_name,
+					const vector< vector<CedarDBColumn> > &flds ) ;
+    virtual unsigned int	update( const string &table_name,
+					const vector<CedarDBColumn> &flds,
+					const vector<CedarDBWhere> &where ) ;
+    virtual unsigned int	del( const string &table_name,
+				     const vector<CedarDBWhere> &where ) ;
+
     virtual void		dump( ostream &strm ) const ;
 
     static CedarDB *		BuildMySQLDB( const string &db_name ) ;

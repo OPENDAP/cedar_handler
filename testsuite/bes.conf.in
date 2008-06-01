@@ -305,3 +305,10 @@ Cedar.DB.Catalog.Password=
 Cedar.DB.Catalog.Database=CEDARCATALOG
 Cedar.DB.Catalog.Socket=
 
+Cedar.DB.Reporter.Type=mysql
+Cedar.DB.Reporter.Server=localhost
+Cedar.DB.Reporter.User=
+Cedar.DB.Reporter.Password=
+Cedar.DB.Reporter.Database=CEDARREPORT
+Cedar.DB.Reporter.Socket=
+

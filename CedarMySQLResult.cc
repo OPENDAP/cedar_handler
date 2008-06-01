@@ -114,6 +114,8 @@ CedarMySQLResult::dump( ostream &strm ) const
 			     << (void *)this << ")" << endl ;
     BESIndent::Indent() ;
 
+    strm << BESIndent::LMarg << "num_rows : " << _nrows << endl ;
+    strm << BESIndent::LMarg << "num_fields : " << _nfields << endl ;
     strm << BESIndent::LMarg << "fields:" << endl ;
     BESIndent::Indent() ;
     int num_fields = _fields.size() ;

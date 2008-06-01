@@ -33,26 +33,20 @@
 #ifndef A_CedarReporter_h
 #define A_CedarReporter_h 1
 
-#include <fstream>
-
-using std::ofstream ;
-using std::ios ;
-using std::endl ;
-
 #include "BESReporter.h"
-#include "BESDataRequestInterface.h"
 #include "BESDataHandlerInterface.h"
+
+class CedarDB ;
 
 class CedarReporter : public BESReporter
 {
 private:
-    ofstream *		_file_buffer ;
-    string		_log_name ;
+    CedarDB *		_db ;
 public:
 			CedarReporter() ;
     virtual		~CedarReporter() ;
 
-    virtual void	report( const BESDataHandlerInterface &dhi ) ;
+    virtual void	report( BESDataHandlerInterface &dhi ) ;
 
     virtual void	dump( ostream &strm ) const ;
 } ;

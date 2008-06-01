@@ -292,8 +292,22 @@ Cedar.DB.Catalog.Password=101011011011101010001111011110011100010101010000100010
 Cedar.DB.Catalog.Database=CEDARCATALOG
 Cedar.DB.Catalog.Socket=/project/cedar/src/pwest/packages/mysql/mysql.sock
 
+Cedar.DB.Test.Type=mysql
+Cedar.DB.Test.Server=localhost
+Cedar.DB.Test.User=root
+Cedar.DB.Test.Password=1010110110111010100011110111100111000101010100001000100110000100
+Cedar.DB.Test.Database=test
+Cedar.DB.Test.Socket=/project/cedar/src/pwest/packages/mysql/mysql.sock
+
+Cedar.DB.Reporter.Type=mysql
+Cedar.DB.Reporter.Server=localhost
+Cedar.DB.Reporter.User=root
+Cedar.DB.Reporter.Password=1010110110111010100011110111100111000101010100001000100110000100
+Cedar.DB.Reporter.Database=test
+Cedar.DB.Reporter.Socket=/project/cedar/src/pwest/packages/mysql/mysql.sock
+
 Cedar.LogName=cedar.log
-Cedar.BaseDir=/Users/pwest/opendap/data/cedar
+Cedar.BaseDir=@datadir@/hyrax/data/cedar
 Cedar.LoginScreen.XML=./screen.xml
 
 # Modified by bes-dap-data.sh on Fri Feb 15 18:35:58 MST 2008

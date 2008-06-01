@@ -35,11 +35,14 @@
 
 #include <string>
 #include <map>
+#include <vector>
 
 using std::string ;
 using std::map ;
+using std::vector ;
 
 #include "BESObj.h"
+#include "CedarDBFields.h"
 
 class CedarDBResult ;
 class CedarDB ;
@@ -49,27 +52,36 @@ typedef CedarDB * (*p_db_builder)( const string &db_name ) ;
 class CedarDB : public BESObj
 {
 private:
-    static map<string,CedarDB *>	db_map ;
-    static map<string,p_db_builder>	db_list ;
-    bool				_is_open ;
-    					CedarDB( CedarDB &db ) {}
+    static map<string,CedarDB *> db_map ;
+    static map<string,p_db_builder> db_list ;
+    bool			_is_open ;
+    				CedarDB( CedarDB &db ) {}
 protected:
-    					CedarDB( ) : _is_open( false ) {}
-    virtual void			set_is_open( bool is_open )
-					{ _is_open = is_open ; }
+    				CedarDB( ) : _is_open( false ) {}
+    virtual void		set_is_open( bool is_open )
+				{ _is_open = is_open ; }
 public:
-    virtual				~CedarDB() {}
+    virtual			~CedarDB() {}
 
-    virtual CedarDBResult *		run_query( const string &query ) = 0 ;
-    virtual void			open() = 0 ;
-    virtual bool			is_open() { return _is_open ; }
-    virtual void			close() = 0 ;
-    virtual void			dump( ostream &strm ) const = 0 ;
+    virtual void		open() = 0 ;
+    virtual bool		is_open() { return _is_open ; }
+    virtual void		close() = 0 ;
 
-    static void				Add_DB_Builder( const string &db_type,
-							p_db_builder builder ) ;
-    static CedarDB *			DB( const string &db_name ) ;
-    static void				Close() ;
+    virtual CedarDBResult *	run_query( const string &query ) = 0 ;
+    virtual unsigned int	insert( const string &table_name,
+					const vector< vector<CedarDBColumn> > &flds ) = 0;
+    virtual unsigned int	update( const string &table_name,
+					const vector<CedarDBColumn> &flds,
+					const vector<CedarDBWhere> &where ) = 0;
+    virtual unsigned int	del( const string &table_name,
+				     const vector<CedarDBWhere> &where ) = 0 ;
+
+    virtual void		dump( ostream &strm ) const = 0 ;
+
+    static void			Add_DB_Builder( const string &db_type,
+						p_db_builder builder ) ;
+    static CedarDB *		DB( const string &db_name ) ;
+    static void			Close() ;
 };
 
 #endif //   CedarDB_h_

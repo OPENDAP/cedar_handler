@@ -42,7 +42,7 @@ CEDAR_HDRS:=CedarFilter.h CedarFlat.h CedarRequestHandler.h \
 	ContainerStorageCedar.h CedarReporter.h InfoResponseHandler.h \
 	CedarAuthenticate.h CedarAuthenticateException.h \
 	CedarDB.h CedarMySQLDB.h CedarMySQLConnect.h CedarDBResult.h \
-	CedarMySQLResult.h CedarEncode.h \
+	CedarMySQLResult.h CedarDBFields.h CedarEncode.h \
 	CedarReadKinst.h CedarReadParcods.h \
 	config_cedar.h CedarFSDir.h CedarFSFile.h
 

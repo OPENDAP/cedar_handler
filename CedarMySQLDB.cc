@@ -124,6 +124,29 @@ CedarMySQLDB::~CedarMySQLDB()
 	close() ;
 }
 
+void
+CedarMySQLDB::open()
+{
+    if( !is_open() )
+    {
+	_connection = new CedarMySQLConnect( ) ;
+	_connection->open( _mysql_server, _mysql_user, _mysql_pwd, _mysql_db,
+			   _mysql_port, _mysql_socket ) ;
+	set_is_open( true ) ;
+    }
+}
+
+void
+CedarMySQLDB::close()
+{
+    if( _connection )
+    {
+	delete _connection ;
+	_connection = 0 ;
+    }
+    set_is_open( false ) ;
+}
+
 CedarDBResult *
 CedarMySQLDB::run_query( const string &query )
 {
@@ -177,27 +200,167 @@ CedarMySQLDB::run_query( const string &query )
     return ret_result ;
 }
 
-void
-CedarMySQLDB::open()
+unsigned int
+CedarMySQLDB::insert( const string &table_name,
+		      const vector< vector<CedarDBColumn> > &flds )
 {
+    BESDEBUG( "cedar", "MYSQL insert" << endl )
+
+    // there must be fields to insert
+    if( flds.empty() )
+    {
+	string err = (string)"No fields specified in the insert to table "
+	             + table_name ;
+	throw BESInternalError( err, __FILE__, __LINE__ ) ;
+    }
+
+    // if the database connection hasn't been made, make it. open will throw
+    // an exception if there is a problem.
     if( !is_open() )
     {
-	_connection = new CedarMySQLConnect( ) ;
-	_connection->open( _mysql_server, _mysql_user, _mysql_pwd, _mysql_db,
-			   _mysql_port, _mysql_socket ) ;
-	set_is_open( true ) ;
+	open() ;
     }
+
+    string query = "INSERT INTO " + table_name + " ( " ;
+    string values = "VALUES " ;
+    vector< vector<CedarDBColumn> >::const_iterator oi = flds.begin() ;
+    vector< vector<CedarDBColumn> >::const_iterator oe = flds.end() ;
+    bool firstset = true ;
+    for( ; oi != oe; oi++ )
+    {
+	if( !firstset )
+	    values += ", " ;
+
+	vector<CedarDBColumn>::const_iterator i = (*oi).begin() ;
+	vector<CedarDBColumn>::const_iterator e = (*oi).end() ;
+	bool isfirst = true ;
+	for( ; i != e; i++ )
+	{
+	    if( firstset )
+	    {
+		if( !isfirst )
+		    query += ", " ;
+		query += (*i).name() ;
+	    }
+
+	    if( !isfirst )
+		values += ", " ;
+	    else
+		values += "( " ;
+	    isfirst = false ;
+	    values += (*i).insert() ;
+	}
+	values += " )" ;
+	firstset = false ;
+    }
+    query += " ) " + values ;
+    BESDEBUG( "cedar", "MYSQL insert: query = " << query << endl )
+
+    // make the insert
+    MYSQL *sql_channel = _connection->get_channel() ;
+    if( mysql_query( sql_channel, query.c_str() ) )
+    {
+	throw BESInternalError( _connection->get_error(), __FILE__, __LINE__ ) ;
+    }
+
+    BESDEBUG( "cedar", "MYSQL insert done" << endl )
+    return mysql_affected_rows( sql_channel ) ;
 }
 
-void
-CedarMySQLDB::close()
+unsigned int
+CedarMySQLDB::update( const string &table_name,
+		      const vector<CedarDBColumn> &flds,
+		      const vector<CedarDBWhere> &where )
 {
-    if( _connection )
+    BESDEBUG( "cedar", "MYSQL update" << endl )
+
+    // there must be fields to insert
+    if( flds.empty() )
     {
-	delete _connection ;
-	_connection = 0 ;
+	string err = (string)"No fields specified in the update to table "
+	             + table_name ;
+	throw BESInternalError( err, __FILE__, __LINE__ ) ;
     }
-    set_is_open( false ) ;
+    // there must be a where clause
+    if( where.empty() )
+    {
+	string err = (string)"No where clause specified in the update to table "
+	             + table_name ;
+	throw BESInternalError( err, __FILE__, __LINE__ ) ;
+    }
+
+    // if the database hasn't been opened, open it.
+    if( !is_open() )
+    {
+	open() ;
+    }
+
+    // build the sql statement
+    string query = "UPDATE " + table_name + " SET " ;
+    vector<CedarDBColumn>::const_iterator i = flds.begin() ;
+    vector<CedarDBColumn>::const_iterator e = flds.end() ;
+    bool isfirst = true ;
+    for( ; i != e; i++ )
+    {
+	if( !isfirst )
+	{
+	    query += ", " ;
+	}
+	isfirst = false ;
+	query += (*i).update() ;
+    }
+    query += " WHERE " ;
+    vector<CedarDBWhere>::const_iterator wi = where.begin() ;
+    vector<CedarDBWhere>::const_iterator we = where.end() ;
+    for( ; wi != we; wi++ )
+    {
+	query += (*wi).where() ;
+    }
+    BESDEBUG( "cedar", "MYSQL update query = " << query << endl )
+
+    // make the update
+    MYSQL *sql_channel = _connection->get_channel() ;
+    if( mysql_query( sql_channel, query.c_str() ) )
+    {
+	throw BESInternalError( _connection->get_error(), __FILE__, __LINE__ ) ;
+    }
+
+    BESDEBUG( "cedar", "MYSQL update done" << endl )
+    return mysql_affected_rows( sql_channel ) ;
+}
+
+unsigned int
+CedarMySQLDB::del( const string &table_name,
+		   const vector<CedarDBWhere> &where )
+{
+    BESDEBUG( "cedar", "MYSQL delete" << endl )
+
+    // there must be a where clause
+    if( where.empty() )
+    {
+	string err = (string)"No where clause specified in the delete to table "
+	             + table_name ;
+	throw BESInternalError( err, __FILE__, __LINE__ ) ;
+    }
+
+    string query = "DELETE FROM " + table_name + " WHERE " ;
+    vector<CedarDBWhere>::const_iterator wi = where.begin() ;
+    vector<CedarDBWhere>::const_iterator we = where.end() ;
+    for( ; wi != we; wi++ )
+    {
+	query += (*wi).where() ;
+    }
+    BESDEBUG( "cedar", "MYSQL update query = " << query << endl )
+
+    // make the update
+    MYSQL *sql_channel = _connection->get_channel() ;
+    if( mysql_query( sql_channel, query.c_str() ) )
+    {
+	throw BESInternalError( _connection->get_error(), __FILE__, __LINE__ ) ;
+    }
+
+    BESDEBUG( "cedar", "MYSQL delete done" << endl )
+    return mysql_affected_rows( sql_channel ) ;
 }
 
 void

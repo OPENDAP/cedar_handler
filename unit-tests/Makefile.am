@@ -22,7 +22,7 @@ noinst_HEADERS = test_config.h
 
 # This determines what gets run by 'make check.'
 if CPPUNIT
-TESTS = dbT authT kinstT parcodsT
+TESTS = dbT authT kinstT parcodsT reporterT
 else
 TESTS = 
 
@@ -66,4 +66,7 @@ kinstT_LDADD =  ../libcedar_handler.la $(AM_LDADD)
 
 parcodsT_SOURCES = parcodsT.cc
 parcodsT_LDADD =  ../libcedar_handler.la $(AM_LDADD)
+
+reporterT_SOURCES = reporterT.cc
+reporterT_LDADD =  ../libcedar_handler.la $(AM_LDADD)
 
