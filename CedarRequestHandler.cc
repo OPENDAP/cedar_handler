@@ -98,14 +98,12 @@ CedarRequestHandler::cedar_build_das( BESDataHandlerInterface &dhi )
 
     bool ret = true ;
 
-    BESResponseObject *response =
-        dhi.response_handler->get_response_object() ;
+    BESResponseObject *response = dhi.response_handler->get_response_object() ;
     BESDASResponse *bdas = dynamic_cast < BESDASResponse * >(response) ;
-    DAS *das = 0 ;
-    if (bdas)
-	das = bdas->get_das() ;
-    else
+    if( !bdas )
 	throw BESInternalError( "cast error", __FILE__, __LINE__ ) ;
+
+    DAS *das = bdas->get_das() ;
 
     try
     {
@@ -146,14 +144,12 @@ CedarRequestHandler::cedar_build_dds( BESDataHandlerInterface &dhi )
 {
     bool ret = true ;
 
-    BESResponseObject *response =
-        dhi.response_handler->get_response_object();
+    BESResponseObject *response = dhi.response_handler->get_response_object();
     BESDDSResponse *bdds = dynamic_cast < BESDDSResponse * >(response);
-    DDS *dds = 0 ;
-    if (bdds)
-	dds = bdds->get_dds();
-    else
+    if( !bdds )
 	throw BESInternalError( "cast error", __FILE__, __LINE__ ) ;
+  
+    DDS *dds = bdds->get_dds();
 
     try
     {
@@ -206,16 +202,13 @@ CedarRequestHandler::cedar_build_dds( BESDataHandlerInterface &dhi )
 bool
 CedarRequestHandler::cedar_build_data( BESDataHandlerInterface &dhi )
 {
-    BESResponseObject *response =
-        dhi.response_handler->get_response_object();
-    BESDataDDSResponse *bdds =
-        dynamic_cast < BESDataDDSResponse * >(response);
-    DataDDS *dds = 0 ;
-    if (bdds)
-	dds = bdds->get_dds();
-    else
+    BESResponseObject *response = dhi.response_handler->get_response_object();
+    BESDataDDSResponse *bdds = dynamic_cast < BESDataDDSResponse * >(response);
+    if( !bdds )
 	throw BESInternalError( "cast error", __FILE__, __LINE__ ) ;
   
+    DataDDS *dds = bdds->get_dds();
+
     try
     {
 	string cedar_error ;
@@ -269,8 +262,7 @@ CedarRequestHandler::cedar_build_flat( BESDataHandlerInterface &dhi )
 {
     bool ret = true ;
 
-    BESResponseObject *response =
-        dhi.response_handler->get_response_object() ;
+    BESResponseObject *response = dhi.response_handler->get_response_object() ;
     CedarFlat *flat = dynamic_cast < CedarFlat * >(response) ;
     if( !flat )
 	throw BESInternalError( "cast error", __FILE__, __LINE__ ) ;
@@ -302,8 +294,7 @@ CedarRequestHandler::cedar_build_tab( BESDataHandlerInterface &dhi )
 {
     bool ret = true ;
 
-    BESResponseObject *response =
-        dhi.response_handler->get_response_object() ;
+    BESResponseObject *response = dhi.response_handler->get_response_object() ;
     CedarTab *dtab = dynamic_cast < CedarTab * >(response) ;
     if( !dtab )
 	throw BESInternalError( "cast error", __FILE__, __LINE__ ) ;
@@ -343,8 +334,7 @@ CedarRequestHandler::cedar_build_vers( BESDataHandlerInterface &dhi )
 {
     bool ret = true ;
 
-    BESResponseObject *response =
-        dhi.response_handler->get_response_object();
+    BESResponseObject *response = dhi.response_handler->get_response_object();
     BESVersionInfo *info = dynamic_cast < BESVersionInfo * >(response);
     if( !info )
 	throw BESInternalError( "cast error", __FILE__, __LINE__ ) ;
@@ -359,8 +349,7 @@ CedarRequestHandler::cedar_build_help( BESDataHandlerInterface &dhi )
 {
     bool ret = true ;
 
-    BESResponseObject *response =
-        dhi.response_handler->get_response_object();
+    BESResponseObject *response = dhi.response_handler->get_response_object();
     BESInfo *info = dynamic_cast < BESInfo * >(response);
     if( !info )
 	throw BESInternalError( "cast error", __FILE__, __LINE__ ) ;
