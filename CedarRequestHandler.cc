@@ -97,9 +97,15 @@ CedarRequestHandler::cedar_build_das( BESDataHandlerInterface &dhi )
     BESDEBUG( "cedar", "building cedar das response:" << endl )
 
     bool ret = true ;
-    BESDASResponse *bdas =
-	dynamic_cast<BESDASResponse *>(dhi.response_handler->get_response_object());
-    DAS *das = bdas->get_das() ;
+
+    BESResponseObject *response =
+        dhi.response_handler->get_response_object() ;
+    BESDASResponse *bdas = dynamic_cast < BESDASResponse * >(response) ;
+    DAS *das = 0 ;
+    if (bdas)
+	das = bdas->get_das() ;
+    else
+	throw BESInternalError( "cast error", __FILE__, __LINE__ ) ;
 
     try
     {
@@ -139,9 +145,15 @@ bool
 CedarRequestHandler::cedar_build_dds( BESDataHandlerInterface &dhi )
 {
     bool ret = true ;
-    BESDDSResponse *bdds =
-	dynamic_cast<BESDDSResponse *>(dhi.response_handler->get_response_object());
-    DDS *dds = bdds->get_dds() ;
+
+    BESResponseObject *response =
+        dhi.response_handler->get_response_object();
+    BESDDSResponse *bdds = dynamic_cast < BESDDSResponse * >(response);
+    DDS *dds = 0 ;
+    if (bdds)
+	dds = bdds->get_dds();
+    else
+	throw BESInternalError( "cast error", __FILE__, __LINE__ ) ;
 
     try
     {
@@ -194,10 +206,16 @@ CedarRequestHandler::cedar_build_dds( BESDataHandlerInterface &dhi )
 bool
 CedarRequestHandler::cedar_build_data( BESDataHandlerInterface &dhi )
 {
-    BESDataDDSResponse *bdds = 
-	dynamic_cast<BESDataDDSResponse *>(dhi.response_handler->get_response_object());
-    DataDDS *dds = bdds->get_dds() ;
-
+    BESResponseObject *response =
+        dhi.response_handler->get_response_object();
+    BESDataDDSResponse *bdds =
+        dynamic_cast < BESDataDDSResponse * >(response);
+    DataDDS *dds = 0 ;
+    if (bdds)
+	dds = bdds->get_dds();
+    else
+	throw BESInternalError( "cast error", __FILE__, __LINE__ ) ;
+  
     try
     {
 	string cedar_error ;
@@ -250,7 +268,12 @@ bool
 CedarRequestHandler::cedar_build_flat( BESDataHandlerInterface &dhi )
 {
     bool ret = true ;
-    CedarFlat *flat = dynamic_cast<CedarFlat *>(dhi.response_handler->get_response_object()) ;
+
+    BESResponseObject *response =
+        dhi.response_handler->get_response_object() ;
+    CedarFlat *flat = dynamic_cast < CedarFlat * >(response) ;
+    if( !flat )
+	throw BESInternalError( "cast error", __FILE__, __LINE__ ) ;
 
     string cedar_error ;
     if( !cedar_read_flat( *flat, dhi.container->access(),
@@ -278,7 +301,13 @@ bool
 CedarRequestHandler::cedar_build_tab( BESDataHandlerInterface &dhi )
 {
     bool ret = true ;
-    CedarTab *dtab = dynamic_cast<CedarTab *>(dhi.response_handler->get_response_object()) ;
+
+    BESResponseObject *response =
+        dhi.response_handler->get_response_object() ;
+    CedarTab *dtab = dynamic_cast < CedarTab * >(response) ;
+    if( !dtab )
+	throw BESInternalError( "cast error", __FILE__, __LINE__ ) ;
+
     string cedar_error ;
     if( !cedar_read_tab( *dtab, dhi.container->access(),
 			 dhi.container->get_constraint(), cedar_error ) )
@@ -292,7 +321,12 @@ bool
 CedarRequestHandler::cedar_build_info( BESDataHandlerInterface &dhi )
 {
     bool ret = true ;
-    BESInfo *info = dynamic_cast<BESInfo *>(dhi.response_handler->get_response_object());
+
+    BESInfo *info =
+	dynamic_cast<BESInfo *>(dhi.response_handler->get_response_object());
+    if( !info )
+	throw BESInternalError( "cast error", __FILE__, __LINE__ ) ;
+
     string cedar_error ;
     if( !cedar_read_info( *info, dhi.container->access(),
 			  dhi.container->get_symbolic_name(),
@@ -308,8 +342,15 @@ bool
 CedarRequestHandler::cedar_build_vers( BESDataHandlerInterface &dhi )
 {
     bool ret = true ;
-    BESVersionInfo *info = dynamic_cast<BESVersionInfo *>(dhi.response_handler->get_response_object());
+
+    BESResponseObject *response =
+        dhi.response_handler->get_response_object();
+    BESVersionInfo *info = dynamic_cast < BESVersionInfo * >(response);
+    if( !info )
+	throw BESInternalError( "cast error", __FILE__, __LINE__ ) ;
+  
     info->addHandlerVersion( PACKAGE_NAME, PACKAGE_VERSION ) ;
+
     return ret ;
 }
 
@@ -317,7 +358,13 @@ bool
 CedarRequestHandler::cedar_build_help( BESDataHandlerInterface &dhi )
 {
     bool ret = true ;
-    BESInfo *info = dynamic_cast<BESInfo *>(dhi.response_handler->get_response_object());
+
+    BESResponseObject *response =
+        dhi.response_handler->get_response_object();
+    BESInfo *info = dynamic_cast < BESInfo * >(response);
+    if( !info )
+	throw BESInternalError( "cast error", __FILE__, __LINE__ ) ;
+  
     info->begin_tag( "Handler" ) ;
     info->add_tag( "name", PACKAGE_NAME ) ;
     string handles = (string)DAS_RESPONSE

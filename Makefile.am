@@ -98,6 +98,7 @@ sample_data_DATA = data/mfp920504a.cbf
 
 do_subst = sed -e 's,[@]sysconfdir[@],$(sysconfdir),g' \
 		   	   -e 's,[@]libdir[@],$(libdir),g' \
+		   	   -e 's,[@]pkgdatadir[@],$(pkgdatadir),g' \
 		   	   -e 's,[@]datadir[@],$(datadir),g'
 
 bes-cedar-data.sh: bes-cedar-data.sh.in config.status

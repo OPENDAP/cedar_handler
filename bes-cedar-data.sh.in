@@ -46,6 +46,9 @@ comment_02="# Cedar.LogName - file to store cedar access information"
 comment_03="# Cedar.BaseDir - base directory where the cedar data resides"
 comment_04="# Cedar.LoginScreen.XML - file that contains the html page to"
 comment_05="#   display if login is needed"
+comment_05a="# Cedar.Help.TXT - location of the text version of cedar help"
+comment_05b="# Cedar.Help.HTML - location of the html version of cedar help"
+comment_05c="# Cedar.Help.XML - location of the xml version of cedar help"
 comment_06="# Cedar.Authenticate.Mode=on|off - should the server authenticate"
 comment_07="# Cedar.DB.Authenticate.Type=mysql - type of database for authentication database"
 comment_08="# Cedar.DB.Authenticate.Server= - MySQL server (i.e. localhost)"
@@ -72,6 +75,10 @@ comment_27="# Cedar.DB.Reporter.Port= - MySQL TCP Port used to connect, socket t
 logname="Cedar.LogName=./cedar.log"
 basedir="Cedar.BaseDir=@datadir@/hyrax/data/cedar"
 screenxml="Cedar.LoginScreen.XML=./screen.xml"
+
+helptxt="Cedar.Help.TXT=@pkgdatadir@/cedar_help.txt"
+helphtml="Cedar.Help.HTML=@pkgdatadir@/cedar_help.html"
+helpxml="Cedar.Help.XML=@pkgdatadir@/cedar_help.txt"
 
 auth="Cedar.Authenticate.Mode=on"
 auth_dbtype="Cedar.DB.Authenticate.Type=mysql"
@@ -106,10 +113,16 @@ awk "BEGIN {cedar_found=0}
 	/^$/ && cedar_found == 1 {print \"$comment_03\"}
 	/^$/ && cedar_found == 1 {print \"$comment_04\"}
 	/^$/ && cedar_found == 1 {print \"$comment_05\"}
+	/^$/ && cedar_found == 1 {print \"$comment_05a\"}
+	/^$/ && cedar_found == 1 {print \"$comment_05b\"}
+	/^$/ && cedar_found == 1 {print \"$comment_05c\"}
 	/^$/ && cedar_found == 1 {print}
 	/^$/ && cedar_found == 1 {print \"$logname\"}
 	/^$/ && cedar_found == 1 {print \"$basedir\"}
 	/^$/ && cedar_found == 1 {print \"$screenxml\"}
+	/^$/ && cedar_found == 1 {print \"$helptxt\"}
+	/^$/ && cedar_found == 1 {print \"$helphtml\"}
+	/^$/ && cedar_found == 1 {print \"$helpxml\"}
 	/^$/ && cedar_found == 1 {print}
 	/^$/ && cedar_found == 1 {print \"$comment_06\"}
 	/^$/ && cedar_found == 1 {print \"$comment_07\"}
