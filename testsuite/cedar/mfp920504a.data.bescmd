@@ -1,2 +1,2 @@
 define d1 as mfp920504a;
-get ascii for d1;
+get dods for d1;

@@ -8,6 +8,6 @@ global srcdir
 
 # The `1' in compare_stdout means call xfail if the test fails.
 
-besstandalone_start "cedar/mfp920504a.ascii.bescmd"
-compare_stdout "cedar/mfp920504a.ascii.bescmd.baseline" "mfp920504a ascii" 0
+besstandalone_start "cedar/mfp920504a.data.bescmd" "data"
+compare_stdout "cedar/mfp920504a.data.bescmd.baseline" "mfp920504a data" 0
 
