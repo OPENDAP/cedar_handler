@@ -64,12 +64,9 @@ BES.LogVerbose=no
 # BES.module.h4=/Users/pwest/opendap/chunking/lib/bes/libhdf4_module.so
 # BES.module.ff=/Users/pwest/opendap/chunking/lib/bes/libff_module.so
 
-BES.modules=dap,cmd,usage,ascii,www,cedar
+BES.modules=dap,cmd,cedar
 BES.module.dap=/Users/pwest/opendap/chunking/lib/bes/libdap_module.so
 BES.module.cmd=/Users/pwest/opendap/chunking/lib/bes/libdap_cmd_module.so
-BES.module.usage=/Users/pwest/opendap/chunking/lib/bes/libusage_module.so
-BES.module.ascii=/Users/pwest/opendap/chunking/lib/bes/libascii_module.so
-BES.module.www=/Users/pwest/opendap/chunking/lib/bes/libwww_module.so
 BES.module.cedar=/Users/pwest/opendap/chunking/lib/bes/libcedar_module.so
 
 #-----------------------------------------------------------------------#
@@ -307,7 +304,7 @@ Cedar.DB.Reporter.Database=test
 Cedar.DB.Reporter.Socket=/project/cedar/src/pwest/packages/mysql/mysql.sock
 
 Cedar.LogName=cedar.log
-Cedar.BaseDir=@datadir@/hyrax/data/cedar
+Cedar.BaseDir=@abs_top_srcdir@/data
 Cedar.LoginScreen.XML=./screen.xml
 
 # Modified by bes-dap-data.sh on Fri Feb 15 18:35:58 MST 2008

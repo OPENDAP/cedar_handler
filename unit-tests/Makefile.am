@@ -50,6 +50,8 @@ bes.conf: bes.conf.in ../config.status
 	sed -e "s%[@]pkgdatadir[@]%${pkgdatadir}%" \
 		-e "s%[@]sysconfdir[@]%${sysconfdir}%" \
 		-e "s%[@]libdir[@]%${libdir}%" \
+		-e "s%[@]abs_top_srcdir[@]%${abs_top_srcdir}%" \
+		-e "s%[@]abs_top_builddir[@]%${abs_top_builddir}%" \
 		-e "s%[@]datadir[@]%${datadir}%" \
 		-e "s%[@]bindir[@]%${bindir}%" $< > bes.conf
 
