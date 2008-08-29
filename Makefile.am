@@ -11,7 +11,7 @@ ACLOCAL_AMFLAGS = -I conf
 
 AM_CPPFLAGS = $(BES_CPPFLAGS)
 
-SUBDIRS = unit-tests testsuite
+SUBDIRS = unit-tests bes-testsuite
 
 bin_PROGRAMS = dap_cedar_handler encode checkKinst checkParcod
 lib_LTLIBRARIES = libcedar_handler.la

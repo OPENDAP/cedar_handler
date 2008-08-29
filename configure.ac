@@ -213,6 +213,6 @@ AM_PATH_CPPUNIT(1.12.0,
 	[AM_CONDITIONAL([CPPUNIT], [true])],
 	[AM_CONDITIONAL([CPPUNIT], [false])])
 
-AC_CONFIG_FILES([Makefile unit-tests/Makefile testsuite/Makefile])
+AC_CONFIG_FILES([Makefile unit-tests/Makefile bes-testsuite/Makefile])
 AC_OUTPUT
 
