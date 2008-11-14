@@ -1,2 +1,7 @@
-define d1 as mfp920504a;
-get tab for d1;
+<?xml version="1.0" encoding="UTF-8"?>
+<request reqID="some_unique_value" >
+    <define name="d">
+	<container name="mfp920504a" />
+    </define>
+    <get type="tab" definition="d" />
+</request>

@@ -52,7 +52,6 @@ using std::endl ;
 #include "CedarAuthenticateException.h"
 #include "ContainerStorageCedar.h"
 #include "BESContainerStorageList.h"
-#include "BESCommand.h"
 #include "CedarMySQLDB.h"
 
 #include "BESDebug.h"
@@ -96,22 +95,6 @@ CedarModule::initialize( const string &modname )
     ContainerStorageCedar *cpf = new ContainerStorageCedar( "Cedar" ) ;
     BESContainerStorageList::TheList()->add_persistence( cpf ) ;
 
-    string cmd_name = string( GET_RESPONSE ) + "." + FLAT_RESPONSE ;
-    BESDEBUG( "cedar", "    adding " << cmd_name << " command" << endl )
-    BESCommand::add_command( cmd_name, BESCommand::TermCommand ) ;
-
-    cmd_name = string( GET_RESPONSE ) + "." + TAB_RESPONSE ;
-    BESDEBUG( "cedar", "    adding " << cmd_name << " command" << endl )
-    BESCommand::add_command( cmd_name, BESCommand::TermCommand ) ;
-
-    cmd_name = string( GET_RESPONSE ) + "." + STREAM_RESPONSE ;
-    BESDEBUG( "cedar", "    adding " << cmd_name << " command" << endl )
-    BESCommand::add_command( cmd_name, BESCommand::TermCommand ) ;
-
-    cmd_name = string( GET_RESPONSE ) + "." + INFO_RESPONSE ;
-    BESDEBUG( "cedar", "    adding " << cmd_name << " command" << endl )
-    BESCommand::add_command( cmd_name, BESCommand::TermCommand ) ;
-
     BESDEBUG( "cedar", "Done Initializing Cedar module " << modname << endl )
 }
 
@@ -149,22 +132,6 @@ CedarModule::terminate( const string &modname )
 
     BESDEBUG( "cedar", "    adding Cedar Persistence" << endl )
     BESContainerStorageList::TheList()->del_persistence( "Cedar" ) ;
-
-    string cmd_name = string( GET_RESPONSE ) + "." + FLAT_RESPONSE ;
-    BESDEBUG( "cedar", "    removing " << cmd_name << " command" << endl )
-    BESCommand::del_command( cmd_name ) ;
-
-    cmd_name = string( GET_RESPONSE ) + "." + TAB_RESPONSE ;
-    BESDEBUG( "cedar", "    removing " << cmd_name << " command" << endl )
-    BESCommand::del_command( cmd_name ) ;
-
-    cmd_name = string( GET_RESPONSE ) + "." + STREAM_RESPONSE ;
-    BESDEBUG( "cedar", "    removing " << cmd_name << " command" << endl )
-    BESCommand::del_command( cmd_name ) ;
-
-    cmd_name = string( GET_RESPONSE ) + "." + INFO_RESPONSE ;
-    BESDEBUG( "cedar", "    removing " << cmd_name << " command" << endl )
-    BESCommand::del_command( cmd_name ) ;
 
     BESDEBUG( "cedar", "    closing databases" << endl )
     CedarDB::Close() ;
