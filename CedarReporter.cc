@@ -91,6 +91,10 @@ CedarReporter::~CedarReporter()
 void
 CedarReporter::report( BESDataHandlerInterface &dhi )
 {
+    // Only report if no errors occurred
+    if( dhi.error_info )
+	return ;
+
     // Only report a data request (get command) for ascii, das, dds, ddx,
     // datadds, tab, flat, stream, info, etc... The first three characters
     // of the action should be get.
@@ -137,7 +141,7 @@ CedarReporter::report( BESDataHandlerInterface &dhi )
     vector<CedarDBColumn> fld_set ;
     fld_set.push_back( CedarDBColumn( "user", user_name ) ) ;
     fld_set.push_back( CedarDBColumn( "requested", requested ) ) ;
-    fld_set.push_back( CedarDBColumn( "product", product ) ) ;
+    fld_set.push_back( CedarDBColumn( "data_product", product ) ) ;
     fld_set.push_back( CedarDBColumn( "constraint_expr", constraint ) ) ;
     flds.push_back( fld_set ) ;
 
@@ -145,7 +149,7 @@ CedarReporter::report( BESDataHandlerInterface &dhi )
     // log file.
     try
     {
-	_db->insert( "tbl_cedar_report", flds ) ;
+	_db->insert( "tbl_report", flds ) ;
     }
     catch( BESError &e )
     {
