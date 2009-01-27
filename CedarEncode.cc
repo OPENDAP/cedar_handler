@@ -189,7 +189,7 @@ CedarEncode::encode( const char *text, const char *key, char *encoded_text )
     else if( strlen( text ) > 8 )
     {
 	CedarEncode::encode( text+8, key, encoded_text+64 ) ;
-	char new_t[8] ;
+	char new_t[9] ;
 	strncpy( new_t, text, 8 ) ;
 	new_t[8] = '\0' ;
 	CedarEncode::my_encode( new_t, key, encoded_text ) ;
@@ -211,7 +211,7 @@ CedarEncode::decode( const char * encoded_text, const char *key,
     if( strlen( encoded_text ) > 64 )
     {
 	CedarEncode::decode( encoded_text+64, key, decoded_text+8 ) ;
-	char new_et[64] ;
+	char new_et[65] ;
 	strncpy( new_et, encoded_text, 64 ) ;
 	new_et[64] = '\0' ;
 	CedarEncode::my_decode( new_et, key, decoded_text ) ;
