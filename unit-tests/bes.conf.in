@@ -277,31 +277,31 @@ BES.DefaultResponseMethod=POST
 Cedar.DB.Authenticate.Type=mysql
 Cedar.DB.Authenticate.Server=localhost
 Cedar.DB.Authenticate.User=root
-Cedar.DB.Authenticate.Password=1010110110111010100011110111100111000101010100001000100110000100
+Cedar.DB.Authenticate.Password=
 Cedar.DB.Authenticate.Database=wikidb
-Cedar.DB.Authenticate.Socket=/project/cedar/src/pwest/packages/mysql/mysql.sock
+Cedar.DB.Authenticate.Socket=
 Cedar.Authenticate.Mode=on
 
 Cedar.DB.Catalog.Type=mysql
 Cedar.DB.Catalog.Server=localhost
 Cedar.DB.Catalog.User=root
-Cedar.DB.Catalog.Password=1010110110111010100011110111100111000101010100001000100110000100
+Cedar.DB.Catalog.Password=
 Cedar.DB.Catalog.Database=CEDARCATALOG
-Cedar.DB.Catalog.Socket=/project/cedar/src/pwest/packages/mysql/mysql.sock
+Cedar.DB.Catalog.Socket=
 
 Cedar.DB.Test.Type=mysql
 Cedar.DB.Test.Server=localhost
 Cedar.DB.Test.User=root
-Cedar.DB.Test.Password=1010110110111010100011110111100111000101010100001000100110000100
+Cedar.DB.Test.Password=
 Cedar.DB.Test.Database=test
-Cedar.DB.Test.Socket=/project/cedar/src/pwest/packages/mysql/mysql.sock
+Cedar.DB.Test.Socket=
 
 Cedar.DB.Reporter.Type=mysql
 Cedar.DB.Reporter.Server=localhost
 Cedar.DB.Reporter.User=root
-Cedar.DB.Reporter.Password=1010110110111010100011110111100111000101010100001000100110000100
+Cedar.DB.Reporter.Password=
 Cedar.DB.Reporter.Database=test
-Cedar.DB.Reporter.Socket=/project/cedar/src/pwest/packages/mysql/mysql.sock
+Cedar.DB.Reporter.Socket=
 
 Cedar.LogName=cedar.log
 Cedar.BaseDir=@abs_top_srcdir@/data
