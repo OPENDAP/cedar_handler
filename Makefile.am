@@ -13,85 +13,68 @@ AM_CPPFLAGS = $(BES_CPPFLAGS)
 
 SUBDIRS = unit-tests bes-testsuite
 
-bin_PROGRAMS = dap_cedar_handler encode checkKinst checkParcod
-lib_LTLIBRARIES = libcedar_handler.la
+bin_PROGRAMS = checkKinst checkParcod encode
 
 lib_besdir=$(libdir)/bes
 lib_bes_LTLIBRARIES = libcedar_module.la
 
 dist_bin_SCRIPTS = bes-cedar-data.sh
 
-CEDAR_SRCS:=cedar_read_attributes.cc cedar_read_descriptors.cc \
-	cedar_read_tab.cc cedar_read_tab_support.cc cedar_read_info.cc \
-	cedar_read_flat.cc cedar_read_stream.cc CedarRequestHandler.cc \
-	CedarFilter.cc CedarTab.cc CedarFlat.cc CedarInfo.cc \
-	FlatResponseHandler.cc TabResponseHandler.cc \
-	StreamResponseHandler.cc ContainerStorageCedar.cc \
-	CedarReporter.cc InfoResponseHandler.cc \
-	CedarAuthenticate.cc CedarAuthenticateException.cc \
-	CedarDB.cc CedarMySQLDB.cc CedarMySQLConnect.cc \
-	CedarReadKinst.cc CedarReadParcods.cc \
-	CedarMySQLResult.cc CedarEncode.cc CedarFSDir.cc CedarFSFile.cc
+CEDAR_DB_SRCS:=CedarDB.cc CedarMySQLDB.cc CedarMySQLConnect.cc		\
+	CedarMySQLResult.cc CedarEncode.cc
+
+CEDAR_DB_HDRS:=CedarDB.h CedarMySQLDB.h CedarMySQLConnect.h		\
+	CedarDBResult.h CedarMySQLResult.h CedarDBFields.h CedarEncode.h
+
+CEDAR_SRCS:=cedar_read_attributes.cc cedar_read_descriptors.cc		\
+	cedar_read_tab.cc cedar_read_tab_support.cc cedar_read_info.cc	\
+	cedar_read_flat.cc cedar_read_stream.cc CedarRequestHandler.cc	\
+	CedarFilter.cc CedarTab.cc CedarFlat.cc CedarInfo.cc		\
+	FlatResponseHandler.cc TabResponseHandler.cc			\
+	StreamResponseHandler.cc ContainerStorageCedar.cc		\
+	CedarReporter.cc InfoResponseHandler.cc				\
+	CedarAuthenticate.cc CedarAuthenticateException.cc		\
+	CedarReadKinst.cc CedarReadParcods.cc				\
+	CedarFSDir.cc CedarFSFile.cc CedarTransmitter.cc		\
+	$(CEDAR_DB_SRCS)
 
 
-CEDAR_HDRS:=CedarFilter.h CedarFlat.h CedarRequestHandler.h \
-	CedarResponseNames.h CedarTab.h CedarInfo.h FlatResponseHandler.h \
-	StreamResponseHandler.h TabResponseHandler.h cedar_read_attributes.h \
-	cedar_read_descriptors.h cedar_read_flat.h cedar_read_info.h \
-	cedar_read_stream.h cedar_read_tab.h cedar_read_tab_support.h \
-	ContainerStorageCedar.h CedarReporter.h InfoResponseHandler.h \
-	CedarAuthenticate.h CedarAuthenticateException.h \
-	CedarDB.h CedarMySQLDB.h CedarMySQLConnect.h CedarDBResult.h \
-	CedarMySQLResult.h CedarDBFields.h CedarEncode.h \
-	CedarReadKinst.h CedarReadParcods.h \
-	config_cedar.h CedarFSDir.h CedarFSFile.h
-
-
-BES_HANDLER_SRC = cedar_handler.cc CedarHandlerApp.cc cedar_module.cc cedar_commands.cc CedarHandlerApp.h
-
-libcedar_handler_la_SOURCES = $(CEDAR_SRCS) $(CEDAR_HDRS)
-libcedar_handler_la_LIBADD = $(BES_DAP_LIBS)
-
-dap_cedar_handler_SOURCES = $(BES_HANDLER_SRC)
-dap_cedar_handler_LDADD = libcedar_handler.la -L$(BES_MODULE_DIR) -ldap_module -ldap_cmd_module
+CEDAR_HDRS:=CedarFilter.h CedarFlat.h CedarRequestHandler.h		\
+	CedarResponseNames.h CedarTab.h CedarInfo.h			\
+	FlatResponseHandler.h StreamResponseHandler.h			\
+	TabResponseHandler.h cedar_read_attributes.h			\
+	cedar_read_descriptors.h cedar_read_flat.h cedar_read_info.h	\
+	cedar_read_stream.h cedar_read_tab.h cedar_read_tab_support.h	\
+	ContainerStorageCedar.h CedarReporter.h InfoResponseHandler.h	\
+	CedarAuthenticate.h CedarAuthenticateException.h		\
+	CedarReadKinst.h CedarReadParcods.h				\
+	config_cedar.h CedarFSDir.h CedarFSFile.h CedarTransmitter.h	\
+	$(CEDAR_DB_HDRS)
 
 libcedar_module_la_SOURCES = $(CEDAR_SRCS) CedarModule.cc $(CEDAR_HDRS) CedarModule.h
+libcedar_module_la_CPPFLAGS = $(AM_CPPFLAGS)
 libcedar_module_la_LDFLAGS = -avoid-version -module 
 libcedar_module_la_LIBADD = $(BES_DAP_LIBS)
 
-encode_SOURCES = encode.cc
-encode_LDADD = libcedar_handler.la -lbes_dap
+checkKinst_SOURCES = checkKinst.cc CedarReadKinst.cc $(CEDAR_DB_SRCS)	\
+	CedarReadKinst.h $(CEDAR_DB_HDRS)
+checkKist_CPPFLAGS = $(AM_CPPFLAGS)
+checkKinst_LDADD = $(BES_DAP_LIBS)
 
-checkKinst_SOURCES = checkKinst.cc
-checkKinst_LDADD = libcedar_handler.la
+checkParcod_SOURCES = checkParcod.cc CedarReadParcods.cc $(CEDAR_DB_SRCS) \
+	CedarReadParcods.h $(CEDAR_DB_HDRS)
+checkParcod_CPPFLAGS = $(AM_CPPFLAGS)
+checkParcod_LDADD =$(BES_DAP_LIBS)
 
-checkParcod_SOURCES = checkParcod.cc
-checkParcod_LDADD = libcedar_handler.la
+encode_SOURCES = encode.cc CedarEncode.cc CedarEncode.h
+encode_CPPFLAGS = $(AM_CPPFLAGS)
+encode_LDADD = $(BES_DAP_LIBS)
 
 pkgdata_DATA = cedar/cedar_help.html cedar/cedar_help.txt cedar/cedar_login.html
 
-MODOBJS = cedar_module.o cedar_commands.o
-
-all-local: $(MODOBJS)
-
-install-data-local: $(MODOBJS)
-	test -z "$(pkglibdir)" || $(mkdir_p) "$(DESTDIR)$(pkglibdir)"
-	list='$(MODOBJS)'; for p in $$list; do \
-	  if test -f $$p; then \
-	    f=$(am__strip_dir) \
-	    $(INSTALL) $$p $(DESTDIR)$(pkglibdir)/$$f; \
-	  fi; \
-	done
-
-uninstall-local:
-	@set -x; list='$(MODOBJS)'; for p in $$list; do \
-	  f=$(am__strip_dir) \
-	  rm -f "$(DESTDIR)$(pkglibdir)/$$f"; \
-	done
-
 EXTRA_DIST = COPYRIGHT COPYING bes-cedar-data.sh.in cedar/cedar_help.html cedar/cedar_help.txt cedar/cedar_login.html data
 
-CLEANFILES = *~ $(MODOBJS) bes-cedar-data.sh
+CLEANFILES = *~ bes-cedar-data.sh
 
 sample_datadir = $(datadir)/hyrax/data/cedar
 sample_data_DATA = data/mfp920504a.cbf

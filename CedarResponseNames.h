@@ -34,10 +34,20 @@
 #define E_CedarResponseNames_H 1
 
 #define CEDAR_NAME "cedar"
+#define CEDAR_SERVICE "cedar"
+#define CEDAR_FORMAT "cedar"
 #define FLAT_RESPONSE "get.flat"
+#define FLAT_SERVICE "flat"
+#define FLAT_DESCRIPT "CEDAR Ascii Flat response"
 #define INFO_RESPONSE "get.info"
+#define INFO_SERVICE "info"
+#define INFO_DESCRIPT "CEDAR File Informational response"
 #define STREAM_RESPONSE "get.stream"
+#define STREAM_SERVICE "stream"
+#define STREAM_DESCRIPT "CEDAR File Streamed"
 #define TAB_RESPONSE "get.tab"
+#define TAB_SERVICE "tab"
+#define TAB_DESCRIPT "CEDAR Ascii Tab delimited response"
 
 #endif // E_CedarResponseNames_H
 

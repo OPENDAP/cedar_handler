@@ -35,24 +35,28 @@
 using std::endl ;
 
 #include "CedarModule.h"
-#include "BESRequestHandlerList.h"
+#include <BESRequestHandlerList.h>
 #include "CedarRequestHandler.h"
-#include "BESResponseHandlerList.h"
+#include <BESResponseHandlerList.h>
 #include "FlatResponseHandler.h"
 #include "TabResponseHandler.h"
 #include "StreamResponseHandler.h"
 #include "InfoResponseHandler.h"
-#include "BESResponseNames.h"
+#include <BESResponseNames.h>
 #include "CedarResponseNames.h"
-#include "BESReporterList.h"
+#include <BESReporterList.h>
 #include "CedarReporter.h"
-#include "BESInterface.h"
+#include <BESInterface.h>
 #include "CedarAuthenticate.h"
-#include "BESExceptionManager.h"
+#include <BESExceptionManager.h>
 #include "CedarAuthenticateException.h"
 #include "ContainerStorageCedar.h"
-#include "BESContainerStorageList.h"
+#include <BESContainerStorageList.h>
 #include "CedarMySQLDB.h"
+#include <BESDapService.h>
+#include <BESServiceRegistry.h>
+#include <BESReturnManager.h>
+#include "CedarTransmitter.h"
 
 #include "BESDebug.h"
 
@@ -66,6 +70,22 @@ CedarModule::initialize( const string &modname )
 
     BESDEBUG( "cedar", "    adding cedar debug context" << endl )
     BESDebug::Register( "cedar" ) ;
+
+    BESDEBUG( "cedar", modname << " handles dap services" << endl )
+    BESDapService::handle_dap_service( modname ) ;
+
+    BESDEBUG( "cedar", "Adding " << CEDAR_SERVICE << " services:" << endl )
+    BESServiceRegistry *registry = BESServiceRegistry::TheRegistry() ;
+    registry->add_service( CEDAR_SERVICE ) ;
+    registry->add_to_service( CEDAR_SERVICE, FLAT_SERVICE,
+			      FLAT_DESCRIPT, CEDAR_FORMAT ) ;
+    registry->add_to_service( CEDAR_SERVICE, TAB_SERVICE,
+			      TAB_DESCRIPT, CEDAR_FORMAT ) ;
+    registry->add_to_service( CEDAR_SERVICE, INFO_SERVICE,
+			      INFO_DESCRIPT, CEDAR_FORMAT ) ;
+    registry->add_to_service( CEDAR_SERVICE, STREAM_SERVICE,
+			      STREAM_DESCRIPT, CEDAR_FORMAT ) ;
+    registry->handles_service( modname, CEDAR_SERVICE ) ;
 
     BESDEBUG( "cedar", "    adding " << modname << " request handler" << endl )
     BESRequestHandlerList::TheList()->add_handler( modname, new CedarRequestHandler( modname ) ) ;
@@ -81,6 +101,10 @@ CedarModule::initialize( const string &modname )
 
     BESDEBUG( "cear", "    adding " << INFO_RESPONSE << " response handler" << endl )
     BESResponseHandlerList::TheList()->add_handler( INFO_RESPONSE, InfoResponseHandler::InfoResponseBuilder ) ;
+
+    BESDEBUG( "cedar", "Initializing Cedar Transmitter" << endl )
+    BESReturnManager::TheManager()->add_transmitter( CEDAR_FORMAT,
+						     new CedarTransmitter( ) ) ;
 
     BESDEBUG( "cedar", "    adding Cedar reporter" << endl )
     BESReporterList::TheList()->add_reporter( modname, new CedarReporter ) ;
@@ -131,7 +155,7 @@ CedarModule::terminate( const string &modname )
     */
 
     BESDEBUG( "cedar", "    adding Cedar Persistence" << endl )
-    BESContainerStorageList::TheList()->del_persistence( "Cedar" ) ;
+    BESContainerStorageList::TheList()->deref_persistence( "Cedar" ) ;
 
     BESDEBUG( "cedar", "    closing databases" << endl )
     CedarDB::Close() ;

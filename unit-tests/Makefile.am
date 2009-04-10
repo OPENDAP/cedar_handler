@@ -5,7 +5,7 @@ AUTOMAKE_OPTIONS = foreign
 
 # Arrange to build with the backward compatibility mode enabled.
 AM_CPPFLAGS = -I$(top_srcdir) $(BES_CPPFLAGS)
-AM_LDADD =
+AM_LDADD = $(BES_DAP_LIBS)
 if CPPUNIT
 AM_CPPFLAGS += $(CPPUNIT_CFLAGS)
 AM_LDADD += $(CPPUNIT_LIBS)
@@ -57,18 +57,25 @@ bes.conf: bes.conf.in ../config.status
 
 ############################################################################
 
-dbT_SOURCES = dbT.cc
-dbT_LDADD =  ../libcedar_handler.la $(AM_LDADD)
+CEDAR_DB_SRCS:=../CedarDB.cc ../CedarMySQLDB.cc ../CedarMySQLConnect.cc	\
+	../CedarMySQLResult.cc ../CedarEncode.cc
 
-authT_SOURCES = authT.cc
-authT_LDADD =  ../libcedar_handler.la $(AM_LDADD)
+CEDAR_DB_HDRS:=../CedarDB.h ../CedarMySQLDB.h ../CedarMySQLConnect.h	\
+	../CedarDBResult.h ../CedarMySQLResult.h ../CedarDBFields.h	\
+	../CedarEncode.h
 
-kinstT_SOURCES = kinstT.cc
-kinstT_LDADD =  ../libcedar_handler.la $(AM_LDADD)
+dbT_SOURCES = dbT.cc $(CEDAR_DB_SRCS) $(CEDAR_DB_HDRS)
+dbT_LDADD =  $(AM_LDADD)
 
-parcodsT_SOURCES = parcodsT.cc
-parcodsT_LDADD =  ../libcedar_handler.la $(AM_LDADD)
+authT_SOURCES = authT.cc $(CEDAR_DB_SRCS) ../CedarAuthenticate.cc ../CedarAuthenticateException.cc $(CEDAR_DB_HDRS) ../CedarAuthenticate.h ../CedarAuthenticateException.h
+authT_LDADD =  $(AM_LDADD)
 
-reporterT_SOURCES = reporterT.cc
-reporterT_LDADD =  ../libcedar_handler.la $(AM_LDADD)
+kinstT_SOURCES = kinstT.cc $(CEDAR_DB_SRCS) ../CedarReadKinst.cc $(CEDAR_DB_HDRS) ../CedarReadKinst.h
+kinstT_LDADD =  $(AM_LDADD)
+
+parcodsT_SOURCES = parcodsT.cc $(CEDAR_DB_SRCS) ../CedarReadParcods.cc $(CEDAR_DB_HDRS) ../CedarReadParcods.h
+parcodsT_LDADD =  $(AM_LDADD)
+
+reporterT_SOURCES = reporterT.cc $(CEDAR_DB_SRCS) ../CedarReporter.cc ../ContainerStorageCedar.cc ../CedarFSDir.cc ../CedarFSFile.cc $(CEDAR_DB_HDRS) ../CedarReporter.h ../ContainerStorageCedar.h ../CedarFSDir.h ../CedarFSFile.h
+reporterT_LDADD =  $(AM_LDADD)
 

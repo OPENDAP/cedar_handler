@@ -1,7 +1,7 @@
-// CedarHandlerApp.cc
+// CedarTransmitter.cc
 
-// This file is part of the OPeNDAP Cedar data handler, providing data
-// access views for CedarWEB data
+// This file is part of bes, A C++ back-end server implementation framework
+// for the OPeNDAP Data Access Protocol.
 
 // Copyright (c) 2004,2005 University Corporation for Atmospheric Research
 // Author: Patrick West <pwest@ucar.edu> and Jose Garcia <jgarcia@ucar.edu>
@@ -23,85 +23,70 @@
 // You can contact University Corporation for Atmospheric Research at
 // 3080 Center Green Drive, Boulder, CO 80301
  
-// (c) COPYRIGHT University Corporation for Atmostpheric Research 2004-2005
+// (c) COPYRIGHT University Corporation for Atmospheric Research 2004-2005
 // Please read the full copyright statement in the file COPYRIGHT_UCAR.
 //
 // Authors:
 //      pwest       Patrick West <pwest@ucar.edu>
 //      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
-#include <signal.h>
-#include <unistd.h>
-
 #include <iostream>
 
-using std::cout ;
-using std::cerr ;
-using std::endl ;
-using std::flush ;
+#include "CedarTransmitter.h"
+#include <BESInfo.h>
+#include <BESReturnManager.h>
+#include <BESTransmitterNames.h>
 
-#include "CedarHandlerApp.h"
-#include "CedarResponseNames.h"
-#include "CedarFilter.h"
-#include "BESCgiInterface.h"
-#include "TheBESKeys.h"
-#include "BESDefaultModule.h"
-#include "BESDefaultCommands.h"
-
-CedarHandlerApp::CedarHandlerApp()
-    : _df( 0 )
+CedarTransmitter::CedarTransmitter( )
+    : _transmitter( 0 ), BESTransmitter()
 {
 }
 
-CedarHandlerApp::~CedarHandlerApp()
+BESTransmitter *
+CedarTransmitter::get_transmitter( BESDataHandlerInterface &dhi )
 {
-    if( _df )
+    if( !_transmitter )
     {
-	delete _df ;
-	_df = 0 ;
+	BESReturnManager *mgr = BESReturnManager::TheManager() ;
+	if( dhi.transmit_protocol != "HTTP" )
+	{
+	    _transmitter = mgr->find_transmitter( BASIC_TRANSMITTER ) ;
+	}
+	else
+	{
+	    _transmitter = mgr->find_transmitter( HTTP_TRANSMITTER ) ;
+	}
     }
+    return _transmitter ;
 }
 
-int
-CedarHandlerApp::initialize( int argc, char **argv )
+void
+CedarTransmitter::send_text( BESInfo &info,
+                             BESDataHandlerInterface &dhi )
 {
-    BESDefaultModule::initialize( argc, argv ) ;
-    BESDefaultCommands::initialize( argc, argv ) ;
-
-    int retVal = BESBaseApp::initialize( argc, argv ) ;
-    if( !retVal )
-    {
-	_df = new CedarFilter( argc, argv ) ;
-    }
-
-    return retVal ;
+    get_transmitter( dhi )->send_text( info, dhi ) ;
 }
 
-int
-CedarHandlerApp::run()
+void
+CedarTransmitter::send_html( BESInfo &info,
+                             BESDataHandlerInterface &dhi )
 {
-    string my_key = "Cedar.Authenticate.Mode" ;
-    TheBESKeys::TheKeys()->set_key( my_key, "off" ) ;
-    BESCgiInterface d( CEDAR_NAME, *_df ) ;
-    d.execute_request( "cedar" ) ;
-
-    return 0 ;
+    get_transmitter( dhi )->send_html( info, dhi ) ;
 }
 
 /** @brief dumps information about this object
  *
- * Displays the pointer value of this instance and calls dump on the parent
- * class
+ * Displays the pointer value of this instance
  *
  * @param strm C++ i/o stream to dump the information to
  */
 void
-CedarHandlerApp::dump( ostream &strm ) const
+CedarTransmitter::dump( ostream &strm ) const
 {
-    strm << BESIndent::LMarg << "CedarHandlerApp::dump - ("
+    strm << BESIndent::LMarg << "CedarTransmitter::dump - ("
 			     << (void *)this << ")" << endl ;
     BESIndent::Indent() ;
-    BESBaseApp::dump( strm ) ;
+    BESTransmitter::dump( strm ) ;
     BESIndent::UnIndent() ;
 }
 

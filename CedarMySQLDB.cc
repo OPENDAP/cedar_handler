@@ -81,7 +81,7 @@ CedarMySQLDB::CedarMySQLDB( const string &db_name )
     string my_sport =
 	TheBESKeys::TheKeys()->get_key( my_key + "Port", port_found ) ;
     _mysql_port = 0 ;
-    if( port_found )
+    if( port_found && !my_sport.empty() )
     {
 	_mysql_port = atoi( my_sport.c_str() ) ;
 	if( _mysql_port == 0 )

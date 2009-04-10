@@ -31,29 +31,30 @@
 //      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
 #include "CedarRequestHandler.h"
-#include "BESResponseHandler.h"
-#include "BESInternalError.h"
-#include "BESInternalFatalError.h"
-#include "BESDapError.h"
-#include "BESResponseNames.h"
+#include <BESResponseHandler.h>
+#include <BESInternalError.h>
+#include <BESInternalFatalError.h>
+#include <BESDapError.h>
+#include <BESResponseNames.h>
 #include "CedarResponseNames.h"
-#include "BESDataNames.h"
+#include <BESDataNames.h>
 #include "cedar_read_attributes.h"
-#include "BESDASResponse.h"
+#include <BESDASResponse.h>
 #include "cedar_read_descriptors.h"
-#include "BESDDSResponse.h"
-#include "BESDataDDSResponse.h"
-#include "Ancillary.h"
+#include <BESDDSResponse.h>
+#include <BESDataDDSResponse.h>
+#include <Ancillary.h>
 #include "cedar_read_tab.h"
 #include "CedarTab.h"
 #include "cedar_read_flat.h"
 #include "CedarFlat.h"
 #include "cedar_read_stream.h"
-#include "BESVersionInfo.h"
+#include <BESVersionInfo.h>
 #include "cedar_read_info.h"
 #include "CedarVersion.h"
-#include "TheBESKeys.h"
-#include "BESDebug.h"
+#include <TheBESKeys.h>
+#include <BESDebug.h>
+#include <BESServiceRegistry.h>
 #include "config_cedar.h"
 
 CedarRequestHandler::CedarRequestHandler( string name )
@@ -339,7 +340,7 @@ CedarRequestHandler::cedar_build_vers( BESDataHandlerInterface &dhi )
     if( !info )
 	throw BESInternalError( "cast error", __FILE__, __LINE__ ) ;
   
-    info->addHandlerVersion( PACKAGE_NAME, PACKAGE_VERSION ) ;
+    info->add_module( PACKAGE_NAME, PACKAGE_VERSION ) ;
 
     return ret ;
 }
@@ -354,25 +355,21 @@ CedarRequestHandler::cedar_build_help( BESDataHandlerInterface &dhi )
     if( !info )
 	throw BESInternalError( "cast error", __FILE__, __LINE__ ) ;
   
-    info->begin_tag( "Handler" ) ;
-    info->add_tag( "name", PACKAGE_NAME ) ;
-    string handles = (string)DAS_RESPONSE
-                     + "," + DDS_RESPONSE
-                     + "," + DATA_RESPONSE
-                     + "," + FLAT_RESPONSE
-                     + "," + TAB_RESPONSE
-                     + "," + INFO_RESPONSE
-                     + "," + STREAM_RESPONSE
-                     + "," + HELP_RESPONSE
-                     + "," + VERS_RESPONSE ;
-    info->add_tag( "handles", handles ) ;
-    info->add_tag( "version", PACKAGE_STRING ) ;
-    info->begin_tag( "help" ) ;
+    map<string,string> attrs ;
+    attrs["name"] = PACKAGE_NAME ;
+    attrs["version"] = PACKAGE_VERSION ;
+    list<string> services ;
+    BESServiceRegistry::TheRegistry()->services_handled( CEDAR_NAME, services );
+    if( services.size() > 0 )
+    {
+	string handles = BESUtil::implode( services, ',' ) ;
+	attrs["handles"] = handles ;
+    }
+    info->begin_tag( "module", &attrs ) ;
 
     info->add_data_from_file( "Cedar.Help", CEDAR_NAME ) ;
 
-    info->end_tag( "help" ) ;
-    info->end_tag( "Handler" ) ;
+    info->end_tag( "module" ) ;
 
     return ret ;
 }

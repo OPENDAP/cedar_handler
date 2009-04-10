@@ -40,6 +40,7 @@ proc besstandalone_start { {script ""} {is_data "no"} } {
     }
 
     if {[string compare $is_data "no"] == 0} {
+        send_user "exec besstandalone -c bes.conf -i $script"
         catch "exec besstandalone -c bes.conf -i $script" comp_output
     } else {
         catch "exec besstandalone -c bes.conf -i $script | getdap -M -" comp_output

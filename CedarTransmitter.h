@@ -1,7 +1,7 @@
-// CedarHandlerApp.h
+// CedarTransmitter.h
 
-// This file is part of the OPeNDAP Cedar data handler, providing data
-// access views for CedarWEB data
+// This file is part of bes, A C++ back-end server implementation framework
+// for the OPeNDAP Data Access Protocol.
 
 // Copyright (c) 2004,2005 University Corporation for Atmospheric Research
 // Author: Patrick West <pwest@ucar.edu> and Jose Garcia <jgarcia@ucar.edu>
@@ -23,32 +23,33 @@
 // You can contact University Corporation for Atmospheric Research at
 // 3080 Center Green Drive, Boulder, CO 80301
  
-// (c) COPYRIGHT University Corporation for Atmostpheric Research 2004-2005
+// (c) COPYRIGHT University Corporation for Atmospheric Research 2004-2005
 // Please read the full copyright statement in the file COPYRIGHT_UCAR.
 //
 // Authors:
 //      pwest       Patrick West <pwest@ucar.edu>
 //      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
-#include "BESBaseApp.h"
-#include "BESDataHandlerInterface.h"
+#ifndef A_CedarTransmitter_h
+#define A_CedarTransmitter_h 1
 
-#include "DODSFilter.h"
+#include "BESTransmitter.h"
 
-using namespace libdap ;
-
-class CedarHandlerApp : public BESBaseApp
+class CedarTransmitter : public BESTransmitter
 {
 private:
-    DODSFilter *		_df ;
+    BESTransmitter *	_transmitter ;
+    BESTransmitter *	get_transmitter( BESDataHandlerInterface &dhi ) ;
 public:
-    				CedarHandlerApp() ;
-    virtual			~CedarHandlerApp() ;
-    virtual int			initialize( int argc, char **argv ) ;
-    virtual int			run() ;
+    			CedarTransmitter() ;
+    virtual		~CedarTransmitter() {}
 
-    virtual void		dump( ostream &strm ) const ;
+    virtual void	send_text( BESInfo &info,
+    				   BESDataHandlerInterface &dhi) ;
+    virtual void	send_html( BESInfo &info,
+    				   BESDataHandlerInterface &dhi) ;
 
-    static bool			set_user( BESDataHandlerInterface &dhi ) ;
+    virtual void	dump( ostream &strm ) const ;
 } ;
 
+#endif // A_CedarTransmitter_h
