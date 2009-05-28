@@ -19,7 +19,7 @@ xsi:schemaLocation="http://xml.opendap.org/ns/DAP2  http://xml.opendap.org/dap/d
                 <value>&quot;42 37&apos;10\&quot;&quot;</value>
             </Attribute>
             <Attribute name="LONGITUDE" type="String">
-                <value>&quot;-72 30&apos;29\&quot;&quot;</value>
+                <value>&quot;-71 29&apos;30\&quot;&quot;</value>
             </Attribute>
             <Attribute name="ALTITUDE" type="String">
                 <value>&quot;0.146&quot;</value>
@@ -381,7 +381,7 @@ xsi:schemaLocation="http://xml.opendap.org/ns/DAP2  http://xml.opendap.org/dap/d
                 <value>&quot;42 37&apos;10\&quot;&quot;</value>
             </Attribute>
             <Attribute name="LONGITUDE" type="String">
-                <value>&quot;-72 30&apos;29\&quot;&quot;</value>
+                <value>&quot;-71 29&apos;30\&quot;&quot;</value>
             </Attribute>
             <Attribute name="ALTITUDE" type="String">
                 <value>&quot;0.146&quot;</value>

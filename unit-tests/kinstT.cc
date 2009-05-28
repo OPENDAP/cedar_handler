@@ -77,7 +77,7 @@ public:
 	    CPPUNIT_ASSERT( lat == "42 37'10\\\"" ) ;
 	    string lon = CedarReadKinst::Get_Longitude_as_String( 5340 ) ;
 	    cout << "lon = " << lon << endl ;
-	    CPPUNIT_ASSERT( lon == "-72 30'29\\\"" ) ;
+	    CPPUNIT_ASSERT( lon == "-71 29'30\\\"" ) ;
 	    string alt = CedarReadKinst::Get_Altitude_as_String( 5340 ) ;
 	    cout << "alt = " << alt << endl ;
 	    CPPUNIT_ASSERT( alt == "0.146" ) ;
