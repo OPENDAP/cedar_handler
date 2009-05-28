@@ -17,6 +17,7 @@ using std::endl ;
 #include "BESDataHandlerInterface.h"
 #include "BESDebug.h"
 #include "BESDataNames.h"
+#include "BESContextManager.h"
 #include "test_config.h"
 
 class reporterT: public TestFixture {
@@ -65,7 +66,7 @@ public:
 	    cerr << "create the container storage" << endl ;
 	    ContainerStorageCedar csc( "cedar" ) ;
 
-	    dhi.data[USER_NAME] = "pwest" ;
+	    BESContextManager::TheManager()->set_context( USER_NAME, "pwest" ) ;
 	    dhi.action = "get.tab" ;
 
 	    cerr << "find mfp920504a" << endl ;

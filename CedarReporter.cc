@@ -35,6 +35,8 @@
 #include "BESDataNames.h"
 #include "CedarDB.h"
 #include "TheBESKeys.h"
+#include "BESContextManager.h"
+#include "BESDataNames.h"
 #include "BESLog.h"
 
 CedarReporter::CedarReporter()
@@ -108,13 +110,14 @@ CedarReporter::report( BESDataHandlerInterface &dhi )
 
     // Get the user name from the data element of dhi. If doesn't exist or
     // is empty then set to USER_UNKNOWN
-    string user_name = "" ;
-    BESDataHandlerInterface::data_citer citer ;
-    citer = dhi.data_c().find( USER_NAME ) ;
-    if( citer != dhi.data_c().end() )
-	user_name = (*citer).second ;
-    if( user_name == "" )
-	user_name = "USER_UNKNOWN" ;
+    bool found = false ;
+    string context = USER_NAME ;
+    string username = BESContextManager::TheManager()->get_context( context,
+								    found ) ;
+    if( username.empty() )
+    {
+	username = "USER_UNKNOWN" ;
+    }
 
     // Get the symbolic names of the containers included in this request.
     // These represent the data files used, and the first three characters
@@ -139,7 +142,7 @@ CedarReporter::report( BESDataHandlerInterface &dhi )
     // being inserted, so only one vector of that vector.
     vector< vector<CedarDBColumn> > flds ;
     vector<CedarDBColumn> fld_set ;
-    fld_set.push_back( CedarDBColumn( "user", user_name ) ) ;
+    fld_set.push_back( CedarDBColumn( "user", username ) ) ;
     fld_set.push_back( CedarDBColumn( "requested", requested ) ) ;
     fld_set.push_back( CedarDBColumn( "data_product", product ) ) ;
     fld_set.push_back( CedarDBColumn( "constraint_expr", constraint ) ) ;
@@ -155,13 +158,13 @@ CedarReporter::report( BESDataHandlerInterface &dhi )
     {
 	(*BESLog::TheLog()) << "Failed to report to cedar database: "
 			    << e.get_message() << endl ;
-	report_to_log( dhi, user_name, requested, product, constraint ) ;
+	report_to_log( dhi, username, requested, product, constraint ) ;
     }
     catch( ... )
     {
 	(*BESLog::TheLog()) << "Failed to report to cedar database: "
 			    << "Unknown exception caught" << endl ;
-	report_to_log( dhi, user_name, requested, product, constraint ) ;
+	report_to_log( dhi, username, requested, product, constraint ) ;
     }
 }
 
@@ -174,14 +177,14 @@ CedarReporter::report( BESDataHandlerInterface &dhi )
  *
  * @param dhi structure that contains all information pertaining to the data
  * request
- * @param user_name user making the data request
+ * @param username user making the data request
  * @param requested symbolic names of files requested (basename of files)
  * @param product data product requested (das, dds, tab, flat, etc...)
  * @param constraint if any specified, the constraint on the data sets
  */
 void
 CedarReporter::report_to_log( BESDataHandlerInterface &dhi,
-			      const string &user_name,
+			      const string &username,
 			      const string &requested,
 			      const string &product,
 			      const string &constraint )
@@ -196,7 +199,7 @@ CedarReporter::report_to_log( BESDataHandlerInterface &dhi,
         *(_file_buffer) << b[j] ;
     *(_file_buffer) << "] " ;
 
-    *(_file_buffer) << user_name << " - "
+    *(_file_buffer) << username << " - "
 		    << requested << " - "
 		    << product << " - "
 		    << constraint << endl ;

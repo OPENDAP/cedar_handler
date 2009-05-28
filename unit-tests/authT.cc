@@ -11,6 +11,7 @@ using std::endl ;
 
 #include "CedarAuthenticate.h"
 #include "BESDataNames.h"
+#include "BESContextManager.h"
 #include "BESDataHandlerInterface.h"
 #include "BESDebug.h"
 #include "CedarMySQLDB.h"
@@ -51,7 +52,7 @@ public:
 	    CedarDB::Add_DB_Builder( "mysql", CedarMySQLDB::BuildMySQLDB ) ;
 
 	    BESDataHandlerInterface dhi ;
-	    dhi.data[USER_NAME] = "pwest" ;
+	    BESContextManager::TheManager()->set_context( USER_NAME, "pwest" ) ;
 
 	    CedarAuthenticate::authenticate( dhi ) ;
 

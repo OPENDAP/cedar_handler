@@ -48,7 +48,6 @@ using std::endl ;
 #include <BESReporterList.h>
 #include "CedarReporter.h"
 #include <BESInterface.h>
-#include "CedarAuthenticate.h"
 #include <BESExceptionManager.h>
 #include "CedarAuthenticateException.h"
 #include "ContainerStorageCedar.h"
@@ -105,9 +104,6 @@ CedarModule::initialize( const string &modname )
     BESDEBUG( "cedar", "    adding Cedar reporter" << endl )
     BESReporterList::TheList()->add_reporter( modname, new CedarReporter ) ;
 
-    BESDEBUG( "cedar", "    adding Cedar authenticate to init callbacks" << endl )
-    BESInterface::add_init_callback( CedarAuthenticate::authenticate ) ;
-
     BESDEBUG( "cedar", "    adding Cedar authenticate exception callback" << endl )
     BESExceptionManager::TheEHM()->add_ehm_callback( CedarAuthenticateException::handleAuthException ) ;
 
@@ -139,11 +135,6 @@ CedarModule::terminate( const string &modname )
     BESDEBUG( "cedar", "    removing Cedar reporter" << endl )
     BESReporter *r = BESReporterList::TheList()->remove_reporter( modname ) ;
     if( r ) delete r ;
-
-    /* no way to remove this
-    BESDEBUG( "cedar", "    removing Cedar authenticate to init callbacks" << endl )
-    BESInterface::add_init_callback( CedarAuthenticate::authenticate ) ;
-    */
 
     /* no way to remove this
     BESDEBUG( "cedar", "    adding Cedar authenticate exception callback" << endl )

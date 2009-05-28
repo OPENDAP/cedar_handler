@@ -48,11 +48,8 @@
  * Cedar.Authenticate.MySQL.mode=&lt;on|off&gt;
  *
  * The relevant columns for authentication in the session table tbl_session,
- * looks like this:
+ * are USER_NAME and TOKEN.
  * 
- * USER_NAME char(30)
- * CLIENT_IP char(45)
- *
  * CedarAuthenticate can be specified on the link line as the
  * authentication mechanism by linking in the object module
  * mysql_authenticator.o. If, during development and testing of the server,

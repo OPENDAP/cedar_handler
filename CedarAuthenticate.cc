@@ -48,6 +48,7 @@ using std::bad_alloc ;
 #include "CedarAuthenticateException.h"
 #include "BESInternalFatalError.h"
 #include "BESDataNames.h"
+#include "BESContextManager.h"
 #include "BESLog.h"
 
 /** @brief Cedar authentication using MySQL database
@@ -143,12 +144,25 @@ CedarAuthenticate::authenticate( BESDataHandlerInterface &dhi )
 	    throw CedarAuthenticateException( e.get_message(), __FILE__, __LINE__ ) ;
 	}
 
-	// get the current date and time
-	string query_str = "select USER_NAME from cedar_sessions " ;
-	query_str += "where USER_NAME=\"" + dhi.data[USER_NAME] + "\"" ;
-	if( dhi.data[USER_TOKEN] != "" )
+	string context = USER_NAME ;
+	string username = BESContextManager::TheManager()->get_context( context,
+								    found ) ;
+	if( username.empty() )
 	{
-	    query_str += " AND TOKEN=\"" + dhi.data[USER_TOKEN] + "\";" ;
+	    string s = "Unable to authenticate user, no user name provided" ;
+	    throw CedarAuthenticateException( s, __FILE__, __LINE__ ) ;
+	}
+
+	context = USER_TOKEN ;
+	string token = BESContextManager::TheManager()->get_context( context,
+								     found ) ;
+
+	// attempt to get the users session information
+	string query_str = "select USER_NAME from cedar_sessions " ;
+	query_str += "where USER_NAME=\"" + username + "\"" ;
+	if( token != "" )
+	{
+	    query_str += " AND TOKEN=\"" + token + "\";" ;
 	}
 	else
 	{
@@ -157,13 +171,12 @@ CedarAuthenticate::authenticate( BESDataHandlerInterface &dhi )
 	CedarDBResult *result = db->run_query( query_str ) ;
 	if( result && !result->is_empty_set() )
 	{
-	    cerr << (*result) << endl ;
 	    if( (result->get_num_fields() != 1) )
 	    {
 		delete result ;
 		ostringstream s ;
 		s << "Unable to authenticate user "
-		  << dhi.data[USER_NAME] << endl
+		  << username << endl
 		  << "Invalid data from MySQL: "
 		  << result->get_num_rows() << " rows and "
 		  << result->get_num_fields() << " fields returned" ;
@@ -175,7 +188,7 @@ CedarAuthenticate::authenticate( BESDataHandlerInterface &dhi )
 	    if( result ) delete result ;
 	    ostringstream s ;
 	    s << "Unable to authenticate user "
-	      << dhi.data[USER_NAME] ;
+	      << username ;
 	    throw CedarAuthenticateException( s.str(), __FILE__, __LINE__ ) ;
 	}
 

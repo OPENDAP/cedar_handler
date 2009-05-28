@@ -52,6 +52,7 @@
 #include <BESVersionInfo.h>
 #include "cedar_read_info.h"
 #include "CedarVersion.h"
+#include "CedarAuthenticate.h"
 #include <TheBESKeys.h>
 #include <BESDebug.h>
 #include <BESServiceRegistry.h>
@@ -96,6 +97,9 @@ bool
 CedarRequestHandler::cedar_build_das( BESDataHandlerInterface &dhi )
 {
     BESDEBUG( "cedar", "building cedar das response:" << endl )
+
+    // make sure the user is authenticated to receive cedar data
+    CedarAuthenticate::authenticate( dhi ) ;
 
     bool ret = true ;
 
@@ -144,6 +148,9 @@ bool
 CedarRequestHandler::cedar_build_dds( BESDataHandlerInterface &dhi )
 {
     bool ret = true ;
+
+    // make sure the user is authenticated to receive cedar data
+    CedarAuthenticate::authenticate( dhi ) ;
 
     BESResponseObject *response = dhi.response_handler->get_response_object();
     BESDDSResponse *bdds = dynamic_cast < BESDDSResponse * >(response);
@@ -203,6 +210,9 @@ CedarRequestHandler::cedar_build_dds( BESDataHandlerInterface &dhi )
 bool
 CedarRequestHandler::cedar_build_data( BESDataHandlerInterface &dhi )
 {
+    // make sure the user is authenticated to receive cedar data
+    CedarAuthenticate::authenticate( dhi ) ;
+
     BESResponseObject *response = dhi.response_handler->get_response_object();
     BESDataDDSResponse *bdds = dynamic_cast < BESDataDDSResponse * >(response);
     if( !bdds )
@@ -263,6 +273,9 @@ CedarRequestHandler::cedar_build_flat( BESDataHandlerInterface &dhi )
 {
     bool ret = true ;
 
+    // make sure the user is authenticated to receive cedar data
+    CedarAuthenticate::authenticate( dhi ) ;
+
     BESResponseObject *response = dhi.response_handler->get_response_object() ;
     CedarFlat *flat = dynamic_cast < CedarFlat * >(response) ;
     if( !flat )
@@ -295,6 +308,9 @@ CedarRequestHandler::cedar_build_tab( BESDataHandlerInterface &dhi )
 {
     bool ret = true ;
 
+    // make sure the user is authenticated to receive cedar data
+    CedarAuthenticate::authenticate( dhi ) ;
+
     BESResponseObject *response = dhi.response_handler->get_response_object() ;
     CedarTab *dtab = dynamic_cast < CedarTab * >(response) ;
     if( !dtab )
@@ -313,6 +329,9 @@ bool
 CedarRequestHandler::cedar_build_info( BESDataHandlerInterface &dhi )
 {
     bool ret = true ;
+
+    // make sure the user is authenticated to receive cedar data
+    CedarAuthenticate::authenticate( dhi ) ;
 
     BESInfo *info =
 	dynamic_cast<BESInfo *>(dhi.response_handler->get_response_object());
