@@ -43,6 +43,7 @@ using std::endl ;
 #include "StreamResponseHandler.h"
 #include "InfoResponseHandler.h"
 #include <BESResponseNames.h>
+#include <BESTransmitterNames.h>
 #include "CedarResponseNames.h"
 #include <BESReporterList.h>
 #include "CedarReporter.h"
@@ -56,7 +57,6 @@ using std::endl ;
 #include <BESDapService.h>
 #include <BESServiceRegistry.h>
 #include <BESReturnManager.h>
-#include "CedarTransmitter.h"
 
 #include "BESDebug.h"
 
@@ -78,13 +78,13 @@ CedarModule::initialize( const string &modname )
     BESServiceRegistry *registry = BESServiceRegistry::TheRegistry() ;
     registry->add_service( CEDAR_SERVICE ) ;
     registry->add_to_service( CEDAR_SERVICE, FLAT_SERVICE,
-			      FLAT_DESCRIPT, CEDAR_FORMAT ) ;
+			      FLAT_DESCRIPT, BASIC_TRANSMITTER ) ;
     registry->add_to_service( CEDAR_SERVICE, TAB_SERVICE,
-			      TAB_DESCRIPT, CEDAR_FORMAT ) ;
+			      TAB_DESCRIPT, BASIC_TRANSMITTER ) ;
     registry->add_to_service( CEDAR_SERVICE, INFO_SERVICE,
-			      INFO_DESCRIPT, CEDAR_FORMAT ) ;
+			      INFO_DESCRIPT, BASIC_TRANSMITTER ) ;
     registry->add_to_service( CEDAR_SERVICE, STREAM_SERVICE,
-			      STREAM_DESCRIPT, CEDAR_FORMAT ) ;
+			      STREAM_DESCRIPT, BASIC_TRANSMITTER ) ;
     registry->handles_service( modname, CEDAR_SERVICE ) ;
 
     BESDEBUG( "cedar", "    adding " << modname << " request handler" << endl )
@@ -101,10 +101,6 @@ CedarModule::initialize( const string &modname )
 
     BESDEBUG( "cear", "    adding " << INFO_RESPONSE << " response handler" << endl )
     BESResponseHandlerList::TheList()->add_handler( INFO_RESPONSE, InfoResponseHandler::InfoResponseBuilder ) ;
-
-    BESDEBUG( "cedar", "Initializing Cedar Transmitter" << endl )
-    BESReturnManager::TheManager()->add_transmitter( CEDAR_FORMAT,
-						     new CedarTransmitter( ) ) ;
 
     BESDEBUG( "cedar", "    adding Cedar reporter" << endl )
     BESReporterList::TheList()->add_reporter( modname, new CedarReporter ) ;

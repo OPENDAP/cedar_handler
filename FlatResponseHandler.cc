@@ -34,6 +34,7 @@
 #include "CedarFlat.h"
 #include "cgi_util.h"
 #include "BESRequestHandlerList.h"
+#include "BESContextManager.h"
 
 FlatResponseHandler::FlatResponseHandler( const string &name )
     : BESResponseHandler( name )
@@ -47,7 +48,11 @@ FlatResponseHandler::~FlatResponseHandler( )
 void
 FlatResponseHandler::execute( BESDataHandlerInterface &dhi )
 {
-    _response = new CedarFlat( dhi.transmit_protocol == "HTTP",
+    bool found = false ;
+    string context = "transmit_protocol" ;
+    string protocol = BESContextManager::TheManager()->get_context( context,
+								    found ) ;
+    _response = new CedarFlat( protocol == "HTTP",
 			       &(dhi.get_output_stream()) ) ;
     BESRequestHandlerList::TheList()->execute_each( dhi ) ;
 }

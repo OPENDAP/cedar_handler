@@ -34,6 +34,7 @@
 #include "CedarInfo.h"
 #include "cgi_util.h"
 #include "BESRequestHandlerList.h"
+#include "BESContextManager.h"
 
 InfoResponseHandler::InfoResponseHandler( const string &name )
     : BESResponseHandler( name )
@@ -47,7 +48,11 @@ InfoResponseHandler::~InfoResponseHandler( )
 void
 InfoResponseHandler::execute( BESDataHandlerInterface &dhi )
 {
-    _response = new CedarInfo( dhi.transmit_protocol == "HTTP",
+    bool found = false ;
+    string context = "transmit_protocol" ;
+    string protocol = BESContextManager::TheManager()->get_context( context,
+								    found ) ;
+    _response = new CedarInfo( protocol == "HTTP",
 			       &(dhi.get_output_stream()) ) ;
     BESRequestHandlerList::TheList()->execute_each( dhi ) ;
 }

@@ -54,7 +54,7 @@ CedarTransmitter::get_transmitter( BESDataHandlerInterface &dhi )
 	}
 	else
 	{
-	    _transmitter = mgr->find_transmitter( HTTP_TRANSMITTER ) ;
+	    _transmitter = mgr->find_transmitter( "HTTP" ) ;
 	}
     }
     return _transmitter ;

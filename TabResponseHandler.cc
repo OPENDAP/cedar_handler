@@ -34,6 +34,7 @@
 #include "CedarTab.h"
 #include "cgi_util.h"
 #include "BESRequestHandlerList.h"
+#include "BESContextManager.h"
 
 TabResponseHandler::TabResponseHandler( const string &name )
     : BESResponseHandler( name )
@@ -47,7 +48,11 @@ TabResponseHandler::~TabResponseHandler( )
 void
 TabResponseHandler::execute( BESDataHandlerInterface &dhi )
 {
-    _response = new CedarTab( dhi.transmit_protocol == "HTTP",
+    bool found = false ;
+    string context = "transmit_protocol" ;
+    string protocol = BESContextManager::TheManager()->get_context( context,
+								    found ) ;
+    _response = new CedarTab( protocol == "HTTP",
 			      &(dhi.get_output_stream()) ) ;
     BESRequestHandlerList::TheList()->execute_each( dhi ) ;
 }
