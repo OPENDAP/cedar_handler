@@ -16,10 +16,10 @@ xsi:schemaLocation="http://xml.opendap.org/ns/DAP2  http://xml.opendap.org/dap/d
                 <value>&quot;MFP&quot;</value>
             </Attribute>
             <Attribute name="LATITUDE" type="String">
-                <value>&quot;42 37&apos;10\&quot;&quot;</value>
+                <value>&quot;42 36&apos;43\&quot;&quot;</value>
             </Attribute>
             <Attribute name="LONGITUDE" type="String">
-                <value>&quot;-71 29&apos;30\&quot;&quot;</value>
+                <value>&quot;-71 29&apos;05\&quot;&quot;</value>
             </Attribute>
             <Attribute name="ALTITUDE" type="String">
                 <value>&quot;0.146&quot;</value>
@@ -378,10 +378,10 @@ xsi:schemaLocation="http://xml.opendap.org/ns/DAP2  http://xml.opendap.org/dap/d
                 <value>&quot;MFP&quot;</value>
             </Attribute>
             <Attribute name="LATITUDE" type="String">
-                <value>&quot;42 37&apos;10\&quot;&quot;</value>
+                <value>&quot;42 36&apos;43\&quot;&quot;</value>
             </Attribute>
             <Attribute name="LONGITUDE" type="String">
-                <value>&quot;-71 29&apos;30\&quot;&quot;</value>
+                <value>&quot;-71 29&apos;05\&quot;&quot;</value>
             </Attribute>
             <Attribute name="ALTITUDE" type="String">
                 <value>&quot;0.146&quot;</value>

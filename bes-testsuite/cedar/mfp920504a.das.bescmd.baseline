@@ -4,8 +4,8 @@ Attributes {
             String KINST "5340";
             String NAME "Millstone Hill Fabry-Perot";
             String PREFIX "MFP";
-            String LATITUDE "42 37'10\"";
-            String LONGITUDE "-71 29'30\"";
+            String LATITUDE "42 36'43\"";
+            String LONGITUDE "-71 29'05\"";
             String ALTITUDE "0.146";
         }
         JPAR_0 {
@@ -154,8 +154,8 @@ Attributes {
             String KINST "5340";
             String NAME "Millstone Hill Fabry-Perot";
             String PREFIX "MFP";
-            String LATITUDE "42 37'10\"";
-            String LONGITUDE "-71 29'30\"";
+            String LATITUDE "42 36'43\"";
+            String LONGITUDE "-71 29'05\"";
             String ALTITUDE "0.146";
         }
         JPAR_0 {
