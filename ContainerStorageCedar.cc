@@ -30,6 +30,10 @@
 //      pwest       Patrick West <pwest@ucar.edu>
 //      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+
 #include <sstream>
 #include <fstream>
 #include <iostream>
@@ -68,7 +72,19 @@ ContainerStorageCedar::~ContainerStorageCedar()
 BESContainer *
 ContainerStorageCedar::look_for( const string &sym_name )
 {
+    // This should be the full path to the file. Make sure it exists. If
+    // it doesn't, then return null and perhaps another container store
+    // can handle it. If not, then an exception will be thrown.
     string real_name = _cedar_base + "/" + sym_name + ".cbf" ;
+    int is_accessible = access( real_name.c_str(), R_OK ) ;
+    if( is_accessible == -1 )
+    {
+	// In this case, the file is not accessible or does not exist
+	// using cedar base directory. So return 0 and allow another
+	// container store a chance to get to it.
+	return 0 ;
+    }
+    // the file is accessible, let's use it
     BESContainer *c = new BESFileContainer( sym_name, real_name, "cedar" ) ;
     return c ;
 }
