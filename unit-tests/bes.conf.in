@@ -280,7 +280,7 @@ Cedar.DB.Authenticate.User=root
 Cedar.DB.Authenticate.Password=
 Cedar.DB.Authenticate.Database=wikidb
 Cedar.DB.Authenticate.Socket=
-Cedar.Authenticate.Mode=on
+Cedar.Authenticate.Mode=off
 
 Cedar.DB.Catalog.Type=mysql
 Cedar.DB.Catalog.Server=localhost
