@@ -50,6 +50,7 @@ using std::bad_alloc ;
 #include "BESDataNames.h"
 #include "BESContextManager.h"
 #include "BESLog.h"
+#include "BESDebug.h"
 
 /** @brief Cedar authentication using MySQL database
  *
@@ -101,11 +102,17 @@ CedarAuthenticate::authenticate( BESDataHandlerInterface &dhi )
     else
     {
 	if( mode == "on" )
+	{
 	    enforce_authentication = true ;
+	    BESDEBUG( "cedar", "CEDAR Authentication enabled" << endl )
+	}
 	else
 	{
 	    if( mode == "off" )
+	    {
 		enforce_authentication = false ;
+		BESDEBUG( "cedar", "CEDAR Authentication disabled" << endl )
+	    }
 	    else
 	    {
 		string s = "Unable to authenticate: Authentication mode set to "
@@ -168,6 +175,7 @@ CedarAuthenticate::authenticate( BESDataHandlerInterface &dhi )
 	{
 	    query_str += " AND TOKEN IS NULL;" ;
 	}
+	BESDEBUG( "cedar", "authenticating with " << query_str << endl )
 	CedarDBResult *result = db->run_query( query_str ) ;
 	if( result && !result->is_empty_set() )
 	{
