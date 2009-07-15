@@ -129,8 +129,7 @@ ContainerStorageCedar::show_containers( BESInfo &info )
 	{
 	    string sym = (*i).getBaseName() ;
 	    string real = (*i).getFullPath() ;
-	    string line = sym + "," + real + "," + CEDAR_NAME + "\n" ;
-	    info.add_data( line ) ;
+	    show_container( sym, real, CEDAR_NAME, info ) ;
 	}
     }
     catch( const string &err_str )
