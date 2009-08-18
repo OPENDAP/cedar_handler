@@ -35,6 +35,7 @@
 #include <BESInternalError.h>
 #include <BESInternalFatalError.h>
 #include <BESDapError.h>
+#include <BESDapNames.h>
 #include <BESResponseNames.h>
 #include "CedarResponseNames.h"
 #include <BESDataNames.h>
