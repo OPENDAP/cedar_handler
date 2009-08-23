@@ -62,18 +62,18 @@ using std::endl ;
 void
 CedarModule::initialize( const string &modname )
 {
-    BESDEBUG( "cedar", "Initializing Cedar module " << modname << endl )
+    BESDEBUG( "cedar", "Initializing Cedar module " << modname << endl ) ;
 
-    BESDEBUG( "cedar", "    adding mysql database" << endl )
+    BESDEBUG( "cedar", "    adding mysql database" << endl ) ;
     CedarDB::Add_DB_Builder( "mysql", CedarMySQLDB::BuildMySQLDB ) ;
 
-    BESDEBUG( "cedar", "    adding cedar debug context" << endl )
+    BESDEBUG( "cedar", "    adding cedar debug context" << endl ) ;
     BESDebug::Register( "cedar" ) ;
 
-    BESDEBUG( "cedar", modname << " handles dap services" << endl )
+    BESDEBUG( "cedar", modname << " handles dap services" << endl ) ;
     BESDapService::handle_dap_service( modname ) ;
 
-    BESDEBUG( "cedar", "Adding " << CEDAR_SERVICE << " services:" << endl )
+    BESDEBUG( "cedar", "Adding " << CEDAR_SERVICE << " services:" << endl ) ;
     BESServiceRegistry *registry = BESServiceRegistry::TheRegistry() ;
     registry->add_service( CEDAR_SERVICE ) ;
     registry->add_to_service( CEDAR_SERVICE, FLAT_SERVICE,
@@ -86,68 +86,77 @@ CedarModule::initialize( const string &modname )
 			      STREAM_DESCRIPT, BASIC_TRANSMITTER ) ;
     registry->handles_service( modname, CEDAR_SERVICE ) ;
 
-    BESDEBUG( "cedar", "    adding " << modname << " request handler" << endl )
+    BESDEBUG( "cedar", "    adding " << modname <<
+		       " request handler" << endl ) ;
     BESRequestHandlerList::TheList()->add_handler( modname, new CedarRequestHandler( modname ) ) ;
 
-    BESDEBUG( "cedar", "    adding " << FLAT_RESPONSE << " response handler" << endl )
+    BESDEBUG( "cedar", "    adding " << FLAT_RESPONSE
+		       << " response handler" << endl ) ;
     BESResponseHandlerList::TheList()->add_handler( FLAT_RESPONSE, FlatResponseHandler::FlatResponseBuilder ) ;
 
-    BESDEBUG( "cear", "    adding " << TAB_RESPONSE << " response handler" << endl )
+    BESDEBUG( "cear", "    adding " << TAB_RESPONSE
+		      << " response handler" << endl ) ;
     BESResponseHandlerList::TheList()->add_handler( TAB_RESPONSE, TabResponseHandler::TabResponseBuilder ) ;
 
-    BESDEBUG( "cedar", "    adding " << STREAM_RESPONSE << " response handler" << endl )
+    BESDEBUG( "cedar", "    adding " << STREAM_RESPONSE
+		       << " response handler" << endl ) ;
     BESResponseHandlerList::TheList()->add_handler( STREAM_RESPONSE, StreamResponseHandler::StreamResponseBuilder ) ;
 
-    BESDEBUG( "cear", "    adding " << INFO_RESPONSE << " response handler" << endl )
+    BESDEBUG( "cear", "    adding " << INFO_RESPONSE
+		      << " response handler" << endl ) ;
     BESResponseHandlerList::TheList()->add_handler( INFO_RESPONSE, InfoResponseHandler::InfoResponseBuilder ) ;
 
-    BESDEBUG( "cedar", "    adding Cedar reporter" << endl )
+    BESDEBUG( "cedar", "    adding Cedar reporter" << endl ) ;
     BESReporterList::TheList()->add_reporter( modname, new CedarReporter ) ;
 
-    BESDEBUG( "cedar", "    adding Cedar authenticate exception callback" << endl )
+    BESDEBUG( "cedar", "    adding Cedar auth exception callback" << endl ) ;
     BESExceptionManager::TheEHM()->add_ehm_callback( CedarAuthenticateException::handleAuthException ) ;
 
-    BESDEBUG( "cedar", "    adding Cedar Persistence" << endl )
+    BESDEBUG( "cedar", "    adding Cedar Persistence" << endl ) ;
     ContainerStorageCedar *cpf = new ContainerStorageCedar( "Cedar" ) ;
     BESContainerStorageList::TheList()->add_persistence( cpf ) ;
 
-    BESDEBUG( "cedar", "Done Initializing Cedar module " << modname << endl )
+    BESDEBUG( "cedar", "Done Initializing Cedar module " << modname << endl ) ;
 }
 
 void
 CedarModule::terminate( const string &modname )
 {
-    BESDEBUG( "cedar", "Cleaning NC module " << modname << endl )
+    BESDEBUG( "cedar", "Cleaning NC module " << modname << endl ) ;
 
-    BESDEBUG( "cedar", "    removing Cedar handler" << modname << endl )
+    BESDEBUG( "cedar", "    removing Cedar handler" << modname << endl ) ;
     BESRequestHandler *rh = BESRequestHandlerList::TheList()->remove_handler( modname ) ;
     if( rh ) delete rh ;
 
-    BESDEBUG( "cedar", "    removing " << FLAT_RESPONSE << " response handler" << endl )
+    BESDEBUG( "cedar", "    removing " << FLAT_RESPONSE
+		       << " response handler" << endl ) ;
     BESResponseHandlerList::TheList()->remove_handler( FLAT_RESPONSE ) ;
-    BESDEBUG( "cedar", "    removing " << TAB_RESPONSE << " response handler" << endl )
+    BESDEBUG( "cedar", "    removing " << TAB_RESPONSE
+		       << " response handler" << endl ) ;
     BESResponseHandlerList::TheList()->remove_handler( TAB_RESPONSE ) ;
-    BESDEBUG( "cedar", "    removing " << STREAM_RESPONSE << " response handler" << endl )
+    BESDEBUG( "cedar", "    removing " << STREAM_RESPONSE
+		       << " response handler" << endl ) ;
     BESResponseHandlerList::TheList()->remove_handler( STREAM_RESPONSE ) ;
-    BESDEBUG( "cedar", "    removing " << INFO_RESPONSE << " response handler" << endl )
+    BESDEBUG( "cedar", "    removing " << INFO_RESPONSE
+		       << " response handler" << endl ) ;
     BESResponseHandlerList::TheList()->remove_handler( INFO_RESPONSE ) ;
 
-    BESDEBUG( "cedar", "    removing Cedar reporter" << endl )
+    BESDEBUG( "cedar", "    removing Cedar reporter" << endl ) ;
     BESReporter *r = BESReporterList::TheList()->remove_reporter( modname ) ;
     if( r ) delete r ;
 
     /* no way to remove this
-    BESDEBUG( "cedar", "    adding Cedar authenticate exception callback" << endl )
+    BESDEBUG( "cedar", "    adding Cedar authenticate exception callback" << endl ) ;
     BESExceptionManager::TheEHM()->add_ehm_callback( CedarAuthenticateException::handleAuthException ) ;
     */
 
-    BESDEBUG( "cedar", "    adding Cedar Persistence" << endl )
+    BESDEBUG( "cedar", "    adding Cedar Persistence" << endl ) ;
     BESContainerStorageList::TheList()->deref_persistence( "Cedar" ) ;
 
-    BESDEBUG( "cedar", "    closing databases" << endl )
+    BESDEBUG( "cedar", "    closing databases" << endl ) ;
     CedarDB::Close() ;
 
-    BESDEBUG( "cedar", "Done Cleaning NC module " << modname << endl )
+    BESDEBUG( "cedar", "Done Cleaning NC module " << modname << endl ) ;
 }
 
 /** @brief dumps information about this object

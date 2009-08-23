@@ -97,7 +97,7 @@ CedarRequestHandler::dump( ostream &strm ) const
 bool
 CedarRequestHandler::cedar_build_das( BESDataHandlerInterface &dhi )
 {
-    BESDEBUG( "cedar", "building cedar das response:" << endl )
+    BESDEBUG( "cedar", "building cedar das response:" << endl ) ;
 
     // make sure the user is authenticated to receive cedar data
     CedarAuthenticate::authenticate( dhi ) ;
@@ -140,7 +140,8 @@ CedarRequestHandler::cedar_build_das( BESDataHandlerInterface &dhi )
         throw ex;
     }
 
-    BESDEBUG( "cedar", "returning from building cedar das response:" << endl << *das << endl )
+    BESDEBUG( "cedar", "returning from building cedar das response:"
+		       << endl << *das << endl ) ;
 
     return ret ;
 }

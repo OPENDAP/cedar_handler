@@ -104,14 +104,14 @@ CedarAuthenticate::authenticate( BESDataHandlerInterface &dhi )
 	if( mode == "on" )
 	{
 	    enforce_authentication = true ;
-	    BESDEBUG( "cedar", "CEDAR Authentication enabled" << endl )
+	    BESDEBUG( "cedar", "CEDAR Authentication enabled" << endl ) ;
 	}
 	else
 	{
 	    if( mode == "off" )
 	    {
 		enforce_authentication = false ;
-		BESDEBUG( "cedar", "CEDAR Authentication disabled" << endl )
+		BESDEBUG( "cedar", "CEDAR Authentication disabled" << endl ) ;
 	    }
 	    else
 	    {
@@ -175,7 +175,7 @@ CedarAuthenticate::authenticate( BESDataHandlerInterface &dhi )
 	{
 	    query_str += " AND TOKEN IS NULL;" ;
 	}
-	BESDEBUG( "cedar", "authenticating with " << query_str << endl )
+	BESDEBUG( "cedar", "authenticating with " << query_str << endl ) ;
 	CedarDBResult *result = db->run_query( query_str ) ;
 	if( result && !result->is_empty_set() )
 	{

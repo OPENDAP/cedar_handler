@@ -51,7 +51,7 @@ CedarMySQLDB::CedarMySQLDB( const string &db_name )
 	string s = (string)"MySQL server not set in BES configuration file" ;
 	throw BESInternalError( s, __FILE__, __LINE__ ) ;
     }
-    BESDEBUG( "cedar", "MySQL server = " << _mysql_server << endl )
+    BESDEBUG( "cedar", "MySQL server = " << _mysql_server << endl ) ;
 
     _mysql_user = TheBESKeys::TheKeys()->get_key( my_key + "User", found  ) ;
     if( found == false )
@@ -59,7 +59,7 @@ CedarMySQLDB::CedarMySQLDB( const string &db_name )
 	string s = (string)"MySQL user not set in BES configuration file" ;
 	throw BESInternalError( s, __FILE__, __LINE__ ) ;
     }
-    BESDEBUG( "cedar", "MySQL user = " << _mysql_user << endl )
+    BESDEBUG( "cedar", "MySQL user = " << _mysql_user << endl ) ;
 
     _mysql_pwd = TheBESKeys::TheKeys()->get_key( my_key + "Password", found  ) ;
     if( found == false )
@@ -67,7 +67,7 @@ CedarMySQLDB::CedarMySQLDB( const string &db_name )
 	string s = (string)"MySQL password not set in BES configuration file" ;
 	throw BESInternalError( s, __FILE__, __LINE__ ) ;
     }
-    BESDEBUG( "cedar", "MySQL password = " << _mysql_pwd << endl )
+    BESDEBUG( "cedar", "MySQL password = " << _mysql_pwd << endl ) ;
 
     _mysql_db = TheBESKeys::TheKeys()->get_key( my_key + "Database", found ) ;
     if( found == false )
@@ -75,7 +75,7 @@ CedarMySQLDB::CedarMySQLDB( const string &db_name )
 	string s = (string)"MySQL database not set in BES configuration file" ;
 	throw BESInternalError( s, __FILE__, __LINE__ ) ;
     }
-    BESDEBUG( "cedar", "MySQL database = " << _mysql_db << endl )
+    BESDEBUG( "cedar", "MySQL database = " << _mysql_db << endl ) ;
     
     bool port_found = false ;
     string my_sport =
@@ -90,7 +90,7 @@ CedarMySQLDB::CedarMySQLDB( const string &db_name )
 	               + " is not valid in BES configuration file" ;
 	    throw BESInternalError( s, __FILE__, __LINE__ ) ;
 	}
-	BESDEBUG( "cedar", "MySQL port = " << _mysql_port << endl )
+	BESDEBUG( "cedar", "MySQL port = " << _mysql_port << endl ) ;
     }
 
     _mysql_socket = TheBESKeys::TheKeys()->get_key( my_key + "Socket", found ) ;
@@ -115,7 +115,7 @@ CedarMySQLDB::CedarMySQLDB( const string &db_name )
 	string s = (string)"MySQL socket is not set in BES configuration file" ;
 	throw BESInternalError( s, __FILE__, __LINE__ ) ;
     }
-    BESDEBUG( "cedar", "MySQL socket = " << _mysql_socket << endl )
+    BESDEBUG( "cedar", "MySQL socket = " << _mysql_socket << endl ) ;
 }
 
 CedarMySQLDB::~CedarMySQLDB()
@@ -150,21 +150,21 @@ CedarMySQLDB::close()
 CedarDBResult *
 CedarMySQLDB::run_query( const string &query )
 {
-    BESDEBUG( "cedar", "MYSQL query = " << query << endl )
+    BESDEBUG( "cedar", "MYSQL query = " << query << endl ) ;
     CedarMySQLResult *ret_result = 0 ;
     if( !is_open() )
     {
 	open() ;
     }
 
-    BESDEBUG( "cedar", "MYSQL query making query" << endl )
+    BESDEBUG( "cedar", "MYSQL query making query" << endl ) ;
     MYSQL *sql_channel = _connection->get_channel() ;
     if( mysql_query( sql_channel, query.c_str() ) )
     {
 	throw BESInternalError( _connection->get_error(), __FILE__, __LINE__ ) ;
     }
 
-    BESDEBUG( "cedar", "MYSQL query getting result" << endl )
+    BESDEBUG( "cedar", "MYSQL query getting result" << endl ) ;
     MYSQL_RES *result = 0 ;
     MYSQL_ROW row ;
     result = mysql_store_result( sql_channel ) ;
@@ -178,7 +178,7 @@ CedarMySQLDB::run_query( const string &query )
 	result_fields.push_back( field->name ) ;
     }
 
-    BESDEBUG( "cedar", "MYSQL query setting results" << endl )
+    BESDEBUG( "cedar", "MYSQL query setting results" << endl ) ;
     ret_result = new CedarMySQLResult( n_rows, n_fields, result_fields ) ;
     ret_result->first_row() ;
     while( ( row = mysql_fetch_row( result ) ) != NULL )
@@ -196,7 +196,7 @@ CedarMySQLDB::run_query( const string &query )
     }
     mysql_free_result( result ) ;
 
-    BESDEBUG( "cedar", "MYSQL query returning" << endl )
+    BESDEBUG( "cedar", "MYSQL query returning" << endl ) ;
     return ret_result ;
 }
 
@@ -204,7 +204,7 @@ unsigned int
 CedarMySQLDB::insert( const string &table_name,
 		      const vector< vector<CedarDBColumn> > &flds )
 {
-    BESDEBUG( "cedar", "MYSQL insert" << endl )
+    BESDEBUG( "cedar", "MYSQL insert" << endl ) ;
 
     // there must be fields to insert
     if( flds.empty() )
@@ -254,7 +254,7 @@ CedarMySQLDB::insert( const string &table_name,
 	firstset = false ;
     }
     query += " ) " + values ;
-    BESDEBUG( "cedar", "MYSQL insert: query = " << query << endl )
+    BESDEBUG( "cedar", "MYSQL insert: query = " << query << endl ) ;
 
     // make the insert
     MYSQL *sql_channel = _connection->get_channel() ;
@@ -263,7 +263,7 @@ CedarMySQLDB::insert( const string &table_name,
 	throw BESInternalError( _connection->get_error(), __FILE__, __LINE__ ) ;
     }
 
-    BESDEBUG( "cedar", "MYSQL insert done" << endl )
+    BESDEBUG( "cedar", "MYSQL insert done" << endl ) ;
     return mysql_affected_rows( sql_channel ) ;
 }
 
@@ -272,7 +272,7 @@ CedarMySQLDB::update( const string &table_name,
 		      const vector<CedarDBColumn> &flds,
 		      const vector<CedarDBWhere> &where )
 {
-    BESDEBUG( "cedar", "MYSQL update" << endl )
+    BESDEBUG( "cedar", "MYSQL update" << endl ) ;
 
     // there must be fields to insert
     if( flds.empty() )
@@ -316,7 +316,7 @@ CedarMySQLDB::update( const string &table_name,
     {
 	query += (*wi).where() ;
     }
-    BESDEBUG( "cedar", "MYSQL update query = " << query << endl )
+    BESDEBUG( "cedar", "MYSQL update query = " << query << endl ) ;
 
     // make the update
     MYSQL *sql_channel = _connection->get_channel() ;
@@ -325,7 +325,7 @@ CedarMySQLDB::update( const string &table_name,
 	throw BESInternalError( _connection->get_error(), __FILE__, __LINE__ ) ;
     }
 
-    BESDEBUG( "cedar", "MYSQL update done" << endl )
+    BESDEBUG( "cedar", "MYSQL update done" << endl ) ;
     return mysql_affected_rows( sql_channel ) ;
 }
 
@@ -333,7 +333,7 @@ unsigned int
 CedarMySQLDB::del( const string &table_name,
 		   const vector<CedarDBWhere> &where )
 {
-    BESDEBUG( "cedar", "MYSQL delete" << endl )
+    BESDEBUG( "cedar", "MYSQL delete" << endl ) ;
 
     // there must be a where clause
     if( where.empty() )
@@ -350,7 +350,7 @@ CedarMySQLDB::del( const string &table_name,
     {
 	query += (*wi).where() ;
     }
-    BESDEBUG( "cedar", "MYSQL update query = " << query << endl )
+    BESDEBUG( "cedar", "MYSQL update query = " << query << endl ) ;
 
     // make the update
     MYSQL *sql_channel = _connection->get_channel() ;
@@ -359,7 +359,7 @@ CedarMySQLDB::del( const string &table_name,
 	throw BESInternalError( _connection->get_error(), __FILE__, __LINE__ ) ;
     }
 
-    BESDEBUG( "cedar", "MYSQL delete done" << endl )
+    BESDEBUG( "cedar", "MYSQL delete done" << endl ) ;
     return mysql_affected_rows( sql_channel ) ;
 }
 
