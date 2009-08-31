@@ -24,6 +24,7 @@ DISTCLEANFILES = bes.conf $(srcdir)/package.m4 cedar_handlerTest
 bes.conf: bes.conf.in ../config.status
 	sed -e "s%[@]pkgdatadir[@]%${pkgdatadir}%" \
 		-e "s%[@]sysconfdir[@]%${sysconfdir}%" \
+		-e "s%[@]modulesdir[@]%${BES_MODULE_DIR}%" \
 		-e "s%[@]libdir[@]%${libdir}%" \
 		-e "s%[@]datadir[@]%${datadir}%" \
 		-e "s%[@]abs_top_srcdir[@]%${abs_top_srcdir}%" \
