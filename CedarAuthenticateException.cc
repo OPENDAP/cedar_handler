@@ -35,7 +35,6 @@
 #include "BESInfo.h"
 #include "BESInfoList.h"
 #include "TheBESKeys.h"
-#include "cgi_util.h"
 #include "config_cedar.h"
 
 #define DEFAULT_ADMINISTRATOR "cedar_db@hao.ucar.edu"

@@ -35,8 +35,12 @@
 #include <cctype>
 #include <cassert>
 #include <string>
+#include <new>
+#include <memory>
 
 using std::string ;
+using std::bad_alloc ;
+using std::auto_ptr ;
 
 #include "CedarReadKinst.h"
 #include "CedarReadParcods.h"

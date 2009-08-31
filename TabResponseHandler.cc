@@ -32,7 +32,6 @@
 
 #include "TabResponseHandler.h"
 #include "CedarTab.h"
-#include "cgi_util.h"
 #include "BESRequestHandlerList.h"
 #include "BESContextManager.h"
 

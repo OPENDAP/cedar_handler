@@ -38,7 +38,6 @@
 #include "CedarResponseNames.h"
 #include "CedarTab.h"
 #include "CedarFlat.h"
-#include "cgi_util.h"
 
 CedarFilter::CedarFilter()
     : DODSFilter()

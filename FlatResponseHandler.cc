@@ -32,7 +32,6 @@
 
 #include "FlatResponseHandler.h"
 #include "CedarFlat.h"
-#include "cgi_util.h"
 #include "BESRequestHandlerList.h"
 #include "BESContextManager.h"
 

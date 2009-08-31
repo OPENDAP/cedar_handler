@@ -35,7 +35,6 @@
 
 
 #include "DAS.h"
-#include "cgi_util.h"
 #include "CedarDataRecord.h"
 
 using namespace libdap ;

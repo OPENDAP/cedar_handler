@@ -36,6 +36,8 @@
 using std::auto_ptr ;
 using std::vector ;
 
+#include <mime_util.h>
+
 #include "CedarReadParcods.h"
 #include "CedarConstraintEvaluator.h"
 #include "Array.h"
@@ -48,7 +50,6 @@ using std::vector ;
 #include "CedarException.h"
 #include "BESError.h"
 #include "TheBESKeys.h"
-#include "cgi_util.h"
 
 bool cedar_read_descriptors( DDS &dds, const string &filename,
                              const string &name, const string &query,
