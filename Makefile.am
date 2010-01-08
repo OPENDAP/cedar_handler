@@ -1,5 +1,5 @@
 
-# Automake file for fits-handler
+# Automake file for cedar_handler
 #
 # 5/17/2005 jhrg
 #
@@ -104,10 +104,10 @@ bes-conf: bes-cedar-data.sh
 # Build linux RPMs
 
 srpm:
-	rpmbuild -ts fits_handler-@PACKAGE_VERSION@.tar.gz
+	rpmbuild -ts --clean @PACKAGE@-@PACKAGE_VERSION@.tar.gz
 
 rpm:
-	rpmbuild -tb fits_handler-@PACKAGE_VERSION@.tar.gz
+	rpmbuild -tb --clean @PACKAGE@-@PACKAGE_VERSION@.tar.gz
 
 info:
 	@echo ""
