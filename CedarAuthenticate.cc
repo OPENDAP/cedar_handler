@@ -91,7 +91,18 @@ CedarAuthenticate::authenticate( BESDataHandlerInterface &dhi )
     bool enforce_authentication = false ;
     bool found = false ;
     string my_key = "Cedar.Authenticate.Mode" ;
-    string mode = TheBESKeys::TheKeys()->get_key( my_key ,found ) ;
+    string mode ;
+    try
+    {
+	TheBESKeys::TheKeys()->get_value( my_key, mode, found ) ;
+    }
+    catch( ... )
+    {
+	string s = (string)"Unable to authenticate: "
+	           + "Authentication mode (on/off) is not set "
+		   + "in BES configuration file" ;
+	throw CedarAuthenticateException( s, __FILE__, __LINE__ ) ;
+    }
     if( found == false )
     {
 	string s = (string)"Unable to authenticate: "

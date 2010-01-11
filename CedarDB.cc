@@ -63,7 +63,8 @@ CedarDB::DB( const string &db_name )
 	bool found = false ;
 	string my_key = "Cedar.DB." + db_name + ".Type" ;
 
-	string db_type = TheBESKeys::TheKeys()->get_key( my_key, found ) ;
+	string db_type ;
+	TheBESKeys::TheKeys()->get_value( my_key, db_type, found ) ;
 	if( found == false || db_type.empty() )
 	{
 	    string err = "Database type is not specified for " + db_name ;

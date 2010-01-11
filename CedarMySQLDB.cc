@@ -43,9 +43,9 @@ using std::vector ;
 CedarMySQLDB::CedarMySQLDB( const string &db_name )
 {
     bool found = false ;
-    string my_key = "Cedar.DB." + db_name + "." ;
+    string key = "Cedar.DB." + db_name + "." ;
 
-    _mysql_server = TheBESKeys::TheKeys()->get_key( my_key + "Server", found ) ;
+    TheBESKeys::TheKeys()->get_value( key + "Server", _mysql_server, found ) ;
     if( found == false )
     {
 	string s = (string)"MySQL server not set in BES configuration file" ;
@@ -53,7 +53,7 @@ CedarMySQLDB::CedarMySQLDB( const string &db_name )
     }
     BESDEBUG( "cedar", "MySQL server = " << _mysql_server << endl ) ;
 
-    _mysql_user = TheBESKeys::TheKeys()->get_key( my_key + "User", found  ) ;
+    TheBESKeys::TheKeys()->get_value( key + "User", _mysql_user, found  ) ;
     if( found == false )
     {
 	string s = (string)"MySQL user not set in BES configuration file" ;
@@ -61,7 +61,7 @@ CedarMySQLDB::CedarMySQLDB( const string &db_name )
     }
     BESDEBUG( "cedar", "MySQL user = " << _mysql_user << endl ) ;
 
-    _mysql_pwd = TheBESKeys::TheKeys()->get_key( my_key + "Password", found  ) ;
+    TheBESKeys::TheKeys()->get_value( key + "Password", _mysql_pwd, found  ) ;
     if( found == false )
     {
 	string s = (string)"MySQL password not set in BES configuration file" ;
@@ -69,7 +69,7 @@ CedarMySQLDB::CedarMySQLDB( const string &db_name )
     }
     BESDEBUG( "cedar", "MySQL password = " << _mysql_pwd << endl ) ;
 
-    _mysql_db = TheBESKeys::TheKeys()->get_key( my_key + "Database", found ) ;
+    TheBESKeys::TheKeys()->get_value( key + "Database", _mysql_db, found ) ;
     if( found == false )
     {
 	string s = (string)"MySQL database not set in BES configuration file" ;
@@ -78,8 +78,8 @@ CedarMySQLDB::CedarMySQLDB( const string &db_name )
     BESDEBUG( "cedar", "MySQL database = " << _mysql_db << endl ) ;
     
     bool port_found = false ;
-    string my_sport =
-	TheBESKeys::TheKeys()->get_key( my_key + "Port", port_found ) ;
+    string my_sport ;
+    TheBESKeys::TheKeys()->get_value( key + "Port", my_sport, port_found ) ;
     _mysql_port = 0 ;
     if( port_found && !my_sport.empty() )
     {
@@ -93,7 +93,7 @@ CedarMySQLDB::CedarMySQLDB( const string &db_name )
 	BESDEBUG( "cedar", "MySQL port = " << _mysql_port << endl ) ;
     }
 
-    _mysql_socket = TheBESKeys::TheKeys()->get_key( my_key + "Socket", found ) ;
+    TheBESKeys::TheKeys()->get_value( key + "Socket", _mysql_socket, found ) ;
     if( !found && !port_found )
     {
 	char *mysql_home = getenv( "MYSQL_HOME" ) ;

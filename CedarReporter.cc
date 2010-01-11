@@ -53,7 +53,7 @@ CedarReporter::CedarReporter()
     // If we are unable to log to the cedar reporter database then we will
     // log to the cedar log file. Not both!
     bool found = false ;
-    _log_name = TheBESKeys::TheKeys()->get_key( "Cedar.LogName", found );
+    TheBESKeys::TheKeys()->get_value( "Cedar.LogName", _log_name, found );
     if( _log_name == "" )
     {
         string err = (string)"Could not determine Cedar log name, "

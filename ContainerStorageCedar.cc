@@ -45,6 +45,7 @@ using std::ifstream ;
 #include "BESFileContainer.h"
 #include "TheBESKeys.h"
 #include "BESInternalError.h"
+#include "BESSyntaxUserError.h"
 #include "BESForbiddenError.h"
 #include "BESInfo.h"
 #include "CedarFSDir.h"
@@ -56,12 +57,12 @@ ContainerStorageCedar::ContainerStorageCedar( const string &n )
 {
     string key = "Cedar.BaseDir" ;
     bool found = false ;
-    _cedar_base = TheBESKeys::TheKeys()->get_key( key, found ) ;
+    TheBESKeys::TheKeys()->get_value( key, _cedar_base, found ) ;
     if( _cedar_base == "" )
     {
 	string s = key + " not defined in bes configuration file"
 	           + ", unable to determine Cedar base directory" ;
-	throw BESInternalError( s, __FILE__, __LINE__ ) ;
+	throw BESSyntaxUserError( s, __FILE__, __LINE__ ) ;
     }
 }
 

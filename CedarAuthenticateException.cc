@@ -57,8 +57,8 @@ CedarAuthenticateException::handleAuthException( BESError &e,
 	    try
 	    {
 		bool found = false ;
-		administrator =
-		    TheBESKeys::TheKeys()->get_key( "BES.ServerAdministrator", found ) ;
+		TheBESKeys::TheKeys()->get_value( "BES.ServerAdministrator",
+						  administrator, found ) ;
 	    }
 	    catch( ... )
 	    {
