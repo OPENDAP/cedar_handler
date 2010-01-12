@@ -18,8 +18,6 @@ bin_PROGRAMS = checkKinst checkParcod encode
 lib_besdir=$(libdir)/bes
 lib_bes_LTLIBRARIES = libcedar_module.la
 
-dist_bin_SCRIPTS = bes-cedar-data.sh
-
 CEDAR_DB_SRCS:=CedarDB.cc CedarMySQLDB.cc CedarMySQLConnect.cc		\
 	CedarMySQLResult.cc CedarEncode.cc
 
@@ -72,32 +70,29 @@ encode_LDADD = $(BES_DAP_LIBS)
 
 pkgdata_DATA = cedar/cedar_help.html cedar/cedar_help.txt cedar/cedar_login.html
 
-EXTRA_DIST = COPYRIGHT COPYING bes-cedar-data.sh.in cedar/cedar_help.html cedar/cedar_help.txt cedar/cedar_login.html data
+EXTRA_DIST = COPYRIGHT COPYING cedar.conf.in cedar/cedar_help.html cedar/cedar_help.txt cedar/cedar_login.html data
 
-CLEANFILES = *~ bes-cedar-data.sh
+CLEANFILES = *~ cedar.conf
 
 sample_datadir = $(datadir)/hyrax/data/cedar
 sample_data_DATA = data/mfp920504a.cbf
 
-do_subst = sed -e 's,[@]sysconfdir[@],$(sysconfdir),g' \
-		   	   -e 's,[@]libdir[@],$(libdir),g' \
-		   	   -e 's,[@]pkgdatadir[@],$(pkgdatadir),g' \
-		   	   -e 's,[@]datadir[@],$(datadir),g'
+install-data-local: cedar.conf
+	@currdate=`date +"%y%m%d%H%M"`; \
+	test -d $(DESTDIR)$(sysconfdir)/bes || $(MKDIR_P) $(DESTDIR)$(sysconfdir)/bes; \
+	test -d $(DESTDIR)$(sysconfdir)/bes/modules || $(MKDIR_P) $(DESTDIR)$(sysconfdir)/bes/modules; \
+	test -f $(DESTDIR)$(sysconfdir)/bes/modules/cedar.conf && mv -f $(DESTDIR)$(sysconfdir)/bes/modules/cedar.conf $(DESTDIR)$(sysconfdir)/bes/modules/cedar.conf.$$currdate; \
+	$(INSTALL_DATA) cedar.conf $(DESTDIR)$(sysconfdir)/bes/modules/cedar.conf
 
-bes-cedar-data.sh: bes-cedar-data.sh.in config.status
-	$(do_subst) < $(srcdir)/bes-cedar-data.sh.in > bes-cedar-data.sh
-	chmod +x bes-cedar-data.sh
+uninstall-local:
+	rm -f $(DESTDIR)$(sysconfdir)/bes/modules/cedar.conf
 
-# This makes sure that the handler modifies the bes which configure found
-# even when distcheck is run.
-bes-conf: bes-cedar-data.sh
-	(bes_prefix=`bes-config --prefix` ; \
-	if test "$$bes_prefix" = "/usr" ; \
-	 then \
-	    ./bes-cedar-data.sh /etc/bes/bes.conf /usr/lib/bes ;\
-	else \
-	    ./bes-cedar-data.sh $$bes_prefix/etc/bes/bes.conf $$bes_prefix/lib/bes ; \
-	fi)
+cedar.conf: cedar.conf.in config.status
+	sed -e "s%[@]bes_modules_dir[@]%${lib_besdir}%g" \
+	    -e "s%[@]sysconfdir[@]%$(sysconfdir)%g" \
+	    -e "s%[@]libdir[@]%$(libdir)%g" \
+	    -e "s%[@]pkgdatadir[@]%$(pkgdatadir)%g" \
+	    -e "s%[@]datadir[@]%$(datadir)%g" $< > cedar.conf
 
 ###########################################################################
 
