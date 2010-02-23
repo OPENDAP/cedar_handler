@@ -109,15 +109,13 @@ CedarReporter::report( BESDataHandlerInterface &dhi )
     string product = dhi.action.substr( 4, dhi.action.length() - 4 ) ;
 
     // Get the user name from the data element of dhi. If doesn't exist or
-    // is empty then set to USER_UNKNOWN
+    // is empty then don't log the entry.
     bool found = false ;
     string context = USER_NAME ;
     string username = BESContextManager::TheManager()->get_context( context,
 								    found ) ;
     if( username.empty() )
-    {
-	username = "USER_UNKNOWN" ;
-    }
+	return ;
 
     // Get the symbolic names of the containers included in this request.
     // These represent the data files used, and the first three characters
