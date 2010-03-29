@@ -6,7 +6,7 @@
 # modules to load, includes data modules and command modules            #
 #-----------------------------------------------------------------------#
 
-BES.modules=cedar
+BES.modules+=cedar
 BES.module.cedar=@bes_modules_dir@/libcedar_module.so
 
 #-----------------------------------------------------------------------#
