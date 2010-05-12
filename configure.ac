@@ -2,14 +2,18 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT(cedar_handler, 2.3.0, dods-tech@unidata.ucar.edu)
+AC_INIT(cedar_handler, 2.3.1, opendap-tech@opendap.org)
 AC_CONFIG_AUX_DIR([conf])
+AC_CONFIG_MACRO_DIR([conf])
 
 AM_INIT_AUTOMAKE(1.10)
 AC_CONFIG_TESTDIR(bes-testsuite, [.])
 
-AC_CONFIG_SRCDIR([cedar_read_attributes.h])
+AC_CONFIG_SRCDIR([configure.ac])
 AC_CONFIG_HEADER([config_cedar.h])
+
+AC_CANONICAL_HOST
+AC_SUBST(host)
 
 # Checks for programs.
 AC_PROG_CXX
@@ -30,75 +34,25 @@ AC_CHECK_TYPES([ptrdiff_t])
 AC_CHECK_FUNCS([strchr])
 
 dnl Checks for specific libraries
-AC_CHECK_LIBDAP([3.9.2],
+AC_CHECK_LIBDAP([3.10.2],
  [
   LIBS="$LIBS $DAP_SERVER_LIBS"
   CPPFLAGS="$CPPFLAGS $DAP_CFLAGS"
  ],
  [ AC_MSG_ERROR([Cannot find libdap])
 ])
-  
-AC_CHECK_BES([3.7.2],
+
+AC_CHECK_BES([3.8.3],
 [
 ],
 [ AC_MSG_ERROR([Cannot find bes])
 ])
 
-dnl Check for the cedar library.
-AC_DEFUN([AC_CHECK_CEDAR],
-[
-AC_ARG_WITH([cedar],
-            [AS_HELP_STRING([--with-cedar=ARG],[cedar directory])],
-            [CEDAR_PATH=${withval}], 
-            [CEDAR_PATH="/usr/local/cedar"])
-
-AC_ARG_WITH([cedar_inc],
-            [AS_HELP_STRING([--with-cedar-include=ARG],[cedar include directory])],
-            [CEDAR_PATH_INC=${withval}], 
-            [CEDAR_PATH_INC="$CEDAR_PATH/include/cedar"])
-
-AC_ARG_WITH([cedar_libdir],
-            [AS_HELP_STRING([--with-cedar-libdir=ARG],[cedar library directory])],
-            [CEDAR_PATH_LIBDIR=${withval}], 
-            [CEDAR_PATH_LIBDIR="$CEDAR_PATH/lib"])
-
-AS_IF([test "z$CEDAR_PATH_LIBDIR" = "z"],[CEDAR_PATH_LIBDIR="$CEDAR_PATH/lib"])
-
-AS_IF([test "z$CEDAR_PATH_INC" = "z"],[CEDAR_PATH_INC="$CEDAR_PATH/include/cedar"])
-
-ac_cedar_ok='yes'
-CEDAR_LIBS="-lCedar"
-CEDAR_LDFLAGS="-L${CEDAR_PATH_LIBDIR}" 
-
-AC_SUBST([CEDAR_LDFLAGS])
-AC_SUBST([CEDAR_LIBS])
-
-CEDAR_CPPFLAGS=
-ac_cedar_h='no'
-AS_IF([test -f "$CEDAR_PATH_INC/CedarConfig.h"],
-      [ac_cedar_h='yes'],
-      [ac_cedar_h='no']
-)
-
-AS_IF([test "$ac_cedar_h" = 'yes' ],
-  [CEDAR_CPPFLAGS="-I$CEDAR_PATH_INC"]
-)
-AC_SUBST([CEDAR_CPPFLAGS])
-
-AS_IF([test "$ac_cedar_ok" = 'no' -o "$ac_cedar_h" = 'no'],
-  [m4_if([$2], [], [:], [$2])],
-  [m4_if([$1], [], [:], [$1])]
-)
-
-])
-
-AC_CHECK_CEDAR(
+AC_CHECK_CEDAR([2.2.0],
    [
        LIBS="$LIBS $CEDAR_LIBS"
-       LDFLAGS="$LDFLAGS $CEDAR_LDFLAGS"
-       CPPFLAGS="$CPPFLAGS $CEDAR_CPPFLAGS"
+       CPPFLAGS="$CPPFLAGS $CEDAR_CFLAGS"
        AC_SUBST([LIBS])
-       AC_SUBST([LDFLAGS])
        AC_SUBST([CPPFLAGS])
    ],
    [
@@ -108,14 +62,6 @@ AC_CHECK_CEDAR(
        AC_MSG_ERROR([cedar library and cedar headers are required.])
    ]
 )
-
-dnl if test "$CEDAR_PATH"
-dnl then
-dnl     AC_MSG_RESULT([$CEDAR_PATH])
-dnl     LDFLAGS="$LDFLAGS -L${CEDAR_PATH}/lib"
-dnl     LIBS="$LIBS -lCedar"
-dnl     CPPFLAGS="$CPPFLAGS -I${CEDAR_PATH}/include"
-dnl fi
 
 dnl Check for the mysql library.
 AC_DEFUN([AC_CHECK_MYSQL],
