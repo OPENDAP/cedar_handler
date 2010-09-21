@@ -1,6 +1,10 @@
 
 $Id: NEWS 14029 2006-06-29 18:10:44Z pwest $
 
+Version 2.3.2
+
+Up to date with libdap 3.10.x and bes 3.8.x
+
 Version 2.3.0
 
 Kinst and parameter information is now retrieved from the database tables

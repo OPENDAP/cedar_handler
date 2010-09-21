@@ -1,3 +1,357 @@
+2010-05-11  Patrick West <pwest@ucar.edu>
+
+	Updated to match newest version of Cedar library, removing auto
+	generated configure scripts, updating version requirements
+	M    configure.ac
+	M    cedar.conf.in
+	D    conf/mkinstalldirs
+	D    conf/depcomp
+	D    conf/missing
+	D    conf/config.guess
+	M    conf/libdap.m4
+	D    conf/config.sub
+	D    conf/ltmain.sh
+	A    conf/cedar.m4
+	D    conf/install-sh
+
+2010-03-29  Patrick West <pwest@ucar.edu>
+
+	Using += instead of = for BES.modules
+	M    cedar.conf.in
+
+2010-02-23  Patrick West <pwest@ucar.edu>
+
+	Not logging access attempts, just successful access by logged in users.
+	M    CedarReporter.cc
+
+2010-01-12  Patrick West <pwest@ucar.edu>
+
+	Using cedar.conf included by bes.conf instead of script to modify
+	bes.conf
+	A    cedar.conf.in
+	D    bes-cedar-data.sh.in
+	M    Makefile.am
+
+2010-01-10  Patrick West <pwest@ucar.edu>
+
+	API changes to BESKeys
+	M    CedarReporter.cc
+	M    ContainerStorageCedar.cc
+	M    CedarAuthenticate.cc
+	M    CedarAuthenticateException.cc
+	M    CedarDB.cc
+	M    CedarMySQLDB.cc
+
+2010-01-08  Patrick West <pwest@ucar.edu>
+
+	--clean to clean build and src files for rpmbuild
+	M    Makefile.am
+
+2009-08-31  Patrick West <pwest@ucar.edu>
+
+	changed path variables to use during autotest
+
+2009-08-31  Patrick West <pwest@ucar.edu>
+
+	changed include of cgi_util to mime_util and removed include where not needed
+
+2009-08-27  Patrick West <pwest@ucar.edu>
+
+	Converted bes-testsuite to use autotest instead of dejagnu
+	M    configure.ac
+	D    bes-testsuite/besstandalone.cedar
+	A    bes-testsuite/atlocal.in
+	D    bes-testsuite/config
+	D    bes-testsuite/common_tests.exp
+	M    bes-testsuite/Makefile.am
+	A    bes-testsuite/cedar_handlerTest.at
+
+2009-08-23  Patrick West <pwest@ucar.edu>
+
+	Added ; after each BESDEBUG statement
+
+2009-08-18  Patrick West <pwest@ucar.edu>
+
+	DAP Macro changes
+
+2009-07-15  Patrick West <pwest@ucar.edu>
+
+	show_containers was not using tags but was just adding text to the
+	information object. Changed this to use the helper method on
+	BESContainerStorage::show_container
+	M    ContainerStorageCedar.cc
+
+2009-07-12  Patrick West <pwest@ucar.edu>
+
+	Added debug to authentication
+	M    CedarAuthenticate.cc
+
+2009-06-18  Patrick West <pwest@ucar.edu>
+
+	New login screen using login.php.
+	M    cedar/cedar_login.html
+
+2009-06-08  Patrick West <pwest@ucar.edu>
+
+	Added the two data files needed by reporterT. Turned off authentication
+	in the unit-tests bes.conf file.
+	AM   data/mfp920603a.cbf
+	AM   data/mfp911104a.cbf
+	M    unit-tests/bes.conf.in
+
+2009-06-08  Patrick West <pwest@ucar.edu>
+
+	Allow other container stores a chance to read the file if it doesn't
+	exist in the cedar store.
+	M    ContainerStorageCedar.cc
+
+2009-05-28  Patrick West <pwest@ucar.edu>
+
+	instrument site lat and lon adjustments
+	M    bes-testsuite/cedar/mfp920504a.das.bescmd.baseline
+	M    bes-testsuite/cedar/mfp920504a.ddx.bescmd.baseline
+	M    unit-tests/kinstT.cc
+
+2009-05-28  Patrick West <pwest@ucar.edu>
+
+	Moved authentication to data retrieval in request hanlder instead of
+	initialization. Changed where to get username and token to context
+	manager instead of data handler interface.
+	M    CedarModule.cc
+	M    CedarRequestHandler.cc
+	M    CedarReporter.cc
+	M    CedarAuthenticate.cc
+	M    unit-tests/authT.cc
+	M    unit-tests/reporterT.cc
+	M    CedarAuthenticate.h
+
+2009-05-28  Patrick West <pwest@ucar.edu>
+
+	Services format now uses basic format instead of special cedar format.
+	Removing use of HttpTransmitter and using transmit_protocol context.
+	M    CedarModule.cc
+	M    FlatResponseHandler.cc
+	M    InfoResponseHandler.cc
+	M    CedarTransmitter.cc
+	M    TabResponseHandler.cc
+
+2009-05-28  Patrick West <pwest@ucar.edu>
+
+	Latitude and longitude corrections
+	M    bes-testsuite/cedar/mfp920504a.das.bescmd.baseline
+	M    bes-testsuite/cedar/mfp920504a.ddx.bescmd.baseline
+	M    unit-tests/kinstT.cc
+
+2009-04-10  Patrick West <pwest@ucar.edu>
+
+	No more cgi server is built and no longer providing apache 1.3 services
+	D    CedarHandlerApp.h
+	M    configure.ac
+	M    CedarModule.cc
+	M    CedarRequestHandler.cc
+	D    cedar_commands.cc
+	M    bes-testsuite/config/unix.exp
+	D    CedarHandlerApp.cc
+	M    CedarResponseNames.h
+	M    unit-tests/Makefile.am
+	M    CedarMySQLDB.cc
+	D    cedar_handler.cc
+	A    CedarTransmitter.cc
+	A    CedarTransmitter.h
+	D    cedar_module.cc
+	M    Makefile.am
+
+2009-02-20  Patrick West <pwest@ucar.edu>
+
+	test table for some of the unit tests
+	A    cedar_test.sql
+
+2009-01-29  Patrick West <pwest@ucar.edu>
+
+	Don't share that
+	M    unit-tests/bes.conf.in
+
+2009-01-26  Patrick West <pwest@ucar.edu>
+
+	Fixed bug with buffers not being created big enough
+	M    CedarEncode.cc
+
+2008-12-31  Patrick West <pwest@ucar.edu>
+
+	Changed report database to use CEDARCATALOG. Table is now tbl_report. Column
+	names changed as well.
+	M    CedarReporter.cc
+
+2008-11-14  James Gallagher <jgallagher@opendap.org>
+
+	Merged the xmlrequest branch to the trunk.
+
+	_M   .
+	M    CedarModule.cc
+	M    bes-testsuite/cedar/mfp920504a.ddx.bescmd
+	M    bes-testsuite/cedar/mfp920504a.flat.bescmd
+	M    bes-testsuite/cedar/mfp920504a.info.bescmd
+	M    bes-testsuite/cedar/mfp920504a.stream.bescmd
+	M    bes-testsuite/cedar/mfp920504a.tab.bescmd
+	M    bes-testsuite/cedar/mfp920504a.das.bescmd
+	M    bes-testsuite/cedar/mfp920504a.data.bescmd
+	M    bes-testsuite/cedar/mfp920504a.dds.bescmd
+
+2008-09-18  James Gallagher <jgallagher@opendap.org>
+
+	Merged multifile branch
+
+2008-08-29  Patrick West <pwest@ucar.edu>
+
+	Removing test configuration file. No longer needed.
+	D    bes.conf
+
+2008-08-29  Patrick West <pwest@ucar.edu>
+
+	Moved testsuite to bes-testsuite for bes regression tests
+	M    configure.ac
+	D    testsuite
+	A    bes-testsuite
+	M    Makefile.am
+
+2008-08-29  Patrick West <pwest@ucar.edu>
+
+	Forgot to add the baseline file.
+	A    mfp920504a.data.bescmd.baseline
+
+2008-08-29  Patrick West <pwest@ucar.edu>
+
+	Removed dap-server modules and changed BaseDir variable.
+	M    unit-tests/bes.conf.in
+	M    unit-tests/Makefile.am
+
+2008-08-29  Patrick West <pwest@ucar.edu>
+
+	Changed ascii to data test. Removed dap-server modules as they might not be
+	built.
+	D    testsuite/besstandalone.cedar/mfp920504a.ascii.exp
+	A    testsuite/besstandalone.cedar/mfp920504a.data.exp
+	M    testsuite/bes.conf.in
+	M    testsuite/config/unix.exp
+	M    testsuite/Makefile.am
+	D    testsuite/cedar/mfp920504a.ascii.bescmd
+	A    testsuite/cedar/mfp920504a.data.bescmd
+	D    testsuite/cedar/mfp920504a.ascii.bescmd.baseline
+
+2008-07-16  Patrick West <pwest@ucar.edu>
+
+	Simplified the dynamic cast checks.
+	M    CedarRequestHandler.cc
+
+2008-07-16  Patrick West <pwest@ucar.edu>
+
+	Checking result of dynamic cast if cast error occurred. Added the cedar help
+	files to the configuration script.
+	M    CedarRequestHandler.cc
+	M    bes-cedar-data.sh.in
+	M    Makefile.am
+
+2008-06-01  Patrick West <pwest@ucar.edu>
+
+	If fail to log to database catch all exceptions and report to the cedar log
+	file. Put a message in the BES log file saying there was a problem.
+	M    CedarReporter.cc
+	M    CedarReporter.h
+
+2008-05-31  Patrick West <pwest@ucar.edu>
+
+	Added insert, update, and delete methods to DB classes. Create better
+	testing in dbT, including adding insert, update, and delete tests. Cedar
+	reporting now goes to database. Added reporter test. Updated
+	bes-cedar-data.sh script for Catalog and Reporter database parameters.
+	M    bes.conf
+	M    CedarMySQLDB.h
+	M    CedarModule.cc
+	M    bes-cedar-data.sh.in
+	M    CedarReporter.cc
+	M    testsuite/bes.conf.in
+	M    testsuite/cedar/mfp920504a.ddx.bescmd.baseline
+	A    CedarDBFields.h
+	M    CedarDB.h
+	M    unit-tests/kinstT.cc
+	M    unit-tests/bes.conf.in
+	M    unit-tests/Makefile.am
+	A    unit-tests/reporterT.cc
+	M    unit-tests/dbT.cc
+	M    CedarMySQLResult.cc
+	M    CedarReporter.h
+	M    CedarMySQLDB.cc
+	M    Makefile.am
+
+2008-05-30  Patrick West <pwest@ucar.edu>
+
+	Adding ancillary das and dds information.
+	M    CedarRequestHandler.cc
+
+2008-05-25  Patrick West <pwest@ucar.edu>
+
+	Added tests for instrument without site and non-existant instrument
+	M    unit-tests/kinstT.cc
+	M    CedarReadKinst.cc
+
+2008-05-25  Patrick West <pwest@ucar.edu>
+
+	Using tbl_site table to get latitude, longitude, and altitude values
+
+	changed the structure of the DAS object to separate out the values instead
+	of having the reading code have to separate out the strings of the KINST and
+	parameters. The KINST attribute structure now contains KINST, NAME, PREFIX,
+	LATITUDE, LONGITUDE, ALTITUDE. The parameter structures (JPAR_0) now
+	includes CODE, SHORTNAME, LONGNAME, UNIT, SCALE. Updated the unit tests
+	M    checkKinst.cc
+	M    testsuite/cedar/mfp920504a.das.bescmd.baseline
+	M    cedar_read_attributes.cc
+	M    CedarReadParcods.cc
+	M    unit-tests/kinstT.cc
+	M    unit-tests/bes.conf.in
+	M    CedarReadKinst.cc
+	M    CedarReadKinst.h
+	M    CedarReadParcods.h
+
+2008-05-14  Patrick West <pwest@ucar.edu>
+
+	Added CPPUNIT as configurable
+	M    configure.ac
+	M    testsuite/bes.conf.in
+	A    conf/cppunit.m4
+	M    unit-tests/bes.conf.in
+	M    unit-tests/Makefile.am
+
+2008-05-06  Patrick West <pwest@ucar.edu>
+
+	Updated the version number in the NEWS file to 2.3.0
+	M    NEWS
+
+2008-05-06  Patrick West <pwest@ucar.edu>
+
+	This is version 2.3.0, not 2.2.0. We've already done 2.2.0. With only the
+	changes in the database code and how we look up instrument and parameter
+	types, this isn't a major release.
+	M    configure.ac
+
+2008-04-22  Patrick West <pwest@ucar.edu>
+
+	Cleaning up for release distribution
+	A    unit-tests/bes.conf.in
+	M    unit-tests/Makefile.am
+	D    unit-tests/bes.conf
+	M    Makefile.am
+
+2008-04-22  Patrick West <pwest@ucar.edu>
+
+	Clearing out some information
+	M    ChangeLog
+	M    testsuite/bes.conf.in
+	M    unit-tests/bes.conf
+
+;; Local Variables:
+;; coding: utf-8
+;; End:
 2008-04-22  Patrick West <pwest@ucar.edu>
 
 	If unable to access database to read instrument and parameter data,

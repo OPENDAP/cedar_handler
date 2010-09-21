@@ -17,7 +17,7 @@ noinst_DATA = bes.conf
 
 CLEANFILES = *.log *.sum site.exp
 
-EXTRA_DIST = cedar_handlerTest.at $(TESTSUITE) aclocal.in cedar bes.conf.in
+EXTRA_DIST = cedar_handlerTest.at $(TESTSUITE) atlocal.in cedar bes.conf.in
 
 DISTCLEANFILES = bes.conf $(srcdir)/package.m4 cedar_handlerTest
 
