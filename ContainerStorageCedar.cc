@@ -80,10 +80,15 @@ ContainerStorageCedar::look_for( const string &sym_name )
     int is_accessible = access( real_name.c_str(), R_OK ) ;
     if( is_accessible == -1 )
     {
-	// In this case, the file is not accessible or does not exist
-	// using cedar base directory. So return 0 and allow another
-	// container store a chance to get to it.
-	return 0 ;
+	real_name = _cedar_base + "/" + sym_name + ".001" ;
+	is_accessible = access( real_name.c_str(), R_OK ) ;
+	if( is_accessible == -1 )
+	{
+	    // In this case, the file is not accessible or does not exist
+	    // using cedar base directory. So return 0 and allow another
+	    // container store a chance to get to it.
+	    return 0 ;
+	}
     }
     // the file is accessible, let's use it
     BESContainer *c = new BESFileContainer( sym_name, real_name, "cedar" ) ;
