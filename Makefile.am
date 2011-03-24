@@ -75,7 +75,7 @@ EXTRA_DIST = COPYRIGHT COPYING cedar.conf.in cedar/cedar_help.html cedar/cedar_h
 CLEANFILES = *~ cedar.conf
 
 sample_datadir = $(datadir)/hyrax/data/cedar
-sample_data_DATA = data/mfp920504a.cbf
+sample_data_DATA = data/mfp920504a.cbf data/mlh090323g.001
 
 install-data-local: cedar.conf
 	@currdate=`date +"%y%m%d%H%M"`; \
