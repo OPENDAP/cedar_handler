@@ -43,6 +43,7 @@ class ContainerStorageCedar : public BESContainerStorage
 {
 private:
     string			_cedar_base ;
+    string			_madrigal_base ;
 public:
     				ContainerStorageCedar( const string &n);
     virtual			~ContainerStorageCedar() ;

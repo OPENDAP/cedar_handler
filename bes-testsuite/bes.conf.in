@@ -284,6 +284,7 @@ BES.DefaultResponseMethod=POST
 # Cedar.DB.Authenticate.Port= - MySQL TCP Port used to connect, socket typically used
 Cedar.LogName=./cedar.log
 Cedar.BaseDir=@abs_top_srcdir@/data
+Madrigal.BaseDir=@abs_top_srcdir@/data
 Cedar.LoginScreen.XML=
 
 Cedar.Authenticate.Mode=off

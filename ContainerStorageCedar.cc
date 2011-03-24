@@ -64,6 +64,9 @@ ContainerStorageCedar::ContainerStorageCedar( const string &n )
 	           + ", unable to determine Cedar base directory" ;
 	throw BESSyntaxUserError( s, __FILE__, __LINE__ ) ;
     }
+    key = "Madrigal.BaseDir" ;
+    found = false ;
+    TheBESKeys::TheKeys()->get_value( key, _madrigal_base, found ) ;
 }
 
 ContainerStorageCedar::~ContainerStorageCedar()
@@ -78,9 +81,9 @@ ContainerStorageCedar::look_for( const string &sym_name )
     // can handle it. If not, then an exception will be thrown.
     string real_name = _cedar_base + "/" + sym_name + ".cbf" ;
     int is_accessible = access( real_name.c_str(), R_OK ) ;
-    if( is_accessible == -1 )
+    if( is_accessible == -1 && !_madrigal_base.empty() )
     {
-	real_name = _cedar_base + "/" + sym_name + ".001" ;
+	real_name = _madrigal_base + "/" + sym_name + ".001" ;
 	is_accessible = access( real_name.c_str(), R_OK ) ;
 	if( is_accessible == -1 )
 	{
@@ -136,6 +139,29 @@ ContainerStorageCedar::show_containers( BESInfo &info )
 	    string sym = (*i).getBaseName() ;
 	    string real = (*i).getFullPath() ;
 	    show_container( sym, real, CEDAR_NAME, info ) ;
+	}
+    }
+    catch( const string &err_str )
+    {
+	info.add_data( err_str ) ;
+    }
+    catch( ... )
+    {
+	info.add_data( "Failed to retrieve containers for cedar" ) ;
+    }
+
+    try
+    {
+	if( !_madrigal_base.empty() )
+	{
+	    CedarFSDir d( _madrigal_base, ".*\\.001$" ) ;
+	    CedarFSDir::fileIterator i ;
+	    for( i = d.beginOfFileList(); i != d.endOfFileList(); i++ )
+	    {
+		string sym = (*i).getBaseName() ;
+		string real = (*i).getFullPath() ;
+		show_container( sym, real, CEDAR_NAME, info ) ;
+	    }
 	}
     }
     catch( const string &err_str )
