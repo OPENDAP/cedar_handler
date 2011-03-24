@@ -1,3 +1,41 @@
+2011-03-24  Patrick West <pwest@ucar.edu>
+
+	Added one additional data set for testing
+	M    Makefile.am
+
+2011-03-24  Patrick West <pwest@ucar.edu>
+
+	Handle madrigal data in different directory
+	M    ContainerStorageCedar.cc
+	M    ContainerStorageCedar.h
+	M    bes-testsuite/bes.conf.in
+
+2011-03-06  Patrick West <pwest@ucar.edu>
+
+	Handles 001 files for madrigal. Added one test.
+	M    ContainerStorageCedar.cc
+	A    bes-testsuite/cedar/mlh090323g.tab.bescmd.baseline
+	A    bes-testsuite/cedar/mlh090323g.das.bescmd.baseline
+	A    bes-testsuite/cedar/mlh090323g.tab.bescmd
+	A    bes-testsuite/cedar/mlh090323g.das.bescmd
+	M    bes-testsuite/cedar_handlerTest.at
+	AM   data/mlh090323g.001
+
+2010-09-20  Patrick West <pwest@ucar.edu>
+
+	New release
+	M    configure.ac
+	M    NEWS
+	M    ChangeLog
+	M    bes-testsuite/Makefile.am
+
+2010-07-15  Patrick West <pwest@ucar.edu>
+
+	Added include of dependent dap.conf
+
+;; Local Variables:
+;; coding: utf-8
+;; End:
 2010-05-11  Patrick West <pwest@ucar.edu>
 
 	Updated to match newest version of Cedar library, removing auto

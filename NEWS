@@ -1,6 +1,14 @@
 
 $Id: NEWS 14029 2006-06-29 18:10:44Z pwest $
 
+Version 2.3.3
+
+Up to date with libdap 3.11.x and bes 3.9.x
+
+Updated storage container to find Madrigal data. This data is found in a
+different base directory than the cedar data, but is still all in a
+single directory (not in the madrigal data structure)
+
 Version 2.3.2
 
 Up to date with libdap 3.10.x and bes 3.8.x
