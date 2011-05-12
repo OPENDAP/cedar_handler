@@ -42,12 +42,13 @@ using std::stringstream ;
 using std::ifstream ;
 
 #include "ContainerStorageCedar.h"
-#include "BESFileContainer.h"
-#include "TheBESKeys.h"
-#include "BESInternalError.h"
-#include "BESSyntaxUserError.h"
-#include "BESForbiddenError.h"
-#include "BESInfo.h"
+#include <BESFileContainer.h>
+#include <TheBESKeys.h>
+#include <BESInternalError.h>
+#include <BESSyntaxUserError.h>
+#include <BESForbiddenError.h>
+#include <BESInfo.h>
+#include <BESServiceRegistry.h>
 #include "CedarFSDir.h"
 #include "CedarFSFile.h"
 #include "CedarResponseNames.h"
@@ -121,6 +122,29 @@ ContainerStorageCedar::del_containers( )
     string s = "Unable to remove a containers from Cedar Persistence" ;
     throw BESForbiddenError( s, __FILE__, __LINE__ ) ;
     return false ;
+}
+
+/** @brief determine if the given container is data and what servies
+ * are available for it
+ *
+ * @param inQuestion the container in question
+ * @param provides an output parameter for storing the list of
+ * services provided for this container
+ */
+bool
+ContainerStorageCedar::isData( const string &inQuestion,
+			       list<string> &provides )
+{
+    bool isit = false ;
+    BESContainer *c = look_for( inQuestion ) ;
+    if( c )
+    {
+	isit = true ;
+	string node_type = c->get_container_type() ;
+	BESServiceRegistry::TheRegistry()->services_handled( node_type,
+							     provides ) ;
+    }
+    return isit ;
 }
 
 void
