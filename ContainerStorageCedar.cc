@@ -88,10 +88,15 @@ ContainerStorageCedar::look_for( const string &sym_name )
 	is_accessible = access( real_name.c_str(), R_OK ) ;
 	if( is_accessible == -1 )
 	{
-	    // In this case, the file is not accessible or does not exist
-	    // using cedar base directory. So return 0 and allow another
-	    // container store a chance to get to it.
-	    return 0 ;
+	    real_name = _madrigal_base + "/" + sym_name + ".cbf" ;
+	    is_accessible = access( real_name.c_str(), R_OK ) ;
+	    if( is_accessible == -1 )
+	    {
+		// In this case, the file is not accessible or does not exist
+		// using cedar base directory. So return 0 and allow another
+		// container store a chance to get to it.
+		return 0 ;
+	    }
 	}
     }
     // the file is accessible, let's use it
@@ -179,6 +184,29 @@ ContainerStorageCedar::show_containers( BESInfo &info )
 	if( !_madrigal_base.empty() )
 	{
 	    CedarFSDir d( _madrigal_base, ".*\\.001$" ) ;
+	    CedarFSDir::fileIterator i ;
+	    for( i = d.beginOfFileList(); i != d.endOfFileList(); i++ )
+	    {
+		string sym = (*i).getBaseName() ;
+		string real = (*i).getFullPath() ;
+		show_container( sym, real, CEDAR_NAME, info ) ;
+	    }
+	}
+    }
+    catch( const string &err_str )
+    {
+	info.add_data( err_str ) ;
+    }
+    catch( ... )
+    {
+	info.add_data( "Failed to retrieve containers for cedar" ) ;
+    }
+
+    try
+    {
+	if( !_madrigal_base.empty() )
+	{
+	    CedarFSDir d( _madrigal_base, ".*\\.cbf$" ) ;
 	    CedarFSDir::fileIterator i ;
 	    for( i = d.beginOfFileList(); i != d.endOfFileList(); i++ )
 	    {
