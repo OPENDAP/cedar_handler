@@ -4,6 +4,8 @@
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/extensions/HelperMacros.h>
 
+#include <stdlib.h>
+
 #include <iostream>
 
 using std::cerr ;
@@ -14,6 +16,7 @@ using std::endl ;
 #include "BESContextManager.h"
 #include "BESDataHandlerInterface.h"
 #include "BESDebug.h"
+#include "TheBESKeys.h"
 #include "CedarMySQLDB.h"
 
 #include "test_config.h"
@@ -43,26 +46,26 @@ public:
 
     void do_conversion()
     {
-	string bes_conf = (string)"BES_CONF=" + TEST_SRC_DIR + "/bes.conf" ;
-	int put_ret = putenv( (char *)bes_conf.c_str() ) ;
+        string bes_conf = (string)TEST_SRC_DIR + "/bes.conf" ;
+        TheBESKeys::ConfigFile = bes_conf ;
 
-	BESDebug::SetUp( "cerr,cedar" ) ;
-	try
-	{
-	    CedarDB::Add_DB_Builder( "mysql", CedarMySQLDB::BuildMySQLDB ) ;
+        BESDebug::SetUp( "cerr,cedar" ) ;
+        try
+        {
+            CedarDB::Add_DB_Builder( "mysql", CedarMySQLDB::BuildMySQLDB ) ;
 
-	    BESDataHandlerInterface dhi ;
-	    BESContextManager::TheManager()->set_context( USER_NAME, "pwest" ) ;
+            BESDataHandlerInterface dhi ;
+            BESContextManager::TheManager()->set_context( USER_NAME, "pwest" ) ;
 
-	    CedarAuthenticate::authenticate( dhi ) ;
+            CedarAuthenticate::authenticate( dhi ) ;
 
-	    CedarDB::Close() ;
-	}
-	catch( BESError &e )
-	{
-	    cerr << e << endl ;
-	    CPPUNIT_ASSERT( !"Caught BES exception" ) ;
-	}
+            CedarDB::Close() ;
+        }
+        catch( BESError &e )
+        {
+            cerr << e << endl ;
+            CPPUNIT_ASSERT( !"Caught BES exception" ) ;
+        }
     }
 
 } ;

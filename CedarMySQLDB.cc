@@ -31,8 +31,11 @@
 //      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
 #include <vector>
+#include <cstdlib>
 
 using std::vector ;
+using std::atoi ;
+using std::getenv ;
 
 #include "CedarMySQLDB.h"
 #include "CedarMySQLConnect.h"

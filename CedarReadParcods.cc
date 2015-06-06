@@ -32,8 +32,10 @@
 
 #include <sstream>
 #include <iostream>
+#include <cstdlib>
 
 using std::ostringstream ;
+using std::atoi ;
 
 #include "CedarReadParcods.h"
 #include "CedarDB.h"

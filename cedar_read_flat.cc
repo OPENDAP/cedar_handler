@@ -31,8 +31,10 @@
 //      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
 #include <sstream>
+#include <memory>
 
 using std::ostringstream ;
+using std::auto_ptr ;
 
 #include "CedarBlock.h"
 #include "CedarFile.h"

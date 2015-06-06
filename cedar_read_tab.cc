@@ -34,8 +34,10 @@
 #include <cstddef>
 //#include <new>
 #include <sstream>
+#include <memory>
 
 using std::ostringstream ;
+using std::auto_ptr ;
 
 #include "CedarFile.h"
 #include "CedarTab.h"
