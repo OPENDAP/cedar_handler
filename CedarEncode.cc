@@ -33,8 +33,13 @@
 #include <unistd.h>
 #include <iostream>
 #include <string>
+#include <cstring>
+#include <cstdlib>
 
 using std::string ;
+using std::strlen ;
+using std::strncpy ;
+using std::exit ;
 using std::cerr ;
 using std::cout ;
 using std::endl ;

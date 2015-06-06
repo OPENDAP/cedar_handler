@@ -31,10 +31,12 @@
 //      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
 #include <iostream>
+#include <cstdlib>
 
 using std::cout ;
 using std::endl ;
 using std::cerr ;
+using std::atoi ;
 
 #include "CedarReadParcods.h"
 #include "CedarMySQLDB.h"
